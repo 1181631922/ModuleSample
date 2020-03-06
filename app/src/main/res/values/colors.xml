@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--  标题栏颜色  -->
+    <color name="colorPrimary">#3F51B5</color>
+    <!--  顶部状态蓝颜色  -->
+    <color name="colorPrimaryDark">#303F9F</color>
+    <!--  fab，鼠标等颜色  -->
+    <color name="colorAccent">#FF4081</color>
 </resources>
