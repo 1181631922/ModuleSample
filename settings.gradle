@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name='ModuleSample'
+include ':ui'
+include ':tool'

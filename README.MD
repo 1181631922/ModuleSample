@@ -16,6 +16,7 @@ PS：英文名：Ripple
 | Base库          | 底层base库，定义功能（app的基本功能）不定义实现     | com.ripple.base.kit       |
 | BaseSdk        | 实现base的功能                       | com.ripple.base.sdk       |
 | UI库            | 通用UI库                           | com.ripple.ui             |
+| TOOL库            | 通用工具库包括android和java                           | com.ripple.tool             |
 | Http库         | 网络库                             | com.ripple.http          |
 | Dialog库        | 封装系统dialog                      | com.ripple.dialog         |
 | Refresh库       | 刷新库                             | com.ripple.refresh        |
@@ -29,6 +30,17 @@ PS：英文名：Ripple
 | Permission库    | 动态权限库                           | com.ripple.permission     |
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |
 | Share库         | 分享库                             | com.ripple.share          |
+
+
+### 2.一些比较杂的问题
+1. 项目除去运行时注解的框架都会采用Kotlin编写，这样写起来也会比较快，使用起来也比较便捷
+2. 每个库写完之后会链接到上方列表
+3. 个人能力问题，可能写不了很快很好
+4. UI库会出一些TV版，方便别人也方便自己吧
+5. 文章会同步到博客上
+6. 中间会有一些其他知识的分享
+
+暂时只有这么多了，剩下的就是希望不要断更
 
 
 
