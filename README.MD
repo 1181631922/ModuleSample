@@ -28,6 +28,7 @@ PS：英文名：Ripple
 | Cache库         | 缓存库                             | com.ripple.cache          |
 | DB库            | 数据库                             | com.ripple.db             |
 | Permission库    | 动态权限库                           | com.ripple.permission     |
+| Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |
 | Share库         | 分享库                             | com.ripple.share          |
 | FileDownload库         | 文件下载库                             | com.ripple.file.down          |
