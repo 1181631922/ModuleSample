@@ -2,7 +2,6 @@ package com.fanyafeng.modules.main
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
-import com.fanyafeng.modules.permission.PermissionActivity
-import com.ripple.ui.RippleImageView
+import com.fanyafeng.modules.permission.PermissionTestActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
@@ -39,8 +37,8 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
-            add(MainModel("主页", MainActivity::class.java))
-            add(MainModel("动态权限", PermissionActivity::class.java))
+//            add(MainModel("主页", MainActivity::class.java))
+            add(MainModel("动态权限", PermissionTestActivity::class.java))
         }
 
         mainAdapter = MainAdapter(this, funcList)
