@@ -34,7 +34,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha01'
     implementation project(path: ':ripple_ui')
-    implementation project(path: ':ripple_tool')
 }
 
 class GreetingPluginExtension {
