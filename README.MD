@@ -30,6 +30,7 @@ PS：英文名：Ripple
 | Permission库    | 动态权限库                           | com.ripple.permission     |
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |
 | Share库         | 分享库                             | com.ripple.share          |
+| FileDownload库         | 文件下载库                             | com.ripple.file.down          |
 
 
 ### 2.一些比较杂的问题

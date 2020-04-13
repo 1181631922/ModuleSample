@@ -36,3 +36,29 @@ dependencies {
     implementation project(path: ':ripple_ui')
     implementation project(path: ':ripple_tool')
 }
+
+class GreetingPluginExtension {
+    String message = "Hello from GreetingPlugin "
+}
+
+class GreetingPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project target) {
+        /**
+         * name为自定义DSL的名字
+         */
+        def extension = target.extensions.create('greeting', GreetingPluginExtension)
+
+        /**
+         * name为task的名字
+         * 出现的位置：
+         * 当前项目->app->Tasks->other->name
+         */
+        target.task('hello') {
+            doLast {
+                println(extension.message)
+            }
+        }
+    }
+}
