@@ -4,6 +4,14 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'ripple-permission-plugin'
+
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -61,3 +69,5 @@ class GreetingPlugin implements Plugin<Project> {
         }
     }
 }
+
+
