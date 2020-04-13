@@ -12,15 +12,17 @@ class PermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
+        title = "动态权限"
+
         initView()
         initData()
     }
 
-    private fun initView(){
+    private fun initView() {
 
     }
 
-    private fun initData(){
+    private fun initData() {
 
     }
 }
