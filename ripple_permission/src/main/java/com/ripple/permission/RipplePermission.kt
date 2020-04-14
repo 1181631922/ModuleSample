@@ -4,9 +4,10 @@ import com.ripple.permission.callback.PermissionCallback
 import java.lang.reflect.InvocationTargetException
 
 /**
- * Author wudaming
- * Created on 2019/1/23
- * 注解辅助类
+ * Author: fanyafeng
+ * Data: 2020/4/13 17:21
+ * Email: fanyafeng@live.cn
+ * Description: 注解辅助类
  */
 object RipplePermission {
 

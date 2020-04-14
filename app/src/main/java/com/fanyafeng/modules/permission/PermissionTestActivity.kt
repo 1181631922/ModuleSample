@@ -11,9 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.fanyafeng.modules.R
+import com.ripple.permission.RipplePermission
 import com.ripple.permission.RipplePermissionImpl
+import com.ripple.permission.annotation.NeedPermission
 import com.ripple.permission.callback.PermissionCallback
 import kotlinx.android.synthetic.main.activity_permission.*
+import java.util.*
 
 
 /**
@@ -33,29 +36,28 @@ class PermissionTestActivity : AppCompatActivity() {
     private fun initView() {
 
         permissionTest.setOnClickListener {
-
+            simpleRequestPermission(listOf("myName"))
         }
 
     }
 
 
+    @NeedPermission(
+        [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION],
+        "result"
+    )
+    fun simpleRequestPermission(list: List<String>) {
+        Log.e("哈哈哈哈", "全部成功输出")
+    }
+
 
     private fun requestMediaPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    3
-                )
-            } else {
-            }
-        } else {
-        }
+        RipplePermission.doCheckPermission(
+            this, arrayListOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), "methodName", "methodDesc", listOf("name"), "onfail"
+        )
     }
 
 
@@ -97,5 +99,15 @@ class PermissionTestActivity : AppCompatActivity() {
 
     private fun initData() {
 
+    }
+
+    fun result(success: List<String>, fail: List<String>) {
+        success.forEach {
+            Log.e("success", it)
+        }
+
+        fail.forEach {
+            Log.e("fail", it)
+        }
     }
 }

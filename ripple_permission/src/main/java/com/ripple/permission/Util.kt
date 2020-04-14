@@ -3,9 +3,10 @@ package com.ripple.permission
 import java.lang.reflect.Method
 
 /**
- * Author wudaming
- * Created on 2019/1/17
- * 反射工具类
+ * Author: fanyafeng
+ * Data: 2020/4/13 17:41
+ * Email: fanyafeng@live.cn
+ * Description: 反射工具
  */
 object Util {
 
@@ -83,7 +84,4 @@ object Util {
     }
 
 
-//    private fun test(){
-//        MNPermission.doCheckPermission(this, listOf(),"","", listOf(),"")
-//    }
 }

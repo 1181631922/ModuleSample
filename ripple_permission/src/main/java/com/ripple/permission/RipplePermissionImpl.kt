@@ -9,9 +9,10 @@ import android.os.Environment
 import com.ripple.permission.callback.PermissionCallback
 
 /**
- * Author wudaming
- * Created on 2019/1/17
- *
+ * Author: fanyafeng
+ * Data: 2020/4/13 17:25
+ * Email: fanyafeng@live.cn
+ * Description:
  */
 object RipplePermissionImpl : IRipplePermission {
 

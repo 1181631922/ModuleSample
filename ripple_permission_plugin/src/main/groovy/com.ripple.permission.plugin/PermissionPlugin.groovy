@@ -3,6 +3,7 @@ package com.ripple.permission.plugin;
 import com.android.build.api.transform.*
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.internal.pipeline.TransformManager
+import com.ripple.permission.plugin.dsl.RipplePermissionPluginExtension
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -18,12 +19,20 @@ import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
 
 import static org.objectweb.asm.ClassReader.EXPAND_FRAMES
-import static org.objectweb.asm.ClassReader.EXPAND_FRAMES
 
 public class PermissionPlugin extends Transform implements Plugin<Project> {
 
+    def extension = RipplePermissionPluginExtension
+
     @Override
     void apply(Project project) {
+
+        /**
+         * 定义dsl
+         */
+        extension = project.extensions.create('rippleIgnorePermission', RipplePermissionPluginExtension)
+
+
         //registerTransform
         def android = project.extensions.getByType(AppExtension)
         android.registerTransform(this)
@@ -51,36 +60,52 @@ public class PermissionPlugin extends Transform implements Plugin<Project> {
 
     @Override
     void transform(TransformInvocation transformInvocation) {
-        println("--------------- LifecyclePlugin visit start ---------------")
-        def startTime = System.currentTimeMillis()
-        Collection<TransformInput> inputs = transformInvocation.inputs
-        TransformOutputProvider outputProvider = transformInvocation.outputProvider
-        //删除之前的输出
-        if (outputProvider != null) {
-            outputProvider.deleteAll()
-        }
-        //遍历inputs
-        inputs.each { input ->
-            //遍历directoryInputs
-            input.directoryInputs.each { directoryInput ->
-                handleDirectoryInput(directoryInput, outputProvider)
-            }
 
-            //遍历jarInputs
-            input.jarInputs.each { jarInput ->
-                handleJarInputs(jarInput, outputProvider)
+        def isIgnoreAll = extension.isIgnoreAll
+        def isIgnoreThirdJar = extension.isIgnoreThirdJar
+        def ignoreContainPathList = extension.ignoreContainPathList
+        def ignorePathList = extension.ignorePathList
+
+
+        if (!isIgnoreAll) {
+            println("--------------- LifecyclePlugin visit start ---------------")
+            def startTime = System.currentTimeMillis()
+            Collection<TransformInput> inputs = transformInvocation.inputs
+            TransformOutputProvider outputProvider = transformInvocation.outputProvider
+            //删除之前的输出
+            if (outputProvider != null) {
+                outputProvider.deleteAll()
             }
+            //遍历inputs
+            inputs.each { input ->
+                //遍历directoryInputs
+                input.directoryInputs.each { directoryInput ->
+                    handleDirectoryInput(directoryInput, outputProvider, ignoreContainPathList, ignorePathList)
+                }
+
+                if (isIgnoreThirdJar) {
+                    /**
+                     * 遍历jarInputs,这个不涉及到第三方jar，不用处理
+                     * 如果有自己的第三方库使用的话，需要将此打开
+                     * 关闭是为了要提升编译速度
+                     */
+                    input.jarInputs.each { jarInput ->
+                        handleJarInputs(jarInput, outputProvider, ignoreContainPathList, ignorePathList)
+                    }
+                }
+            }
+            def cost = (System.currentTimeMillis() - startTime) / 1000
+            //        super.transform(transformInvocation)
+            println("--------------- LifecyclePlugin visit end ---------------")
+            println("LifecyclePlugin cost ： $cost s")
         }
-        def cost = (System.currentTimeMillis() - startTime) / 1000
-//        super.transform(transformInvocation)
-        println("--------------- LifecyclePlugin visit end ---------------")
-        println("LifecyclePlugin cost ： $cost s")
     }
 
     /**
      * 处理文件目录下的class文件
      */
-    static void handleDirectoryInput(DirectoryInput directoryInput, TransformOutputProvider outputProvider) {
+    static void handleDirectoryInput(DirectoryInput directoryInput, TransformOutputProvider outputProvider,
+                                     List<String> ignoreContainPathList, List<String> ignorePathList) {
         //是否是目录
         if (directoryInput.file.isDirectory()) {
             //列出目录所有文件（包含子文件夹，子文件夹内文件）
@@ -90,7 +115,7 @@ public class PermissionPlugin extends Transform implements Plugin<Project> {
                     println("----------- deal with \"class\" file <' + name + '> -----------")
                     ClassReader classReader = new ClassReader(file.bytes)
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_FRAMES)
-                    ClassVisitor cv = new LifecycleClassVisitor(classWriter)
+                    ClassVisitor cv = new AgencyHandleClassVisitor(classWriter, ignoreContainPathList, ignorePathList)
                     classReader.accept(cv, EXPAND_FRAMES)
                     byte[] code = classWriter.toByteArray()
                     FileOutputStream fos = new FileOutputStream(file.parentFile.absolutePath + File.separator + name)
@@ -104,7 +129,8 @@ public class PermissionPlugin extends Transform implements Plugin<Project> {
         FileUtils.copyDirectory(directoryInput.file, dest)
     }
 
-    static void handleJarInputs(JarInput jarInput, TransformOutputProvider outputProvider) {
+    static void handleJarInputs(JarInput jarInput, TransformOutputProvider outputProvider,
+                                List<String> ignoreContainPathList, List<String> ignorePathList) {
         if (jarInput.file.getAbsolutePath().endsWith(".jar")) {
             //重命名输出文件，因为可能同名，会覆盖
             def jarName = jarInput.name
@@ -133,7 +159,7 @@ public class PermissionPlugin extends Transform implements Plugin<Project> {
                     jarOutputStream.putNextEntry(zipEntry)
                     ClassReader classReader = new ClassReader(IOUtils.toByteArray(inputStream))
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-                    ClassVisitor cv = new LifecycleClassVisitor(classWriter)
+                    ClassVisitor cv = new AgencyHandleClassVisitor(classWriter, ignoreContainPathList, ignorePathList)
                     classReader.accept(cv, EXPAND_FRAMES)
                     byte[] code = classWriter.toByteArray()
                     jarOutputStream.write(code)
@@ -163,8 +189,8 @@ public class PermissionPlugin extends Transform implements Plugin<Project> {
         return (name.endsWith(".class")
                 && !name.startsWith("R\$")
                 && "R.class" != name
-                && "BuildConfig.class" != name
-                && "androidx/appcompat/app/AppCompatActivity.class" == name)
+                && "BuildConfig.class" != name)
+//                && "com/fanyafeng/modules/permission/PermissionTestActivity.class" == name
     }
 
 
