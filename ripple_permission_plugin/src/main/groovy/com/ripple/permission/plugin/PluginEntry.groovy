@@ -11,12 +11,9 @@ class PluginEntry implements Plugin<Project> {
     void apply(Project project) {
         def android = project.extensions.getByType(AppExtension)
 
-//        PermissionTransform transform = new PermissionTransform()
-//        android.registerTransform(transform)
-
         def extension = project.extensions.create('rippleIgnorePermission', RipplePermissionPluginExtension)
 
-        PermissionPlugin transform = new PermissionPlugin(extension)
+        PermissionPlugin transform = new PermissionPlugin()
         android.registerTransform(transform)
     }
 }

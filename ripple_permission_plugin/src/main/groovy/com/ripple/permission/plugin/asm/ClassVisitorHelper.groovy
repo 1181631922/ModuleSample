@@ -13,10 +13,10 @@ import org.objectweb.asm.ClassWriter;
  * Description:
  */
 class ClassVisitorHelper {
-    static byte[] modifyClass(String className, byte[] srcByteCode, RipplePermissionPluginExtension extension) {
+    static byte[] modifyClass(String className, byte[] srcByteCode) {
         byte[] classByteCode = null
         try {
-            classByteCode = modifyClas(srcByteCode, extension)
+            classByteCode = modifyClas(srcByteCode)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -27,10 +27,10 @@ class ClassVisitorHelper {
         return classByteCode
     }
 
-    private static byte[] modifyClas(byte[] srcByteCode, RipplePermissionPluginExtension extension) throws IOException {
+    private static byte[] modifyClas(byte[] srcByteCode) throws IOException {
         ClassReader cr = new ClassReader(srcByteCode)
         ClassWriter classWriter = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS)
-        ClassVisitor adapter = new AgencyHandleClassVisitor(classWriter, extension.ignoreContainPathList, extension.ignorePathList)
+        ClassVisitor adapter = new AgencyHandleClassVisitor(classWriter)
         cr.accept(adapter, ClassReader.EXPAND_FRAMES)
         return classWriter.toByteArray()
     }

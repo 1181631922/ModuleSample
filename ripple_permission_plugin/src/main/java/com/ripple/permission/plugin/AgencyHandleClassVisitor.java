@@ -17,13 +17,9 @@ import java.util.List;
  */
 public class AgencyHandleClassVisitor extends ClassVisitor implements Opcodes {
     private String className;
-    private List<String> ignoreContainPathList;
-    private List<String> ignorePathList;
 
-    public AgencyHandleClassVisitor(ClassVisitor cv, List<String> ignoreContainPathList, List<String> ignorePathList) {
+    public AgencyHandleClassVisitor(ClassVisitor cv) {
         super(Opcodes.ASM5, cv);
-        this.ignoreContainPathList = ignoreContainPathList;
-        this.ignorePathList = ignorePathList;
     }
 
     @Override
@@ -37,24 +33,6 @@ public class AgencyHandleClassVisitor extends ClassVisitor implements Opcodes {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         System.out.println("AgencyHandleClassVisitor : visitMethod : " + name);
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-
-        if (ignoreContainPathList != null && ignoreContainPathList.size() > 0) {
-            for (String path : ignoreContainPathList) {
-                if (className != null && className.contains(path)) {
-                    return super.visitMethod(access, name, desc, signature, exceptions);
-                }
-            }
-        }
-
-        if (ignorePathList != null && ignorePathList.size() > 0) {
-            for (String path : ignorePathList) {
-                if (className != null && className.equals(path)) {
-                    return super.visitMethod(access, name, desc, signature, exceptions);
-                }
-            }
-        }
-
-
         return new PermissionMethodVisitor(mv, className,name, desc);
     }
 

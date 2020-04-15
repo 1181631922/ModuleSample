@@ -10,12 +10,6 @@ import org.apache.commons.io.IOUtils
 
 public class PermissionPlugin extends Transform {
 
-    def extension
-
-    PermissionPlugin(RipplePermissionPluginExtension extension) {
-        this.extension = extension
-    }
-
     @Override
     String getName() {
         return "PermissionPlugin"
@@ -96,7 +90,7 @@ public class PermissionPlugin extends Transform {
         String className = path2ClassName(classFile.absolutePath, dir.absolutePath)
         try {
             byte[] sourceClassBytes = IOUtils.toByteArray(new FileInputStream(classFile))
-            byte[] modifiedBytes = ClassVisitorHelper.modifyClass(className, sourceClassBytes, extension)
+            byte[] modifiedBytes = ClassVisitorHelper.modifyClass(className, sourceClassBytes)
             if (modifiedBytes) {
                 modified = new File(tempDir, className.replace('.', '') + '.class')
                 if (modified.exists())
