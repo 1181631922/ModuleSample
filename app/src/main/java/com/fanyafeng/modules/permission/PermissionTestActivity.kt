@@ -36,7 +36,7 @@ class PermissionTestActivity : AppCompatActivity() {
     private fun initView() {
 
         permissionTest.setOnClickListener {
-            simpleRequestPermission(listOf("myName"))
+            simpleRequestPermission("name")
         }
 
     }
@@ -46,18 +46,18 @@ class PermissionTestActivity : AppCompatActivity() {
         [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION],
         "result"
     )
-    fun simpleRequestPermission(list: List<String>) {
-        Log.e("哈哈哈哈", "全部成功输出")
+    fun simpleRequestPermission(item: String) {
+        Log.e("哈哈哈哈", "权限用户已经授权")
     }
 
 
     private fun requestMediaPermission() {
-        RipplePermission.doCheckPermission(
-            this, arrayListOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ), "methodName", "methodDesc", listOf("name"), "onfail"
-        )
+//        RipplePermission.doCheckPermission(
+//            this, arrayListOf(
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ), "methodName", "methodDesc", listOf("name"), "result"
+//        )
     }
 
 
@@ -91,6 +91,10 @@ class PermissionTestActivity : AppCompatActivity() {
         toast.show()
     }
 
+    fun look() {
+        Log.e("哭哭哭哭", "用户拒绝了某些权限")
+    }
+
     fun onFail(per: List<String>) {
         per.forEach {
             Log.e("fail", it)
@@ -102,6 +106,8 @@ class PermissionTestActivity : AppCompatActivity() {
     }
 
     fun result(success: List<String>, fail: List<String>) {
+        Log.e("哭哭哭哭", "用户拒绝了某些权限")
+
         success.forEach {
             Log.e("success", it)
         }

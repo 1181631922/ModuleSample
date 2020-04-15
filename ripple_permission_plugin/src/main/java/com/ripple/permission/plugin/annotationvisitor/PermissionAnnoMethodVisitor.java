@@ -1,5 +1,6 @@
 package com.ripple.permission.plugin.annotationvisitor;
 
+import com.ripple.permission.plugin.inject.InjectProcessor;
 import com.ripple.permission.plugin.log.LogUtil;
 import com.ripple.permission.plugin.model.PermissionAnnoModel;
 
@@ -41,14 +42,14 @@ public class PermissionAnnoMethodVisitor extends AnnotationVisitor {
     public void visit(String name, Object value) {
         super.visit(name, value);
         //添加失败回调方法名字
-        if ("failMethodName".equals(name)) {
+        if (InjectProcessor.ANNO_METHOD_FIELD.equals(name)) {
             model.setFailMethodName((String) value);
         }
     }
 
     @Override
     public AnnotationVisitor visitArray(String name) {
-        if ("permissionList".equals(name)) {
+        if (InjectProcessor.ANNO_METHOD_PER.equals(name)) {
             return new PermissionAnnoArrayVisitor(super.visitArray(name), model);
         } else {
             return super.visitArray(name);

@@ -7,14 +7,20 @@
   <version>1.0.0</version>
   <dependencies>
     <dependency>
-      <groupId>com.android.tools.build</groupId>
-      <artifactId>gradle</artifactId>
-      <version>3.6.2</version>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>7.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-commons</artifactId>
+      <version>7.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.android.tools.build</groupId>
-      <artifactId>gradle-api</artifactId>
+      <artifactId>gradle</artifactId>
       <version>3.6.2</version>
       <scope>runtime</scope>
     </dependency>

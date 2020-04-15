@@ -9,11 +9,11 @@ package com.ripple.permission.plugin.log;
 public class LogUtil {
 
     public static void i(String message) {
-        System.out.println("i ---------> permission_plugin:" + message);
+        System.out.println("permission_plugin:--------->" + message);
     }
 
 
     public static void d(String message) {
-        System.out.println("d ---------> permission_plugin:" + message);
+        System.out.println("permission_plugin:--------->" + message);
     }
 }

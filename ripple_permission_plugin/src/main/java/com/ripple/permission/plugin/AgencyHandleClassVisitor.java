@@ -55,7 +55,7 @@ public class AgencyHandleClassVisitor extends ClassVisitor implements Opcodes {
         }
 
 
-        return new PermissionMethodVisitor(mv, className, desc);
+        return new PermissionMethodVisitor(mv, className,name, desc);
     }
 
     @Override

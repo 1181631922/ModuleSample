@@ -9,4 +9,4 @@ package com.ripple.permission.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.BINARY)
-annotation class NeedPermission(val permissionList: Array<String>, val failMethodName: String)
+annotation class NeedPermission(val permissions: Array<String>, val method: String)
