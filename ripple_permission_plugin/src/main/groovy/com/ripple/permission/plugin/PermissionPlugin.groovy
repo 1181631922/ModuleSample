@@ -39,53 +39,47 @@ public class PermissionPlugin extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation)
-        boolean isIgnoreAll = extension.isIgnoreAll
-        boolean isIgnoreThirdJar = extension.isIgnoreThirdJar
-        if (!isIgnoreAll) {
-            transformInvocation.inputs.each {
-                it.directoryInputs.each { DirectoryInput directoryInput ->
-                    File dest = transformInvocation.outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY)
-                    File dir = directoryInput.file
-                    if (dir) {
-                        HashMap<String, File> modifyMap = new HashMap<>()
-                        dir.traverse(type: FileType.FILES, nameFilter: ~/.*\.class/) {
-                            File classFile ->
-                                File file = modifyClassFile(dir, classFile, transformInvocation.getContext().temporaryDir)
-                                if (file != null) {
-                                    modifyMap.put(classFile.absolutePath.replace(dir.absolutePath, ""), file)
-                                }
-
-                        }
-                        FileUtils.copyDirectory(directoryInput.file, dest)
-
-                        modifyMap.entrySet().each { Map.Entry<String, File> en ->
-                            File target = new File(dest.absolutePath + en.getKey())
-//                            Logger.info(target.getAbsolutePath())
-                            if (target.exists()) {
-                                target.delete()
+        transformInvocation.inputs.each {
+            it.directoryInputs.each { DirectoryInput directoryInput ->
+                File dest = transformInvocation.outputProvider.getContentLocation(directoryInput.name, directoryInput.contentTypes, directoryInput.scopes, Format.DIRECTORY)
+                File dir = directoryInput.file
+                if (dir) {
+                    HashMap<String, File> modifyMap = new HashMap<>()
+                    dir.traverse(type: FileType.FILES, nameFilter: ~/.*\.class/) {
+                        File classFile ->
+                            File file = modifyClassFile(dir, classFile, transformInvocation.getContext().temporaryDir)
+                            if (file != null) {
+                                modifyMap.put(classFile.absolutePath.replace(dir.absolutePath, ""), file)
                             }
-                            FileUtils.copyFile(en.getValue(), target)
-                            en.getValue().delete()
+
+                    }
+                    FileUtils.copyDirectory(directoryInput.file, dest)
+
+                    modifyMap.entrySet().each { Map.Entry<String, File> en ->
+                        File target = new File(dest.absolutePath + en.getKey())
+//                            Logger.info(target.getAbsolutePath())
+                        if (target.exists()) {
+                            target.delete()
                         }
-
-
+                        FileUtils.copyFile(en.getValue(), target)
+                        en.getValue().delete()
                     }
 
 
                 }
 
-                if (!isIgnoreThirdJar) {
-                    it.jarInputs.each { JarInput jarInput ->
-                        String jarName = jarInput.name
-                        File outputFile = transformInvocation.getOutputProvider().getContentLocation(jarName,
-                                jarInput.contentTypes, jarInput.scopes, Format.JAR)
-
-                        FileUtils.copyFile(jarInput.file, outputFile)
-                    }
-
-                }
 
             }
+
+            it.jarInputs.each { JarInput jarInput ->
+                String jarName = jarInput.name
+                File outputFile = transformInvocation.getOutputProvider().getContentLocation(jarName,
+                        jarInput.contentTypes, jarInput.scopes, Format.JAR)
+
+                FileUtils.copyFile(jarInput.file, outputFile)
+            }
+
+
         }
     }
 

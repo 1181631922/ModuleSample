@@ -8,14 +8,6 @@ package com.ripple.permission.plugin.dsl;
  * 如果这些还不够，可以通过定义忽略路径
  */
 public class RipplePermissionPluginExtension {
-    boolean isIgnoreAll = false
-    boolean isIgnoreThirdJar = true
-
-    /**
-     * 如果相应目录或者第三方jar包已经忽略，下方不起作用
-     * 上方配置优先执行
-     */
-
     //包含相应路径的都忽略，类似模糊查询
     List<String> ignoreContainPathList = new ArrayList<>();
 
