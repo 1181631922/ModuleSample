@@ -13,6 +13,7 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
 import com.fanyafeng.modules.permission.PermissionTestActivity
+import com.fanyafeng.modules.mediapick.MediaPickActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
-//            add(MainModel("主页", MainActivity::class.java))
+            add(MainModel("媒体库选择", MediaPickActivity::class.java))
             add(MainModel("动态权限", PermissionTestActivity::class.java))
         }
 

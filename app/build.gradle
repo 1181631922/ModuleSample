@@ -31,8 +31,8 @@ android {
     }
 }
 
-rippleIgnorePermission{
-    ignoreContainPathList=["com/fanyafeng/modules"]
+rippleIgnorePermission {
+    ignoreContainPathList = ["com/fanyafeng/modules"]
 }
 
 dependencies {
@@ -74,5 +74,3 @@ class GreetingPlugin implements Plugin<Project> {
         }
     }
 }
-
-

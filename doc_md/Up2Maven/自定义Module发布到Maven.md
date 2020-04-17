@@ -27,10 +27,12 @@
  * Email: fanyafeng@live.cn
  * Desc: 发布到本地maven库所需maven文件
  * 发布版本命令：gradle :module名称:uploadArchives
+ * uploadArchives其实就是一个gradle的task
  * 发布新版本规则为：
  * MAVEN_GROUP_ID:xxx.xxx.xxx(一般，多的话还可以继续在后面加路径名)
  * MAVEN_ARTIFACT_ID:xxx-xxx(具体的库名称)
  * MAVEN_VERSION:x.x.x(正式版) x.x.x-SNAPSHOT(快照版)
+ * 版本发布必须要高于上一个版本不能重复，否则发布失败
  * 依赖的库的格式：implementation "xxx.xxx.xxx:xxx-xxx-xxx:0.1.0"
  *
  * 脚本语言为groovy
