@@ -6,3 +6,4 @@ package com.ripple.media.picker.model
  * Email: fanyafeng@live.cn
  * Description:
  */
+interface RippleVideoModel : RippleMediaModel

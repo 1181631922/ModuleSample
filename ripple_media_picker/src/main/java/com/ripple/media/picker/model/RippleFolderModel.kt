@@ -6,3 +6,8 @@ package com.ripple.media.picker.model
  * Email: fanyafeng@live.cn
  * Description:
  */
+interface RippleFolderModel : RippleBaseModel {
+    fun getName(): String
+
+    fun getMediaList(): List<RippleMediaModel>
+}
