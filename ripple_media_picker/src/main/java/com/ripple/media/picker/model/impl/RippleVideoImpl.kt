@@ -1,5 +1,6 @@
 package com.ripple.media.picker.model.impl
 
+import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.model.RippleVideoModel
 
 /**
@@ -8,7 +9,7 @@ import com.ripple.media.picker.model.RippleVideoModel
  * Email: fanyafeng@live.cn
  * Description:
  */
-class RippleVideoImpl : RippleVideoModel, Comparable<RippleVideoImpl> {
+class RippleVideoImpl : RippleVideoModel {
     private lateinit var parentPath: String
 
     private lateinit var path: String
@@ -161,7 +162,6 @@ class RippleVideoImpl : RippleVideoModel, Comparable<RippleVideoImpl> {
     }
 
 
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -180,8 +180,8 @@ class RippleVideoImpl : RippleVideoModel, Comparable<RippleVideoImpl> {
     /**
      * 暂定按照修改时间进行排序
      */
-    override fun compareTo(other: RippleVideoImpl): Int {
-        return if (this.dateModified > other.dateModified) {
+    override fun compareTo(other: RippleMediaModel): Int {
+        return if (this.dateModified > other.getDateModified()) {
             -1
         } else {
             1

@@ -13,7 +13,7 @@ class RippleFolderImpl : RippleFolderModel {
 
     private lateinit var name: String
 
-    private lateinit var mediaList: List<RippleMediaModel>
+    private lateinit var mediaList: MutableList<RippleMediaModel>
 
     private var isCheck = false
 
@@ -22,8 +22,8 @@ class RippleFolderImpl : RippleFolderModel {
     @JvmOverloads
     constructor(
         name: String,
-        mediaList: List<RippleMediaModel>,
         path: String,
+        mediaList: MutableList<RippleMediaModel>,
         isCheck: Boolean = false
     ) {
         this.name = name
@@ -32,12 +32,14 @@ class RippleFolderImpl : RippleFolderModel {
         this.path = path
     }
 
+    constructor()
+
 
     fun setName(name: String) {
         this.name = name
     }
 
-    fun setMediaList(mediaList: List<RippleMediaModel>) {
+    fun setMediaList(mediaList: MutableList<RippleMediaModel>) {
         this.mediaList = mediaList
     }
 
@@ -53,7 +55,7 @@ class RippleFolderImpl : RippleFolderModel {
         return name
     }
 
-    override fun getMediaList(): List<RippleMediaModel> {
+    override fun getMediaList(): MutableList<RippleMediaModel> {
         return mediaList
     }
 
@@ -64,5 +66,21 @@ class RippleFolderImpl : RippleFolderModel {
     override fun getPath(): String {
         return path
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RippleFolderImpl
+
+        if (path != other.path) return false
+
+        return true
+    }
+
+    override fun toString(): String {
+        return "RippleFolderImpl(name='$name', mediaList=$mediaList, isCheck=$isCheck, path='$path')"
+    }
+
 
 }

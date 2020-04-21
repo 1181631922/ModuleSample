@@ -9,5 +9,5 @@ package com.ripple.media.picker.model
 interface RippleFolderModel : RippleBaseModel {
     fun getName(): String
 
-    fun getMediaList(): List<RippleMediaModel>
+    fun getMediaList(): MutableList<RippleMediaModel>
 }

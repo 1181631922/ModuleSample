@@ -1,6 +1,7 @@
 package com.ripple.media.picker.model.impl
 
 import com.ripple.media.picker.model.RippleImageModel
+import com.ripple.media.picker.model.RippleMediaModel
 
 /**
  * Author: fanyafeng
@@ -8,7 +9,7 @@ import com.ripple.media.picker.model.RippleImageModel
  * Email: fanyafeng@live.cn
  * Description:
  */
-class RippleImageImpl : RippleImageModel, Comparable<RippleImageImpl> {
+class RippleImageImpl : RippleImageModel {
 
     private lateinit var parentPath: String
 
@@ -179,11 +180,12 @@ class RippleImageImpl : RippleImageModel, Comparable<RippleImageImpl> {
     /**
      * 暂定按照修改时间进行排序
      */
-    override fun compareTo(other: RippleImageImpl): Int {
-        return if (this.dateModified > other.dateModified) {
+    override fun compareTo(other: RippleMediaModel): Int {
+        return if (this.dateModified > other.getDateModified()) {
             -1
         } else {
             1
         }
     }
+
 }

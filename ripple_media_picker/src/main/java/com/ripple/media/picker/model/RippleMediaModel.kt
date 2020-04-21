@@ -6,7 +6,7 @@ package com.ripple.media.picker.model
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface RippleMediaModel : RippleBaseModel {
+interface RippleMediaModel : RippleBaseModel,Comparable<RippleMediaModel> {
     /**
      * 获取父路径
      */

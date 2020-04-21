@@ -1,2 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ripple.media.picker" />
+    package="com.ripple.media.picker">
+
+    <application>
+        <activity android:name=".image.activity.RippleImagePickerActivity"></activity>
+        <activity android:name=".activity.RippleBaseActivity" />
+    </application>
+
+</manifest>
