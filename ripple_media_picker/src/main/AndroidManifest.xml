@@ -2,9 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ripple.media.picker">
 
+
     <application>
-        <activity android:name=".image.activity.RippleImagePickerActivity"></activity>
-        <activity android:name=".activity.RippleBaseActivity" />
+
+        <activity
+            android:name=".image.activity.RippleImagePickerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.RippleBaseActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
