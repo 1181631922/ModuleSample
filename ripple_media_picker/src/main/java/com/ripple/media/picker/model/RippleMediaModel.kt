@@ -53,7 +53,7 @@ interface RippleMediaModel : RippleBaseModel,Comparable<RippleMediaModel> {
     fun getDuration(): Long
 
     /**
-     * 获取图片类型
+     * 获取文件类型
      */
     fun getType(): String
 
