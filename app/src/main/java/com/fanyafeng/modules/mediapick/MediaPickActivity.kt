@@ -12,7 +12,6 @@ import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.MediaPickConfig
 import com.ripple.media.picker.config.impl.ImagePickConfig
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
-import com.ripple.media.picker.util.screenwidth
 import com.ripple.permission.annotation.NeedPermission
 
 class MediaPickActivity : AppCompatActivity() {

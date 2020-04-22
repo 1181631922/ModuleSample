@@ -12,6 +12,7 @@ import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.model.RippleImageModel
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.model.impl.RippleImageImpl
+import com.ripple.media.picker.util.dp2px
 import com.ripple.media.picker.util.screenwidth
 import com.ripple.media.picker.view.RippleImageView
 
@@ -30,7 +31,7 @@ class RippleImageAdapter @JvmOverloads constructor(
     RecyclerView.Adapter<RippleImageAdapter.RippleImageViewHolder>() {
 
     var SCREEN_WIDTH = (mContext as Activity).screenwidth()
-    var ITEM_WIDTH = SCREEN_WIDTH / line
+    var ITEM_WIDTH = ((SCREEN_WIDTH - 4.dp2px) / line).toInt()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RippleImageViewHolder {

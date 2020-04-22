@@ -22,7 +22,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
     companion object {
         private val TAG = RippleImagePickerActivity.javaClass.simpleName
-        private val LINE = 4
+        private val LINE = 3
         val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 101
     }
 

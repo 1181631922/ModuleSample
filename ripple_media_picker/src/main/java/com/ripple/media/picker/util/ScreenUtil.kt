@@ -53,10 +53,10 @@ internal object ScreenUtil {
     }
 }
 
-fun Activity.screenwidth() = ScreenUtil.getScreenWidth(this)
+internal fun Activity.screenwidth() = ScreenUtil.getScreenWidth(this)
 
-fun Activity.screenHeight() = ScreenUtil.getScreenHeight(this)
+internal fun Activity.screenHeight() = ScreenUtil.getScreenHeight(this)
 
-fun Activity.realScreenWidth() = ScreenUtil.getRealScreenWidth(this)
+internal fun Activity.realScreenWidth() = ScreenUtil.getRealScreenWidth(this)
 
-fun Activity.realScreenHeight() = ScreenUtil.getRealScreenHeight(this)
+internal fun Activity.realScreenHeight() = ScreenUtil.getRealScreenHeight(this)

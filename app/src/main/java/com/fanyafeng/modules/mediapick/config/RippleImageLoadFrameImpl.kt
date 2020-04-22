@@ -22,6 +22,7 @@ class RippleImageLoadFrameImpl : ImageLoadFrame {
     ) {
         val requestOptions = RequestOptions()
             .override(width, height)
+            .centerCrop()
         Glide.with(context)
             .load(path)
             .apply(requestOptions)
