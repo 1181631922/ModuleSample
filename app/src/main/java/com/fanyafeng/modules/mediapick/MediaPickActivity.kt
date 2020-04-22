@@ -23,7 +23,7 @@ class MediaPickActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_pick)
-        title = "媒体库选择选择"
+        title = "媒体库选择"
 
         initView()
         initData()

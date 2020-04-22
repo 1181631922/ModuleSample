@@ -1,10 +1,9 @@
 package com.ripple.media.picker.image.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import com.ripple.media.picker.R
-import com.ripple.media.picker.activity.RippleBaseActivity
+import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.image.ScanImageSource
 import com.ripple.media.picker.model.RippleFolderModel
 import com.ripple.media.picker.util.LogUtil
@@ -27,7 +26,6 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
     private fun initView() {
         scanImageSource = ScanImageSource(this, null, this)
-
     }
 
     private fun initData() {

@@ -18,25 +18,25 @@ interface MediaThemeConfig : Serializable {
     /**
      * 设置statusbar颜色
      */
-    fun setStatusBarColor(): Int
+    fun getStatusBarColor(): Int
 
     /**
      * 设置toolbar颜色
      */
-    fun setToolbarColor(): Int
+    fun getToolbarColor(): Int
 
     /**
      * 设置中间标题的颜色
      */
-    fun setToolbarCenterTitleColor(): Int
+    fun getToolbarCenterTitleColor(): Int
 
     /**
      * 设置右侧标题颜色
      */
-    fun setToolbarRightTitleColor(): Int
+    fun getToolbarRightTitleColor(): Int
 
     /**
      * 设置返回键
      */
-    fun setNavigationIcon(): Int
+    fun getNavigationIcon(): Int
 }

@@ -12,11 +12,16 @@ import com.ripple.media.picker.config.MediaThemeConfig
  */
 class ThemeConfig(builder: Builder) : MediaThemeConfig {
 
+    companion object {
+        private val statusBarColorString = "#303F9F"
+        private val toolbarColorString = "#3F51B5"
+    }
+
     private var isLight: Boolean = false
 
-    private var statusBarColor = Color.parseColor("#3F51B5")
+    private var statusBarColor = Color.parseColor(statusBarColorString)
 
-    private var toolbarColor = Color.parseColor("#303F9F")
+    private var toolbarColor = Color.parseColor(toolbarColorString)
 
     private var toolbarCenterTitleColor = Color.WHITE
 
@@ -37,23 +42,23 @@ class ThemeConfig(builder: Builder) : MediaThemeConfig {
         return isLight
     }
 
-    override fun setStatusBarColor(): Int {
+    override fun getStatusBarColor(): Int {
         return statusBarColor
     }
 
-    override fun setToolbarColor(): Int {
+    override fun getToolbarColor(): Int {
         return toolbarColor
     }
 
-    override fun setToolbarCenterTitleColor(): Int {
+    override fun getToolbarCenterTitleColor(): Int {
         return toolbarCenterTitleColor
     }
 
-    override fun setToolbarRightTitleColor(): Int {
+    override fun getToolbarRightTitleColor(): Int {
         return toolbarRightTitleColor
     }
 
-    override fun setNavigationIcon(): Int {
+    override fun getNavigationIcon(): Int {
         return navigationIcon
     }
 
@@ -124,8 +129,8 @@ class ThemeConfig(builder: Builder) : MediaThemeConfig {
 
         fun create(): ThemeConfig {
             return Builder().setLight(false)
-                .setStatusBarColor(Color.parseColor("#3F51B5"))
-                .setToolbarColor(Color.parseColor("#303F9F"))
+                .setStatusBarColor(Color.parseColor(statusBarColorString))
+                .setToolbarColor(Color.parseColor(toolbarColorString))
                 .setToolbarCenterTitleColor(Color.WHITE)
                 .setToolbarRightTitleColor(Color.WHITE)
                 .setNavigationIcon(R.drawable.go_back_left_arrow)

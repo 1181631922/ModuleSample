@@ -9,7 +9,7 @@
             android:name=".image.activity.RippleImagePickerActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activity.RippleBaseActivity"
+            android:name=".base.RippleBaseActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
