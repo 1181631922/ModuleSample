@@ -1,6 +1,5 @@
 package com.ripple.media.picker.image
 
-import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.MediaStore
@@ -8,14 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.ripple.media.picker.ScanMediaSource
+import com.ripple.media.picker.callback.ScanMediaSource
 import com.ripple.media.picker.model.RippleFolderModel
-import com.ripple.media.picker.model.RippleImageModel
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.model.impl.RippleFolderImpl
 import com.ripple.media.picker.model.impl.RippleImageImpl
 import java.io.File
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -170,7 +167,8 @@ class ScanImageSource @JvmOverloads constructor(
     }
 
 
-    interface ImageSourceListener : ScanMediaSource<RippleFolderModel>
+    interface ImageSourceListener :
+        ScanMediaSource<RippleFolderModel>
 
 
     fun recycle() {

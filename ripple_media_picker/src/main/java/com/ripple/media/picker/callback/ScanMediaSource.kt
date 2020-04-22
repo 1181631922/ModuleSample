@@ -1,4 +1,4 @@
-package com.ripple.media.picker
+package com.ripple.media.picker.callback
 
 /**
  * Author: fanyafeng
