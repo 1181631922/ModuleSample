@@ -40,7 +40,6 @@
                 android:gravity="center"
                 android:maxLength="16"
                 android:maxLines="1"
-                android:text="测试标题"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />
 
@@ -53,7 +52,6 @@
                 android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="发送"
                 android:textColor="@android:color/white"
                 android:textSize="16dp" />
         </androidx.appcompat.widget.Toolbar>

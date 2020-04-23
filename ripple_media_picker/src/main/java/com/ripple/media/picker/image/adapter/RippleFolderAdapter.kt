@@ -25,7 +25,7 @@ class RippleFolderAdapter(
 ) :
     RecyclerView.Adapter<RippleFolderAdapter.RippleFolderViewHolder>() {
 
-    var onItemListener: ((view: View, position: Int) -> Unit)? = null
+    var onItemListener: ((model: RippleFolderModel, view: View, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RippleFolderViewHolder {
         val layout =
@@ -54,7 +54,7 @@ class RippleFolderAdapter(
             holder.rippleFolderCount?.text = imageList.size.toString()
 
             holder.itemView.setOnClickListener {
-                onItemListener?.invoke(it, position)
+                onItemListener?.invoke(model,it, position)
             }
         }
     }

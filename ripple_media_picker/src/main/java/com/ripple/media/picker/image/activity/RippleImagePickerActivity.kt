@@ -91,6 +91,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     }
 
     private fun updateData() {
+        toolbar?.navigationIcon = null
         toolbarCenterTitle!!.setOnClickListener {
             setRippleFolderRV()
         }
@@ -121,6 +122,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             adapter = RippleImageAdapter(this, mediaList[0].getMediaList(), LINE)
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
+            toolbarCenterTitle?.text = "所有图片"
 
             /**
              * 文件夹
@@ -130,10 +132,11 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             rippleFolderRV.adapter = folderAdapter
             folderAdapter?.notifyDataSetChanged()
 
-            folderAdapter?.onItemListener = { view, position ->
+            folderAdapter?.onItemListener = { model, _, position ->
 
                 adapter = RippleImageAdapter(this, mediaList[position].getMediaList(), LINE)
                 rippleImageRV.adapter = adapter
+                toolbarCenterTitle?.text = model.getName()
                 setRippleFolderRV()
             }
         }
