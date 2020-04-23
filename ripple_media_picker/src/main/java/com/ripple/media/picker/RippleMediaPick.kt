@@ -6,6 +6,7 @@ import com.ripple.media.picker.config.MediaThemeConfig
 import com.ripple.media.picker.config.impl.ImagePickConfig
 import com.ripple.media.picker.config.impl.ThemeConfig
 import com.ripple.media.picker.loadframe.impl.ImageLoadFrame
+import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.Preconditions
 
 /**
@@ -39,6 +40,14 @@ class RippleMediaPick private constructor() {
      */
     var themeConfig: MediaThemeConfig = ThemeConfig.Builder().create()
         get() = Preconditions.checkNotNull(field, "MediaThemeConfig接口未实现")
+        private set(value) {
+            field = value
+        }
+
+    /**
+     * 选取图片列表
+     */
+    var imageList = ArrayList<RippleMediaModel>()
         private set(value) {
             field = value
         }
@@ -83,11 +92,13 @@ class RippleMediaPick private constructor() {
         imageLoadFrame = savedInstanceState.getSerializable("imageLoadFrame") as ImageLoadFrame?
         imagePickConfig = savedInstanceState.getSerializable("imagePickConfig") as IImagePickConfig
         themeConfig = savedInstanceState.getSerializable("themeConfig") as MediaThemeConfig
+        imageList = savedInstanceState.getSerializable("imageList") as ArrayList<RippleMediaModel>
     }
 
     fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable("imageLoadFrame", imageLoadFrame)
         outState.putSerializable("imagePickConfig", imagePickConfig)
         outState.putSerializable("themeConfig", themeConfig)
+        outState.putSerializable("imageList", imageList)
     }
 }

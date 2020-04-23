@@ -4,13 +4,17 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ripple.media.picker.R
+import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.image.ScanImageSource
+import com.ripple.media.picker.image.adapter.RippleFolderAdapter
 import com.ripple.media.picker.image.adapter.RippleImageAdapter
 import com.ripple.media.picker.model.RippleFolderModel
 import com.ripple.media.picker.model.RippleMediaModel
@@ -30,12 +34,13 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     private var adapter: RippleImageAdapter? = null
     private var list = ArrayList<RippleMediaModel>()
 
+    private var folderAdapter: RippleFolderAdapter? = null
+    private var folderList = ArrayList<RippleFolderModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ripple_image_picker)
 
-//        initView()
-//        initData()
         requestMediaPermission()
     }
 
@@ -44,7 +49,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) !== PackageManager.PERMISSION_GRANTED
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
@@ -68,10 +73,39 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         scanImageSource = ScanImageSource(this, null, this)
         rippleImageRV.layoutManager =
             GridLayoutManager(this, LINE, GridLayoutManager.VERTICAL, false)
+        rippleFolderRV.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false)
+        (rippleImageRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (rippleFolderRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
     private fun initData() {
+        rippleFolderShape.setOnClickListener {
+            setRippleFolderRV()
+        }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateData()
+    }
+
+    private fun updateData() {
+        toolbarCenterTitle!!.setOnClickListener {
+            setRippleFolderRV()
+        }
+    }
+
+    private fun setRippleFolderRV() {
+        //点击切换文件夹
+        val isShown = rippleFolderRV.isShown
+        if (isShown) {
+            rippleFolderRV.visibility = View.GONE
+            rippleFolderShape.visibility = View.GONE
+        } else {
+            rippleFolderRV.visibility = View.VISIBLE
+            rippleFolderShape.visibility = View.VISIBLE
+        }
     }
 
     /**
@@ -80,10 +114,28 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     override fun onMediaLoaded(mediaList: List<RippleFolderModel>) {
         LogUtil.d(TAG, mediaList.toString())
         if (mediaList.isNotEmpty()) {
-            list.addAll(mediaList[0].getMediaList())
-            adapter = RippleImageAdapter(this, list, LINE)
+
+            /**
+             * 所有图片
+             */
+            adapter = RippleImageAdapter(this, mediaList[0].getMediaList(), LINE)
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
+
+            /**
+             * 文件夹
+             */
+
+            folderAdapter = RippleFolderAdapter(this, mediaList)
+            rippleFolderRV.adapter = folderAdapter
+            folderAdapter?.notifyDataSetChanged()
+
+            folderAdapter?.onItemListener = { view, position ->
+
+                adapter = RippleImageAdapter(this, mediaList[position].getMediaList(), LINE)
+                rippleImageRV.adapter = adapter
+                setRippleFolderRV()
+            }
         }
     }
 
@@ -106,5 +158,10 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LogUtil.d(msg = RippleMediaPick.getInstance().imageList.toString())
     }
 }

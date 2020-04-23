@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
@@ -49,6 +50,9 @@ class RippleImageAdapter @JvmOverloads constructor(
     }
 
     override fun onBindViewHolder(holder: RippleImageViewHolder, position: Int) {
+        holder.imageItemCheck?.text = ""
+
+
         val model = list[position]
 
         val params = holder.imageItemLayout?.layoutParams
@@ -64,20 +68,10 @@ class RippleImageAdapter @JvmOverloads constructor(
             ITEM_WIDTH
         )
 
-        when (position % line) {
-            0 -> {
-
-            }
-            1 -> {
-
-            }
-            2 -> {
-
-            }
-            3 -> {
-
-            }
-
+        holder.imageItemCheck?.setOnClickListener {
+            //点击选择图片
+            RippleMediaPick.getInstance().imageList.add(model)
+            holder.imageItemCheck?.text = "9"
         }
     }
 
@@ -86,10 +80,12 @@ class RippleImageAdapter @JvmOverloads constructor(
 
         var imageItemLayout: RelativeLayout? = null
         var imageItemIcon: RippleImageView? = null
+        var imageItemCheck: TextView? = null
 
         init {
             imageItemLayout = item.findViewById(R.id.imageItemLayout)
             imageItemIcon = item.findViewById(R.id.imageItemIcon)
+            imageItemCheck = item.findViewById(R.id.imageItemCheck)
         }
     }
 }
