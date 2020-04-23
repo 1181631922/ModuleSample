@@ -119,7 +119,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             /**
              * 所有图片
              */
-            adapter = RippleImageAdapter(this, mediaList[0].getMediaList(), LINE)
+            adapter = RippleImageAdapter(this, mediaList[0].getMediaList(), line = LINE)
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
@@ -134,7 +134,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
             folderAdapter?.onItemListener = { model, _, position ->
 
-                adapter = RippleImageAdapter(this, mediaList[position].getMediaList(), LINE)
+                adapter = RippleImageAdapter(this, mediaList[position].getMediaList(), line = LINE)
                 rippleImageRV.adapter = adapter
                 toolbarCenterTitle?.text = model.getName()
                 setRippleFolderRV()

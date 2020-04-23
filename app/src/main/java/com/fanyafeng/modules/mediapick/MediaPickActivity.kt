@@ -43,6 +43,7 @@ class MediaPickActivity : AppCompatActivity() {
 
     @NeedPermission(permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE], method = "onFail")
     private fun swipePic() {
+        RippleMediaPick.getInstance().imageList.clear()
         startActivity(Intent(this, RippleImagePickerActivity::class.java))
     }
 

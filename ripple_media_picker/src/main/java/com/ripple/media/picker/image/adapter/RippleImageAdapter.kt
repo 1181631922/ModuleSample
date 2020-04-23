@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.model.RippleImageModel
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.model.impl.RippleImageImpl
+import com.ripple.media.picker.util.LogUtil
 import com.ripple.media.picker.util.dp2px
 import com.ripple.media.picker.util.screenwidth
 import com.ripple.media.picker.view.RippleImageView
@@ -26,6 +29,7 @@ import com.ripple.media.picker.view.RippleImageView
 class RippleImageAdapter @JvmOverloads constructor(
     private val mContext: Context,
     private val list: List<RippleMediaModel>,
+    private val config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig,
     private val line: Int = 4,
     private val showCamera: Boolean = false
 ) :
@@ -55,11 +59,8 @@ class RippleImageAdapter @JvmOverloads constructor(
         val model = list[position]
 
         if (model.isCheck()) {
-            val modelList = RippleMediaPick.getInstance().imageList
-            modelList.forEachIndexed { index, rippleMediaModel ->
-                if (model == rippleMediaModel) {
-                    holder.imageItemCheck?.text = index.toString()
-                }
+            model.getTag()?.let {
+                holder.imageItemCheck?.text = (model.getTag() as Int).toString()
             }
         }
 
@@ -77,8 +78,12 @@ class RippleImageAdapter @JvmOverloads constructor(
         )
 
         holder.imageItemCheck?.setOnClickListener {
+
             //点击选择图片
             val modelList = RippleMediaPick.getInstance().imageList
+
+            LogUtil.d("选取图片数量图片数量：", msg = modelList.toString())
+
             /**
              * 如果选中的图片包括当前的图则取消选择
              * 否则的话添加选择
@@ -86,13 +91,22 @@ class RippleImageAdapter @JvmOverloads constructor(
              * 取消，选择后需要更新个数显示
              */
             if (modelList.contains(model)) {
+                model.setCheck(false)
+                model.setTag(null)
                 modelList.remove(model)
+                updateCount(list, modelList, holder.imageItemCheck)
+                notifyDataSetChanged()
             } else {
-                model.setCheck(true)
-                modelList.add(model)
+                if (modelList.size < config.getCount()) {
+                    model.setCheck(true)
+                    modelList.add(model)
+                    updateCount(list, modelList, holder.imageItemCheck)
+                    notifyDataSetChanged()
+                } else {
+                    Toast.makeText(mContext, "图片最多选取" + config.getCount() + "张", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-            updateCount(list, modelList, holder.imageItemCheck)
-            notifyDataSetChanged()
         }
     }
 
@@ -104,10 +118,12 @@ class RippleImageAdapter @JvmOverloads constructor(
         selectList: List<RippleMediaModel>,
         view: TextView?
     ) {
-        allList.forEachIndexed { allIndex, allItem ->
+        allList.forEachIndexed { _, allItem ->
             selectList.forEachIndexed { selectIndex, selectItem ->
                 if (allItem == selectItem) {
-                    view?.text = selectIndex.toString()
+                    val seeIndex = selectIndex + 1
+                    allItem.setTag(seeIndex)
+                    view?.text = seeIndex.toString()
                 }
             }
         }
