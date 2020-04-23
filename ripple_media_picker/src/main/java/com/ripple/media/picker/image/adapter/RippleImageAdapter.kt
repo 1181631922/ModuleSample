@@ -52,8 +52,16 @@ class RippleImageAdapter @JvmOverloads constructor(
     override fun onBindViewHolder(holder: RippleImageViewHolder, position: Int) {
         holder.imageItemCheck?.text = ""
 
-
         val model = list[position]
+
+        if (model.isCheck()) {
+            val modelList = RippleMediaPick.getInstance().imageList
+            modelList.forEachIndexed { index, rippleMediaModel ->
+                if (model == rippleMediaModel) {
+                    holder.imageItemCheck?.text = index.toString()
+                }
+            }
+        }
 
         val params = holder.imageItemLayout?.layoutParams
         params?.width = ITEM_WIDTH
@@ -70,22 +78,53 @@ class RippleImageAdapter @JvmOverloads constructor(
 
         holder.imageItemCheck?.setOnClickListener {
             //点击选择图片
-            RippleMediaPick.getInstance().imageList.add(model)
-            holder.imageItemCheck?.text = "9"
+            val modelList = RippleMediaPick.getInstance().imageList
+            /**
+             * 如果选中的图片包括当前的图则取消选择
+             * 否则的话添加选择
+             *
+             * 取消，选择后需要更新个数显示
+             */
+            if (modelList.contains(model)) {
+                modelList.remove(model)
+            } else {
+                model.setCheck(true)
+                modelList.add(model)
+            }
+            updateCount(list, modelList, holder.imageItemCheck)
+            notifyDataSetChanged()
         }
     }
 
+    /**
+     * 更新选中右上角显示
+     */
+    private fun updateCount(
+        allList: List<RippleMediaModel>,
+        selectList: List<RippleMediaModel>,
+        view: TextView?
+    ) {
+        allList.forEachIndexed { allIndex, allItem ->
+            selectList.forEachIndexed { selectIndex, selectItem ->
+                if (allItem == selectItem) {
+                    view?.text = selectIndex.toString()
+                }
+            }
+        }
+    }
 
     inner class RippleImageViewHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         var imageItemLayout: RelativeLayout? = null
         var imageItemIcon: RippleImageView? = null
         var imageItemCheck: TextView? = null
+        var imageItemUnCheck: TextView? = null
 
         init {
             imageItemLayout = item.findViewById(R.id.imageItemLayout)
             imageItemIcon = item.findViewById(R.id.imageItemIcon)
             imageItemCheck = item.findViewById(R.id.imageItemCheck)
+            imageItemUnCheck = item.findViewById(R.id.imageItemUnCheck)
         }
     }
 }

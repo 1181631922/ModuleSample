@@ -35,6 +35,8 @@ class RippleImageImpl : RippleImageModel {
 
     private var isCheck = false
 
+    private var any: Any? = null
+
     @JvmOverloads
     constructor(
         parentPath: String,
@@ -109,7 +111,7 @@ class RippleImageImpl : RippleImageModel {
         this.type = type
     }
 
-    fun setCheck(isCheck: Boolean) {
+    override fun setCheck(isCheck: Boolean) {
         this.isCheck = isCheck
     }
 
@@ -160,6 +162,14 @@ class RippleImageImpl : RippleImageModel {
 
     override fun getPath(): String {
         return path
+    }
+
+    override fun getTag(): Any? {
+        return any
+    }
+
+    override fun setTag(tag: Any?) {
+        this.any = tag
     }
 
     override fun toString(): String {

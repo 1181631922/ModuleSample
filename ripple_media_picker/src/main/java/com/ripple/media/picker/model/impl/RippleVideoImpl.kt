@@ -34,6 +34,8 @@ class RippleVideoImpl : RippleVideoModel {
 
     private var isCheck = false
 
+    private var any: Any? = null
+
     @JvmOverloads
     constructor(
         parentPath: String,
@@ -108,7 +110,7 @@ class RippleVideoImpl : RippleVideoModel {
         this.type = type
     }
 
-    fun setCheck(isCheck: Boolean) {
+    override fun setCheck(isCheck: Boolean) {
         this.isCheck = isCheck
     }
 
@@ -159,6 +161,14 @@ class RippleVideoImpl : RippleVideoModel {
 
     override fun getPath(): String {
         return path
+    }
+
+    override fun getTag(): Any? {
+        return any
+    }
+
+    override fun setTag(tag: Any?) {
+        this.any = tag
     }
 
 

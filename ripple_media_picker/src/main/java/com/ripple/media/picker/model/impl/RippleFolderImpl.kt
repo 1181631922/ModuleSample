@@ -19,6 +19,8 @@ class RippleFolderImpl : RippleFolderModel {
 
     private lateinit var path: String
 
+    private var any: Any? = null
+
     @JvmOverloads
     constructor(
         name: String,
@@ -43,7 +45,7 @@ class RippleFolderImpl : RippleFolderModel {
         this.mediaList = mediaList
     }
 
-    fun setCheck(isCheck: Boolean) {
+    override fun setCheck(isCheck: Boolean) {
         this.isCheck = isCheck
     }
 
@@ -65,6 +67,14 @@ class RippleFolderImpl : RippleFolderModel {
 
     override fun getPath(): String {
         return path
+    }
+
+    override fun getTag(): Any? {
+        return any
+    }
+
+    override fun setTag(tag: Any?) {
+        this.any = tag
     }
 
     override fun equals(other: Any?): Boolean {
