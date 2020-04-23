@@ -38,6 +38,8 @@ class RippleImageAdapter @JvmOverloads constructor(
     var SCREEN_WIDTH = (mContext as Activity).screenwidth()
     var ITEM_WIDTH = ((SCREEN_WIDTH - 4.dp2px) / line).toInt()
 
+    var itemClickListener: ((view: View, model: RippleMediaModel, position: Int) -> Unit)? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RippleImageViewHolder {
         val layout =
@@ -119,6 +121,7 @@ class RippleImageAdapter @JvmOverloads constructor(
                         .show()
                 }
             }
+            itemClickListener?.invoke(it, model, position)
         }
     }
 

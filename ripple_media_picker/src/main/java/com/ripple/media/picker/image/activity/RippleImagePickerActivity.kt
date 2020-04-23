@@ -1,9 +1,12 @@
 package com.ripple.media.picker.image.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -14,6 +17,7 @@ import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.config.IImagePickConfig
+import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.ScanImageSource
 import com.ripple.media.picker.image.adapter.RippleFolderAdapter
 import com.ripple.media.picker.image.adapter.RippleImageAdapter
@@ -97,12 +101,40 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     override fun onResume() {
         super.onResume()
         updateData()
+        setRightTitle(0)
     }
 
     private fun updateData() {
         toolbar?.navigationIcon = null
         toolbarCenterTitle!!.setOnClickListener {
             setRippleFolderRV()
+        }
+
+        toolbarRightTitle?.setOnClickListener {
+            val imageList = RippleMediaPick.getInstance().imageList
+            if (imageList.size > 0) {
+                val listener = RippleImagePick.getInstance().selectImageListListener
+                if (listener != null) {
+                    listener.selectImageList(imageList)
+                    RippleImagePick.getInstance().selectImageListListener = null
+                }
+
+                val intent = Intent()
+                intent.putExtra(
+                    RippleImagePick.RESULT_IMG_LIST,
+                    imageList
+                )
+                setResult(RESULT_OK, intent)
+                finish()
+                RippleMediaPick.getInstance().imageList.clear()
+            }
+        }
+
+        toolbarLeftTitle.text = "取消"
+        toolbarLeftTitle.setTextColor(Color.parseColor("#ffffff"))
+        toolbarLeftTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15F)
+        toolbarLeftTitle.setOnClickListener {
+            finish()
         }
     }
 
@@ -116,6 +148,21 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             rippleFolderRV.visibility = View.VISIBLE
             rippleFolderShape.visibility = View.VISIBLE
         }
+    }
+
+    private fun setRightTitle(count: Int) {
+        if (count > 0) {
+            toolbarRightTitle?.setTextColor(Color.WHITE)
+            toolbarRightTitle?.background =
+                resources.getDrawable(R.drawable.ripple_next_step_shape)
+            toolbarRightTitle?.text = "下一步($count)"
+        } else {
+            toolbarRightTitle?.setTextColor(Color.GRAY)
+            toolbarRightTitle?.background =
+                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
+            toolbarRightTitle?.text = "下一步"
+        }
+
     }
 
     /**
@@ -151,6 +198,13 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                 rippleImageRV.adapter = adapter
                 toolbarCenterTitle?.text = model.getName()
                 setRippleFolderRV()
+                adapter?.itemClickListener = { view, model, position ->
+                    setRightTitle(RippleMediaPick.getInstance().imageList.size)
+                }
+            }
+
+            adapter?.itemClickListener = { view, model, position ->
+                setRightTitle(RippleMediaPick.getInstance().imageList.size)
             }
         }
     }

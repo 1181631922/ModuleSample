@@ -1,6 +1,7 @@
 package com.fanyafeng.modules.mediapick
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,8 +12,12 @@ import com.fanyafeng.modules.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.MediaPickConfig
 import com.ripple.media.picker.config.impl.ImagePickConfig
+import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
+import com.ripple.media.picker.image.extend.imagePick
+import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.permission.annotation.NeedPermission
+import kotlinx.android.synthetic.main.activity_media_pick.*
 
 class MediaPickActivity : AppCompatActivity() {
 
@@ -31,23 +36,45 @@ class MediaPickActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val config = ImagePickConfig.Builder().setCount(9).setSize(100L)
-            .setChooseType(MediaPickConfig.ChooseType.MULTIPLE_CHOOSE_TYPE).build()
+        mediaPick1.setOnClickListener {
+            RippleImagePick.getInstance().imagePickForMulti(this, 10000)
+        }
 
-        Log.d(TAG, "数量：" + config.getSize())
+        mediaPick2.setOnClickListener {
+            imagePick {
+                Log.d("返回数据:", it.toString())
+            }
+        }
     }
 
     private fun initData() {
-        swipePic()
+
     }
 
-    @NeedPermission(permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE], method = "onFail")
+    @NeedPermission(
+        permissions = [Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE],
+        method = "onFail"
+    )
     private fun swipePic() {
         RippleMediaPick.getInstance().imageList.clear()
         startActivity(Intent(this, RippleImagePickerActivity::class.java))
     }
 
     private fun onFail() {
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 10000) {
+                Log.d(
+                    "result返回的数据:",
+                    (data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST))
+                        .toString()
+                )
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
 
     }
 }
