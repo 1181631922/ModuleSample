@@ -98,10 +98,22 @@ class RippleImageAdapter @JvmOverloads constructor(
                 notifyDataSetChanged()
             } else {
                 if (modelList.size < config.getCount()) {
-                    model.setCheck(true)
-                    modelList.add(model)
-                    updateCount(list, modelList, holder.imageItemCheck)
-                    notifyDataSetChanged()
+                    if (config.getSize() == -1L) {
+                        model.setCheck(true)
+                        modelList.add(model)
+                        updateCount(list, modelList, holder.imageItemCheck)
+                        notifyDataSetChanged()
+                    } else {
+                        if (model.getSize() > config.getSize()) {
+                            Toast.makeText(mContext, "选取的图片大小不符合规格", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            model.setCheck(true)
+                            modelList.add(model)
+                            updateCount(list, modelList, holder.imageItemCheck)
+                            notifyDataSetChanged()
+                        }
+                    }
                 } else {
                     Toast.makeText(mContext, "图片最多选取" + config.getCount() + "张", Toast.LENGTH_SHORT)
                         .show()

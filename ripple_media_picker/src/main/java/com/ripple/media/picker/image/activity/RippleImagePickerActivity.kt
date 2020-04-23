@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
+import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.image.ScanImageSource
 import com.ripple.media.picker.image.adapter.RippleFolderAdapter
 import com.ripple.media.picker.image.adapter.RippleImageAdapter
@@ -37,9 +38,17 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     private var folderAdapter: RippleFolderAdapter? = null
     private var folderList = ArrayList<RippleFolderModel>()
 
+    private var config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ripple_image_picker)
+
+        config = if (intent.getSerializableExtra(IImagePickConfig.IMAGE_CONFIG_NAME) != null) {
+            intent.getSerializableExtra(IImagePickConfig.IMAGE_CONFIG_NAME) as IImagePickConfig
+        } else {
+            RippleMediaPick.getInstance().imagePickConfig
+        }
 
         requestMediaPermission()
     }
@@ -119,7 +128,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             /**
              * 所有图片
              */
-            adapter = RippleImageAdapter(this, mediaList[0].getMediaList(), line = LINE)
+            adapter =
+                RippleImageAdapter(this, mediaList[0].getMediaList(), config = config, line = LINE)
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
@@ -134,7 +144,10 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
             folderAdapter?.onItemListener = { model, _, position ->
 
-                adapter = RippleImageAdapter(this, mediaList[position].getMediaList(), line = LINE)
+                adapter = RippleImageAdapter(
+                    this,
+                    mediaList[position].getMediaList(), config = config, line = LINE
+                )
                 rippleImageRV.adapter = adapter
                 toolbarCenterTitle?.text = model.getName()
                 setRippleFolderRV()

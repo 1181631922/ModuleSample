@@ -7,6 +7,10 @@ package com.ripple.media.picker.config
  * Description:
  */
 interface IImagePickConfig : MediaPickConfig {
+
+    companion object {
+        const val IMAGE_CONFIG_NAME = "item_image_pick_config"
+    }
 //    fun setCropStyle()
 //
 //    enum class CropStyle {
