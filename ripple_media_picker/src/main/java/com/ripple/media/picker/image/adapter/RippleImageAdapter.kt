@@ -57,12 +57,14 @@ class RippleImageAdapter @JvmOverloads constructor(
 
     override fun onBindViewHolder(holder: RippleImageViewHolder, position: Int) {
         holder.imageItemCheck?.text = ""
+        holder.imageItemCheck?.background=mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
 
         val model = list[position]
 
         if (model.isCheck()) {
             model.getTag()?.let {
                 holder.imageItemCheck?.text = (model.getTag() as Int).toString()
+                holder.imageItemCheck?.background=mContext.resources.getDrawable(R.drawable.ripple_image_check_shape)
             }
         }
 
