@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.MediaPickConfig

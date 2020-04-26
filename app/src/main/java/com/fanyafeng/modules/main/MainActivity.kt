@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fanyafeng.modules.BaseActivity
+import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
 import com.fanyafeng.modules.permission.PermissionTestActivity
@@ -27,6 +28,8 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         title = "主页"
 
+
+        BuildConfig.VERSION_CODE
         initView()
         initData()
     }
