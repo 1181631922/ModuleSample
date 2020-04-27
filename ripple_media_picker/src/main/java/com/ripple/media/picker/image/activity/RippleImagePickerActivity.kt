@@ -35,8 +35,10 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
     companion object {
         private val TAG = RippleImagePickerActivity.javaClass.simpleName
-        private val LINE = 3
-        val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 101
+        private const val LINE = 3
+        const val REQUEST_CODE = 100
+        const val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 101
+        const val REQUEST_CODE_CAMERA = 102
     }
 
     private val handler = Handler()
@@ -67,12 +69,38 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
-                    arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                    ),
+                    REQUEST_CODE
+                )
+            } else if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     REQUEST_CODE_WRITE_EXTERNAL_STORAGE
+                )
+            } else if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    REQUEST_CODE_CAMERA
                 )
             } else {
                 operateData()
@@ -100,78 +128,6 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         rippleFolderShape.setOnClickListener {
             setRippleFolderRV()
         }
-    }
-
-    private fun loadData() {
-        ScanImageSource(this, null, object : ScanImageSource.ImageSourceListener {
-            override fun onMediaLoaded(mediaList: List<RippleFolderModel>) {
-                LogUtil.d(TAG, mediaList.toString())
-                if (mediaList.isNotEmpty()) {
-                    if (reloadPicture) {
-                        LogUtil.d("picture:", msg = "用户拍照新添加了一张图片")
-                        val model = mediaList[0].getMediaList()[0]
-                        LogUtil.d(
-                            "picture:",
-                            "新拍的图：" + takePicturePath + ";第一个图：" + model.getPath()
-                        )
-                        model.setCheck(true)
-                        model.setTag(RippleMediaPick.getInstance().imageList.size + 1)
-                        RippleMediaPick.getInstance().imageList.add(model)
-                        reloadPicture = false
-                    }
-
-                    val selectSize = RippleMediaPick.getInstance().imageList.size
-
-                    runOnUiThread {
-
-                    }
-
-                    /**
-                     * 所有图片
-                     */
-                    adapter =
-                        RippleImageAdapter(
-                            this@RippleImagePickerActivity,
-                            mediaList[0].getMediaList(),
-                            config = config,
-                            line = LINE
-                        )
-                    rippleImageRV.adapter = adapter
-                    adapter?.notifyDataSetChanged()
-                    toolbarCenterTitle?.text = "所有图片"
-                    LogUtil.d("picture:", msg = "size:" + selectSize + ";所有图片刷新")
-
-                    /**
-                     * 文件夹
-                     */
-
-                    folderAdapter = RippleFolderAdapter(this@RippleImagePickerActivity, mediaList)
-                    rippleFolderRV.adapter = folderAdapter
-                    folderAdapter?.notifyDataSetChanged()
-                    LogUtil.d("picture:", msg = "size:" + selectSize + ";文件夹刷新")
-
-                    folderAdapter?.onItemListener = { model, _, position ->
-
-                        adapter = RippleImageAdapter(
-                            this@RippleImagePickerActivity,
-                            mediaList[position].getMediaList(), config = config, line = LINE
-                        )
-                        rippleImageRV.adapter = adapter
-                        toolbarCenterTitle?.text = model.getName()
-                        setRippleFolderRV()
-                        adapter?.itemClickListener = { view, model, position ->
-                            setRightTitle(RippleMediaPick.getInstance().imageList.size)
-                        }
-                    }
-
-                    adapter?.itemClickListener = { view, model, position ->
-                        setRightTitle(RippleMediaPick.getInstance().imageList.size)
-                    }
-
-                    setRightTitle(RippleMediaPick.getInstance().imageList.size)
-                }
-            }
-        })
     }
 
     override fun onResume() {
@@ -274,7 +230,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
-            LogUtil.d("picture:", msg = "size:" + selectSize + ";所有图片刷新")
+            LogUtil.d("picture:", msg = "size:$selectSize;所有图片刷新")
 
             /**
              * 文件夹
@@ -283,7 +239,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             folderAdapter = RippleFolderAdapter(this, mediaList)
             rippleFolderRV.adapter = folderAdapter
             folderAdapter?.notifyDataSetChanged()
-            LogUtil.d("picture:", msg = "size:" + selectSize + ";文件夹刷新")
+            LogUtil.d("picture:", msg = "size:$selectSize;文件夹刷新")
 
             folderAdapter?.onItemListener = { model, _, position ->
 
@@ -313,14 +269,25 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         grantResults: IntArray
     ) {
         when (requestCode) {
-            REQUEST_CODE_WRITE_EXTERNAL_STORAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            REQUEST_CODE -> if (grantResults[0] === PackageManager.PERMISSION_GRANTED && grantResults[1] === PackageManager.PERMISSION_GRANTED
+            ) {
                 operateData()
             } else {
-                Toast.makeText(
-                    this@RippleImagePickerActivity,
-                    "Permission Denied",
-                    Toast.LENGTH_SHORT
-                )
+                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+            REQUEST_CODE_CAMERA -> if (grantResults[0] === PackageManager.PERMISSION_GRANTED) {
+                operateData()
+            } else {
+                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+            REQUEST_CODE_WRITE_EXTERNAL_STORAGE -> if (grantResults[0] === PackageManager.PERMISSION_GRANTED) {
+                operateData()
+            } else {
+                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
                     .show()
                 finish()
             }
@@ -344,7 +311,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                             this,
                             arrayOf(takePicturePath),
                             null
-                        ) { path, uri ->
+                        ) { _, _ ->
                             handler.post {
                                 scanImageSource?.reloadAll()
                             }

@@ -93,13 +93,6 @@ class RippleImageAdapter @JvmOverloads constructor(
                 holder.imageItemCheck?.background =
                     mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
 
-//                if (model.isCheck()) {
-//                    model.getTag()?.let {
-//                        holder.imageItemCheck?.text = (model.getTag() as Int).toString()
-//                        holder.imageItemCheck?.background =
-//                            mContext.resources.getDrawable(R.drawable.ripple_image_check_shape)
-//                    }
-//                }
                 val selectList = RippleMediaPick.getInstance().imageList
                 if (selectList.contains(model)) {
                     val index = selectList.indexOf(model) + 1
@@ -178,6 +171,7 @@ class RippleImageAdapter @JvmOverloads constructor(
                 holder.itemView.setOnClickListener {
                     val modelList = RippleMediaPick.getInstance().imageList
                     if (modelList.size < config.getCount()) {
+                        //申请相机权限
                         TakePicture(config).openCamera(
                             mContext,
                             IImagePickConfig.TAKE_PICTURE_CODE
