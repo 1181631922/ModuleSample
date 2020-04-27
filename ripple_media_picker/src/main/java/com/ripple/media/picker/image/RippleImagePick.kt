@@ -7,6 +7,7 @@ import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
 import com.ripple.media.picker.image.listener.SelectImageListListener
+import java.io.File
 
 /**
  * Author: fanyafeng
@@ -16,6 +17,8 @@ import com.ripple.media.picker.image.listener.SelectImageListListener
  */
 class RippleImagePick private constructor() {
     var selectImageListListener: SelectImageListListener? = null
+
+    var takePictureFile: File? = null
 
     companion object {
 

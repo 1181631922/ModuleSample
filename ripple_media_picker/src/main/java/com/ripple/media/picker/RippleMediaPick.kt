@@ -8,6 +8,7 @@ import com.ripple.media.picker.config.impl.ThemeConfig
 import com.ripple.media.picker.loadframe.impl.ImageLoadFrame
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.Preconditions
+import java.io.File
 
 /**
  * Author: fanyafeng

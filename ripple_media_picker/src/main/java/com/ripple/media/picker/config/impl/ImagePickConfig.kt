@@ -1,7 +1,9 @@
 package com.ripple.media.picker.config.impl
 
+import android.os.Environment
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
+import java.io.File
 
 /**
  * Author: fanyafeng
@@ -22,6 +24,15 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
     private var size: Long = -1L
 
     /**
+     * 拍照存储路径
+     */
+    private var photoFile =
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            File(Environment.getExternalStorageDirectory(), "/DCIM/camera/")
+        else
+            Environment.getDataDirectory()
+
+    /**
      * 默认多选，单选会带裁剪，暂时不支持
      */
     private var chooseType = MediaPickConfig.ChooseType.MULTIPLE_CHOOSE_TYPE
@@ -30,6 +41,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
         count = builder.count
         size = builder.size
         chooseType = builder.chooseType
+        photoFile = builder.photoFile
+    }
+
+    override fun getPhotoFile(): File {
+        return photoFile
     }
 
     override fun getCount(): Int {
@@ -58,6 +74,19 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
                 field = value
             }
 
+        var photoFile = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+            File(Environment.getExternalStorageDirectory(), "/DCIM/camera/")
+        else
+            Environment.getDataDirectory()
+            private set(value) {
+                field = value
+            }
+
+        fun setPhotoFile(photoFile: File): Builder {
+            this.photoFile = photoFile
+            return this
+        }
+
         fun setCount(count: Int): Builder {
             this.count = count
             return this
@@ -79,7 +108,13 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
 
         fun create(): ImagePickConfig {
             return Builder().setCount(9).setSize(-1L)
-                .setChooseType(MediaPickConfig.ChooseType.MULTIPLE_CHOOSE_TYPE).build()
+                .setChooseType(MediaPickConfig.ChooseType.MULTIPLE_CHOOSE_TYPE)
+                .setPhotoFile(
+                    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+                        File(Environment.getExternalStorageDirectory(), "/DCIM/camera/")
+                    else
+                        Environment.getDataDirectory()
+                ).build()
         }
 
     }

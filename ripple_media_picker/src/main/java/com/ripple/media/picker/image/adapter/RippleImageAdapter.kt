@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.camera.TakePicture
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.model.RippleImageModel
 import com.ripple.media.picker.model.RippleMediaModel
@@ -31,9 +32,14 @@ class RippleImageAdapter @JvmOverloads constructor(
     private val list: List<RippleMediaModel>,
     private val config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig,
     private val line: Int = 4,
-    private val showCamera: Boolean = false
+    private val showCamera: Boolean = true
 ) :
-    RecyclerView.Adapter<RippleImageAdapter.RippleImageViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val ITEM_TYPE_PICTURE = 1
+        private const val ITEM_TYPE_CAMERA = 2
+    }
 
     var SCREEN_WIDTH = (mContext as Activity).screenwidth()
     var ITEM_WIDTH = ((SCREEN_WIDTH - 4.dp2px) / line).toInt()
@@ -41,91 +47,155 @@ class RippleImageAdapter @JvmOverloads constructor(
     var itemClickListener: ((view: View, model: RippleMediaModel, position: Int) -> Unit)? = null
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RippleImageViewHolder {
-        val layout =
-            LayoutInflater.from(mContext).inflate(R.layout.ripple_item_image_layout, parent, false)
-        return RippleImageViewHolder(layout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            ITEM_TYPE_CAMERA -> {
+                val cameraLayout =
+                    LayoutInflater.from(mContext)
+                        .inflate(R.layout.ripple_item_take_photo_layout, parent, false)
+                return RippleTakePhotoViewHolder(cameraLayout)
+            }
+            ITEM_TYPE_PICTURE -> {
+                val imageLayout =
+                    LayoutInflater.from(mContext)
+                        .inflate(R.layout.ripple_item_image_layout, parent, false)
+                return RippleImageViewHolder(imageLayout)
+            }
+
+        }
+        val imageLayout =
+            LayoutInflater.from(mContext)
+                .inflate(R.layout.ripple_item_image_layout, parent, false)
+        return RippleImageViewHolder(imageLayout)
     }
 
     override fun getItemCount(): Int {
-
         return if (showCamera)
             list.size + 1
         else
             list.size
     }
 
-    override fun onBindViewHolder(holder: RippleImageViewHolder, position: Int) {
-        holder.imageItemCheck?.text = ""
-        holder.imageItemCheck?.background=mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
-
-        val model = list[position]
-
-        if (model.isCheck()) {
-            model.getTag()?.let {
-                holder.imageItemCheck?.text = (model.getTag() as Int).toString()
-                holder.imageItemCheck?.background=mContext.resources.getDrawable(R.drawable.ripple_image_check_shape)
-            }
+    override fun getItemViewType(position: Int): Int {
+        return if (showCamera) {
+            if (position == 0) ITEM_TYPE_CAMERA else ITEM_TYPE_PICTURE
+        } else {
+            ITEM_TYPE_PICTURE
         }
+    }
 
-        val params = holder.imageItemLayout?.layoutParams
-        params?.width = ITEM_WIDTH
-        params?.height = ITEM_WIDTH
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val loadFrame = RippleMediaPick.getInstance().imageLoadFrame
-        loadFrame?.displayImage(
-            mContext,
-            model.getPath(),
-            holder.imageItemIcon!!,
-            ITEM_WIDTH,
-            ITEM_WIDTH
-        )
+        when (holder) {
+            is RippleImageViewHolder -> {
+                val model = list[if (showCamera) position - 1 else position]
+                holder.imageItemCheck?.text = ""
+                holder.imageItemCheck?.background =
+                    mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
 
-        holder.imageItemCheck?.setOnClickListener {
+//                if (model.isCheck()) {
+//                    model.getTag()?.let {
+//                        holder.imageItemCheck?.text = (model.getTag() as Int).toString()
+//                        holder.imageItemCheck?.background =
+//                            mContext.resources.getDrawable(R.drawable.ripple_image_check_shape)
+//                    }
+//                }
+                val selectList = RippleMediaPick.getInstance().imageList
+                if (selectList.contains(model)) {
+                    val index = selectList.indexOf(model) + 1
+                    holder.imageItemCheck?.text = index.toString()
+                    holder.imageItemCheck?.background =
+                        mContext.resources.getDrawable(R.drawable.ripple_image_check_shape)
+                }
 
-            //点击选择图片
-            val modelList = RippleMediaPick.getInstance().imageList
+                val params = holder.imageItemLayout?.layoutParams
+                params?.width = ITEM_WIDTH
+                params?.height = ITEM_WIDTH
 
-            LogUtil.d("选取图片数量图片数量：", msg = modelList.toString())
+                val loadFrame = RippleMediaPick.getInstance().imageLoadFrame
+                loadFrame?.displayImage(
+                    mContext,
+                    model.getPath(),
+                    holder.imageItemIcon!!,
+                    ITEM_WIDTH,
+                    ITEM_WIDTH
+                )
 
-            /**
-             * 如果选中的图片包括当前的图则取消选择
-             * 否则的话添加选择
-             *
-             * 取消，选择后需要更新个数显示
-             */
-            if (modelList.contains(model)) {
-                model.setCheck(false)
-                model.setTag(null)
-                modelList.remove(model)
-                updateCount(list, modelList, holder.imageItemCheck)
-                notifyDataSetChanged()
-            } else {
-                if (modelList.size < config.getCount()) {
-                    if (config.getSize() == -1L) {
-                        model.setCheck(true)
-                        modelList.add(model)
+                holder.imageItemCheck?.setOnClickListener {
+
+                    //点击选择图片
+                    val modelList = RippleMediaPick.getInstance().imageList
+
+                    LogUtil.d("选取图片数量图片数量：", msg = modelList.toString())
+
+                    /**
+                     * 如果选中的图片包括当前的图则取消选择
+                     * 否则的话添加选择
+                     *
+                     * 取消，选择后需要更新个数显示
+                     */
+                    if (modelList.contains(model)) {
+                        model.setCheck(false)
+                        model.setTag(null)
+                        modelList.remove(model)
                         updateCount(list, modelList, holder.imageItemCheck)
                         notifyDataSetChanged()
                     } else {
-                        if (model.getSize() > config.getSize()) {
-                            Toast.makeText(mContext, "选取的图片大小不符合规格", Toast.LENGTH_SHORT)
-                                .show()
+                        if (modelList.size < config.getCount()) {
+                            if (config.getSize() == -1L) {
+                                model.setCheck(true)
+                                modelList.add(model)
+                                updateCount(list, modelList, holder.imageItemCheck)
+                                notifyDataSetChanged()
+                            } else {
+                                if (model.getSize() > config.getSize()) {
+                                    Toast.makeText(mContext, "选取的图片大小不符合规格", Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    model.setCheck(true)
+                                    modelList.add(model)
+                                    updateCount(list, modelList, holder.imageItemCheck)
+                                    notifyDataSetChanged()
+                                }
+                            }
                         } else {
-                            model.setCheck(true)
-                            modelList.add(model)
-                            updateCount(list, modelList, holder.imageItemCheck)
-                            notifyDataSetChanged()
+                            Toast.makeText(
+                                mContext,
+                                "图片最多选取" + config.getCount() + "张",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
                         }
                     }
-                } else {
-                    Toast.makeText(mContext, "图片最多选取" + config.getCount() + "张", Toast.LENGTH_SHORT)
-                        .show()
+                    itemClickListener?.invoke(it, model, position)
+                }
+
+            }
+            is RippleTakePhotoViewHolder -> {
+                val params = holder.rippleTakePhotoLayout?.layoutParams
+                params?.width = ITEM_WIDTH
+                params?.height = ITEM_WIDTH
+                holder.itemView.setOnClickListener {
+                    val modelList = RippleMediaPick.getInstance().imageList
+                    if (modelList.size < config.getCount()) {
+                        TakePicture(config).openCamera(
+                            mContext,
+                            IImagePickConfig.TAKE_PICTURE_CODE
+                        )
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "图片最多选取" + config.getCount() + "张",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+
                 }
             }
-            itemClickListener?.invoke(it, model, position)
         }
     }
+
 
     /**
      * 更新选中右上角显示
@@ -139,6 +209,7 @@ class RippleImageAdapter @JvmOverloads constructor(
             selectList.forEachIndexed { selectIndex, selectItem ->
                 if (allItem == selectItem) {
                     val seeIndex = selectIndex + 1
+                    selectItem.setTag(seeIndex)
                     allItem.setTag(seeIndex)
                     view?.text = seeIndex.toString()
                 }
@@ -160,4 +231,17 @@ class RippleImageAdapter @JvmOverloads constructor(
             imageItemUnCheck = item.findViewById(R.id.imageItemUnCheck)
         }
     }
+
+    inner class RippleTakePhotoViewHolder(item: View) : RecyclerView.ViewHolder(item) {
+        var rippleTakePhotoLayout: RelativeLayout? = null
+        var rippleTakePhoto: RippleImageView? = null
+
+
+        init {
+            rippleTakePhotoLayout = item.findViewById(R.id.rippleTakePhotoLayout)
+            rippleTakePhoto = item.findViewById(R.id.rippleTakePhoto)
+        }
+    }
+
+
 }

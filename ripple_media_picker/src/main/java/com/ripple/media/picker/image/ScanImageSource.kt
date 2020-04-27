@@ -36,6 +36,8 @@ class ScanImageSource @JvmOverloads constructor(
         private lateinit var fixedThreadPool: ExecutorService
     }
 
+    private val loaderManager = LoaderManager.getInstance(appCompatActivity!!)
+
     private val IMAGE_ATTRIBUTE = arrayOf(
         MediaStore.Images.ImageColumns.DATE_MODIFIED,
         MediaStore.Images.ImageColumns.DATE_ADDED,
@@ -53,15 +55,25 @@ class ScanImageSource @JvmOverloads constructor(
             fixedThreadPool = Executors.newFixedThreadPool(1)
         }
 
-        appCompatActivity?.let {
-            val loaderManager = LoaderManager.getInstance(appCompatActivity!!)
-            if (path == null) {
-                loaderManager.initLoader(SCAN_ALL_IMAGES, null, this)
-            } else {
-                val bundle = Bundle()
-                bundle.putString("path", path)
-                loaderManager.initLoader(SCAN_FOLDER, bundle, this)
-            }
+        if (path == null) {
+            loaderManager.initLoader(SCAN_ALL_IMAGES, null, this)
+        } else {
+            val bundle = Bundle()
+            bundle.putString("path", path)
+            loaderManager.initLoader(SCAN_FOLDER, bundle, this)
+        }
+    }
+
+    fun reloadAll() {
+        loaderManager.restartLoader(SCAN_ALL_IMAGES, null, this)
+    }
+
+    private fun destroyAllLoader() {
+        loaderManager.getLoader<Cursor>(SCAN_ALL_IMAGES)?.let {
+            loaderManager.destroyLoader(SCAN_ALL_IMAGES)
+        }
+        loaderManager.getLoader<Cursor>(SCAN_FOLDER)?.let {
+            loaderManager.destroyLoader(SCAN_FOLDER)
         }
     }
 
@@ -86,6 +98,7 @@ class ScanImageSource @JvmOverloads constructor(
             )
         }
     }
+
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         val imageFolderList = mutableListOf<RippleFolderModel>()
@@ -157,6 +170,7 @@ class ScanImageSource @JvmOverloads constructor(
                 act?.let {
                     act.runOnUiThread {
                         imageSourceListener.onMediaLoaded(imageFolderList)
+                        destroyAllLoader()
                     }
                 }
             }

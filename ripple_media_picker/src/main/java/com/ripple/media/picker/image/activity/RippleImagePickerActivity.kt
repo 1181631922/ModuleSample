@@ -1,11 +1,14 @@
 package com.ripple.media.picker.image.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
+import com.ripple.media.picker.camera.PictureGalleryUtil
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.ScanImageSource
@@ -35,7 +39,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 101
     }
 
-    private lateinit var scanImageSource: ScanImageSource
+    private val handler = Handler()
+    private var scanImageSource: ScanImageSource? = null
     private var adapter: RippleImageAdapter? = null
     private var list = ArrayList<RippleMediaModel>()
 
@@ -95,13 +100,86 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         rippleFolderShape.setOnClickListener {
             setRippleFolderRV()
         }
+    }
 
+    private fun loadData() {
+        ScanImageSource(this, null, object : ScanImageSource.ImageSourceListener {
+            override fun onMediaLoaded(mediaList: List<RippleFolderModel>) {
+                LogUtil.d(TAG, mediaList.toString())
+                if (mediaList.isNotEmpty()) {
+                    if (reloadPicture) {
+                        LogUtil.d("picture:", msg = "用户拍照新添加了一张图片")
+                        val model = mediaList[0].getMediaList()[0]
+                        LogUtil.d(
+                            "picture:",
+                            "新拍的图：" + takePicturePath + ";第一个图：" + model.getPath()
+                        )
+                        model.setCheck(true)
+                        model.setTag(RippleMediaPick.getInstance().imageList.size + 1)
+                        RippleMediaPick.getInstance().imageList.add(model)
+                        reloadPicture = false
+                    }
+
+                    val selectSize = RippleMediaPick.getInstance().imageList.size
+
+                    runOnUiThread {
+
+                    }
+
+                    /**
+                     * 所有图片
+                     */
+                    adapter =
+                        RippleImageAdapter(
+                            this@RippleImagePickerActivity,
+                            mediaList[0].getMediaList(),
+                            config = config,
+                            line = LINE
+                        )
+                    rippleImageRV.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                    toolbarCenterTitle?.text = "所有图片"
+                    LogUtil.d("picture:", msg = "size:" + selectSize + ";所有图片刷新")
+
+                    /**
+                     * 文件夹
+                     */
+
+                    folderAdapter = RippleFolderAdapter(this@RippleImagePickerActivity, mediaList)
+                    rippleFolderRV.adapter = folderAdapter
+                    folderAdapter?.notifyDataSetChanged()
+                    LogUtil.d("picture:", msg = "size:" + selectSize + ";文件夹刷新")
+
+                    folderAdapter?.onItemListener = { model, _, position ->
+
+                        adapter = RippleImageAdapter(
+                            this@RippleImagePickerActivity,
+                            mediaList[position].getMediaList(), config = config, line = LINE
+                        )
+                        rippleImageRV.adapter = adapter
+                        toolbarCenterTitle?.text = model.getName()
+                        setRippleFolderRV()
+                        adapter?.itemClickListener = { view, model, position ->
+                            setRightTitle(RippleMediaPick.getInstance().imageList.size)
+                        }
+                    }
+
+                    adapter?.itemClickListener = { view, model, position ->
+                        setRightTitle(RippleMediaPick.getInstance().imageList.size)
+                    }
+
+                    setRightTitle(RippleMediaPick.getInstance().imageList.size)
+                }
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
         updateData()
         setRightTitle(0)
+
+        adapter?.notifyDataSetChanged()
     }
 
     private fun updateData() {
@@ -171,15 +249,32 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     override fun onMediaLoaded(mediaList: List<RippleFolderModel>) {
         LogUtil.d(TAG, mediaList.toString())
         if (mediaList.isNotEmpty()) {
+            if (reloadPicture) {
+                LogUtil.d("picture:", msg = "用户拍照新添加了一张图片")
+                val model = mediaList[0].getMediaList()[0]
+                LogUtil.d("picture:", "新拍的图：" + takePicturePath + ";第一个图：" + model.getPath())
+                model.setCheck(true)
+                model.setTag(RippleMediaPick.getInstance().imageList.size + 1)
+                RippleMediaPick.getInstance().imageList.add(model)
+                reloadPicture = false
+            }
+
+            val selectSize = RippleMediaPick.getInstance().imageList.size
 
             /**
              * 所有图片
              */
             adapter =
-                RippleImageAdapter(this, mediaList[0].getMediaList(), config = config, line = LINE)
+                RippleImageAdapter(
+                    this,
+                    mediaList[0].getMediaList(),
+                    config = config,
+                    line = LINE
+                )
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
+            LogUtil.d("picture:", msg = "size:" + selectSize + ";所有图片刷新")
 
             /**
              * 文件夹
@@ -188,6 +283,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             folderAdapter = RippleFolderAdapter(this, mediaList)
             rippleFolderRV.adapter = folderAdapter
             folderAdapter?.notifyDataSetChanged()
+            LogUtil.d("picture:", msg = "size:" + selectSize + ";文件夹刷新")
 
             folderAdapter?.onItemListener = { model, _, position ->
 
@@ -206,6 +302,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             adapter?.itemClickListener = { view, model, position ->
                 setRightTitle(RippleMediaPick.getInstance().imageList.size)
             }
+
+            setRightTitle(RippleMediaPick.getInstance().imageList.size)
         }
     }
 
@@ -230,8 +328,49 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                IImagePickConfig.TAKE_PICTURE_CODE -> {
+                    if (RippleImagePick.getInstance().takePictureFile != null) {
+                        PictureGalleryUtil.updatePictureGallery(
+                            this,
+                            RippleImagePick.getInstance().takePictureFile!!
+                        )
+                        takePicturePath =
+                            RippleImagePick.getInstance().takePictureFile?.absolutePath
+                        MediaScannerConnection.scanFile(
+                            this,
+                            arrayOf(takePicturePath),
+                            null
+                        ) { path, uri ->
+                            handler.post {
+                                scanImageSource?.reloadAll()
+                            }
+                        }
+                        reloadPicture = true
+                        RippleImagePick.getInstance().takePictureFile = null
+                    }
+                }
+            }
+        }
+    }
+
+    private var takePicturePath: String? = null
+
+    private var reloadPicture = false
+
     override fun onDestroy() {
         super.onDestroy()
         LogUtil.d(msg = RippleMediaPick.getInstance().imageList.toString())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing && scanImageSource != null) {
+            scanImageSource?.recycle();
+            scanImageSource = null;
+        }
     }
 }
