@@ -24,6 +24,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
     private var size: Long = -1L
 
     /**
+     * 是否显示拍照按钮，默认显示
+     */
+    private var showCamera = true
+
+    /**
      * 拍照存储路径
      */
     private var photoFile =
@@ -42,10 +47,15 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
         size = builder.size
         chooseType = builder.chooseType
         photoFile = builder.photoFile
+        showCamera = builder.showCamera
     }
 
     override fun getPhotoFile(): File {
         return photoFile
+    }
+
+    override fun showCamera(): Boolean {
+        return showCamera;
     }
 
     override fun getCount(): Int {
@@ -74,6 +84,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
                 field = value
             }
 
+        var showCamera: Boolean = true
+            private set(value) {
+                field = value
+            }
+
         var photoFile = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
             File(Environment.getExternalStorageDirectory(), "/DCIM/camera/")
         else
@@ -81,6 +96,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
             private set(value) {
                 field = value
             }
+
+        fun setShowCamera(showCamera: Boolean): Builder {
+            this.showCamera = showCamera
+            return this
+        }
 
         fun setPhotoFile(photoFile: File): Builder {
             this.photoFile = photoFile
@@ -114,7 +134,8 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
                         File(Environment.getExternalStorageDirectory(), "/DCIM/camera/")
                     else
                         Environment.getDataDirectory()
-                ).build()
+                ).setShowCamera(true)
+                .build()
         }
 
     }

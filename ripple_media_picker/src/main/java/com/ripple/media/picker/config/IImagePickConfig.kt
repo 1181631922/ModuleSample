@@ -25,6 +25,13 @@ interface IImagePickConfig : MediaPickConfig {
 //     * 用户裁剪后保存图片的路径
 //     */
 //    fun getCropFile()
+
+
+    /**
+     * 是否显示拍照按钮
+     */
+    fun showCamera():Boolean
+
 //    fun setCropStyle()
 //
 //    enum class CropStyle {

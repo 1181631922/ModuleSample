@@ -31,8 +31,7 @@ class RippleImageAdapter @JvmOverloads constructor(
     private val mContext: Context,
     private val list: List<RippleMediaModel>,
     private val config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig,
-    private val line: Int = 4,
-    private val showCamera: Boolean = true
+    private val line: Int = 4
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -70,14 +69,14 @@ class RippleImageAdapter @JvmOverloads constructor(
     }
 
     override fun getItemCount(): Int {
-        return if (showCamera)
+        return if (config.showCamera())
             list.size + 1
         else
             list.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (showCamera) {
+        return if (config.showCamera()) {
             if (position == 0) ITEM_TYPE_CAMERA else ITEM_TYPE_PICTURE
         } else {
             ITEM_TYPE_PICTURE
@@ -88,7 +87,7 @@ class RippleImageAdapter @JvmOverloads constructor(
 
         when (holder) {
             is RippleImageViewHolder -> {
-                val model = list[if (showCamera) position - 1 else position]
+                val model = list[if (config.showCamera()) position - 1 else position]
                 holder.imageItemCheck?.text = ""
                 holder.imageItemCheck?.background =
                     mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
@@ -161,6 +160,10 @@ class RippleImageAdapter @JvmOverloads constructor(
                         }
                     }
                     itemClickListener?.invoke(it, model, position)
+                }
+
+                holder.itemView.setOnClickListener {
+                    //跳转到
                 }
 
             }

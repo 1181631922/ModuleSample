@@ -46,6 +46,10 @@ class MediaPickActivity : AppCompatActivity() {
                 Log.d("返回数据:", it.toString())
             }
         }
+
+        imagePick(9) {
+
+        }
     }
 
     private fun initData() {
