@@ -7,6 +7,7 @@ import android.view.GestureDetector
 import android.view.View
 import android.widget.ImageView
 import com.ripple.media.picker.view.photoview.impl.PhotoViewAttacher
+import java.nio.channels.FileLock
 
 /**
  * Author: fanyafeng
@@ -31,13 +32,13 @@ interface IPhotoView {
      * 获取可绘制图形的显示矩形
      * 用于放缩和平移
      */
-    fun getDisplayRect(): RectF
+    fun getDisplayRect(): RectF?
 
 
     /**
      * 设置当前可绘制图形矩阵
      */
-    fun setDisplayMatrix(matrix: Matrix): Boolean
+    fun setDisplayMatrix(matrix: Matrix?): Boolean
 
     /**
      * 获取当前可绘制图形矩阵
@@ -47,15 +48,15 @@ interface IPhotoView {
     /**
      * 返回最小Scale
      */
-    fun getMinimumScale()
+    fun getMinimumScale():Float
 
     fun setMinimumScale(minimumScale: Float)
 
-    fun getMediumScale()
+    fun getMediumScale():Float
 
     fun setMediumScale(mediumScale: Float)
 
-    fun getMaximumScale()
+    fun getMaximumScale():Float
 
     fun setMaximumScale(maximumScale: Float)
 
@@ -110,7 +111,7 @@ interface IPhotoView {
     /**
      * 获取可见区域的bitmap
      */
-    fun getVisibleRectangleBitmap(): Bitmap
+    fun getVisibleRectangleBitmap(): Bitmap?
 
     /**
      * 设置变焦转换速度
@@ -134,13 +135,13 @@ interface IPhotoView {
 
     fun setOnPhotoTapListener(listener: PhotoViewAttacher.Companion.OnPhotoTapListener)
 
-    fun getOnPhotoTapListener(): PhotoViewAttacher.Companion.OnPhotoTapListener
+    fun getOnPhotoTapListener(): PhotoViewAttacher.Companion.OnPhotoTapListener?
 
     fun setOnViewTapListener(listener: PhotoViewAttacher.Companion.OnViewTapListener)
 
-    fun getOnViewTapListener(): PhotoViewAttacher.Companion.OnViewTapListener
+    fun getOnViewTapListener(): PhotoViewAttacher.Companion.OnViewTapListener?
 
-    fun setOnDoubleTapListener(newOnDoubleTapListener: GestureDetector.OnDoubleTapListener)
+    fun setOnDoubleTapListener(newOnDoubleTapListener: GestureDetector.OnDoubleTapListener?)
 
     fun setOnScaleChangeListener(onScaleChangeListener: PhotoViewAttacher.Companion.OnScaleChangeListener)
 
