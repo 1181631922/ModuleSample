@@ -26,4 +26,27 @@ interface IPreviewImageConfig : Serializable {
      * 图片列表
      */
     fun getImageList(): List<RippleMediaModel>
+
+    /**
+     * 编辑模式
+     */
+    fun getModel(): PreviewModel
+
+    enum class PreviewModel{
+        /**
+         * 正常模式，只能进行查看图片
+         */
+        NORMAL,
+
+        /**
+         * 选取图片模式，显示图片被选取顺序等
+         */
+        SELECT,
+
+        /**
+         * 删除图片模式，只可以进行图片的删除
+         */
+        DELETE,
+    }
+
 }

@@ -12,11 +12,11 @@ import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.config.IPreviewImageConfig
+import com.ripple.media.picker.config.impl.PreviewImageConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.screenHeight
 import com.ripple.media.picker.util.screenwidth
-import com.ripple.media.picker.view.RippleImageView
 import com.ripple.media.picker.view.photoview.PhotoView
 import kotlinx.android.synthetic.main.activity_ripple_preview_image.*
 
@@ -26,7 +26,8 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
     private var photoViewAdapter: PhotoViewAdapter? = null
     private var currPosition: Int = 0
 
-    private var config: IPreviewImageConfig? = null
+    private var config: IPreviewImageConfig = PreviewImageConfig.Builder().build()
+    private var model = config.getModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +35,10 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
 
         if (intent.getSerializableExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG) != null) {
             config =
-                intent.getSerializableExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG) as IPreviewImageConfig?
-            list = config!!.getImageList()
-            currPosition = config!!.getCurrentPosition()
+                intent.getSerializableExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG) as IPreviewImageConfig
+            list = config.getImageList()
+            model = config.getModel()
+            currPosition = config.getCurrentPosition()
         }
 
         initView()
@@ -50,6 +52,16 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        when (model) {
+            IPreviewImageConfig.PreviewModel.NORMAL -> {
+                toolbarRightTitle?.visibility = View.GONE
+                imageItemCheck.visibility = View.GONE
+            }
+            IPreviewImageConfig.PreviewModel.SELECT -> {
+                toolbarRightTitle?.visibility = View.VISIBLE
+                imageItemCheck.visibility = View.VISIBLE
+            }
+        }
         updateImageSizeView()
     }
 

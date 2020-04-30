@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
+import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
+import com.ripple.media.picker.image.activity.RipplePreviewImageActivity
 import com.ripple.media.picker.image.listener.SelectImageListListener
 import java.io.File
 
@@ -50,5 +52,20 @@ class RippleImagePick private constructor() {
         val intent = Intent(context, RippleImagePickerActivity::class.java)
         intent.putExtra(IImagePickConfig.IMAGE_CONFIG_NAME, config)
         (context as Activity).startActivityForResult(intent, requestCode)
+    }
+
+    @JvmOverloads
+    fun imagePreview(
+        context: Context,
+        config: IPreviewImageConfig,
+        requestCode: Int = IPreviewImageConfig.PREVIEW_RESULT
+    ) {
+        val intent = Intent(context, RipplePreviewImageActivity::class.java)
+
+        intent.putExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG, config)
+        (context as Activity).startActivityForResult(
+            intent,
+            requestCode
+        )
     }
 }

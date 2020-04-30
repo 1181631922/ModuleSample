@@ -1,6 +1,5 @@
 package com.ripple.media.picker.config.impl
 
-import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.model.RippleMediaModel
 
@@ -16,9 +15,12 @@ class PreviewImageConfig private constructor(builder: Builder) : IPreviewImageCo
 
     private var imageList: List<RippleMediaModel> = mutableListOf()
 
+    private var selectModel = IPreviewImageConfig.PreviewModel.SELECT
+
     init {
         currentPosition = builder.currentPosition
         imageList = builder.imageList
+        selectModel = builder.selectModel
     }
 
     override fun getCurrentPosition(): Int {
@@ -27,6 +29,10 @@ class PreviewImageConfig private constructor(builder: Builder) : IPreviewImageCo
 
     override fun getImageList(): List<RippleMediaModel> {
         return imageList
+    }
+
+    override fun getModel(): IPreviewImageConfig.PreviewModel {
+        return selectModel
     }
 
     class Builder {
@@ -40,6 +46,11 @@ class PreviewImageConfig private constructor(builder: Builder) : IPreviewImageCo
                 field = value
             }
 
+        var selectModel = IPreviewImageConfig.PreviewModel.SELECT
+            private set(value) {
+                field = value
+            }
+
         fun setCurrentPosition(currentPosition: Int): Builder {
             this.currentPosition = currentPosition
             return this
@@ -47,6 +58,11 @@ class PreviewImageConfig private constructor(builder: Builder) : IPreviewImageCo
 
         fun setImageList(imageList: List<RippleMediaModel>): Builder {
             this.imageList = imageList
+            return this
+        }
+
+        fun setSelectModel(selectModel: IPreviewImageConfig.PreviewModel): Builder {
+            this.selectModel = selectModel
             return this
         }
 

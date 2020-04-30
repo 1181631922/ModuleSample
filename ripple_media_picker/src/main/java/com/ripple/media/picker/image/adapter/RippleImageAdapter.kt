@@ -16,6 +16,7 @@ import com.ripple.media.picker.camera.TakePicture
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.config.impl.PreviewImageConfig
+import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.activity.RipplePreviewImageActivity
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.LogUtil
@@ -171,14 +172,9 @@ class RippleImageAdapter @JvmOverloads constructor(
                     val config =
                         PreviewImageConfig.Builder().setCurrentPosition(realPosition)
                             .setImageList(list)
+                            .setSelectModel(IPreviewImageConfig.PreviewModel.NORMAL)
                             .build()
-                    val intent = Intent(mContext, RipplePreviewImageActivity::class.java)
-
-                    intent.putExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG, config)
-                    (mContext as Activity).startActivityForResult(
-                        intent,
-                        IPreviewImageConfig.PREVIEW_RESULT
-                    )
+                    RippleImagePick.getInstance().imagePreview(mContext,config,IPreviewImageConfig.PREVIEW_RESULT)
                 }
 
             }
