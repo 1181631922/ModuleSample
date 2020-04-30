@@ -3,6 +3,7 @@ package com.ripple.media.picker.config.impl
 import android.os.Environment
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
+import com.ripple.media.picker.model.RippleMediaModel
 import java.io.File
 
 /**
@@ -42,12 +43,18 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
      */
     private var chooseType = MediaPickConfig.ChooseType.MULTIPLE_CHOOSE_TYPE
 
+    /**
+     * 已选中图片
+     */
+    private var selectList: List<RippleMediaModel> = mutableListOf()
+
     init {
         count = builder.count
         size = builder.size
         chooseType = builder.chooseType
         photoFile = builder.photoFile
         showCamera = builder.showCamera
+        selectList = builder.selectList
     }
 
     override fun getPhotoFile(): File {
@@ -56,6 +63,10 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
 
     override fun showCamera(): Boolean {
         return showCamera;
+    }
+
+    override fun getSelectList(): List<RippleMediaModel> {
+        return selectList
     }
 
     override fun getCount(): Int {
@@ -97,6 +108,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
                 field = value
             }
 
+        var selectList: List<RippleMediaModel> = mutableListOf()
+            private set(value) {
+                field = value
+            }
+
         fun setShowCamera(showCamera: Boolean): Builder {
             this.showCamera = showCamera
             return this
@@ -119,6 +135,11 @@ class ImagePickConfig private constructor(builder: Builder) : IImagePickConfig {
 
         fun setChooseType(chooseType: MediaPickConfig.ChooseType): Builder {
             this.chooseType = chooseType
+            return this
+        }
+
+        fun setSelectList(selectList: List<RippleMediaModel>): Builder {
+            this.selectList = selectList
             return this
         }
 

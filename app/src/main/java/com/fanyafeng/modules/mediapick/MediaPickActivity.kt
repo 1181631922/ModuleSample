@@ -25,6 +25,8 @@ class MediaPickActivity : AppCompatActivity() {
         private val TAG = MediaPickActivity::class.java.simpleName
     }
 
+    private var testList = mutableListOf<RippleMediaModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media_pick)
@@ -41,9 +43,11 @@ class MediaPickActivity : AppCompatActivity() {
         }
 
         mediaPick2.setOnClickListener {
-            imagePick {
+            val config = ImagePickConfig.Builder().setSelectList(testList).build()
+            imagePick(config) {
                 Log.d("选取的图片:", it.toString())
                 Log.d("选取的图片数量:", it.size.toString())
+                testList.addAll(it)
             }
         }
     }

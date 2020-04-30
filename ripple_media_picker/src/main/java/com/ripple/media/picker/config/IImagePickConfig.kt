@@ -1,5 +1,7 @@
 package com.ripple.media.picker.config
 
+import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.model.RippleMediaModel
 import java.io.File
 
 /**
@@ -30,7 +32,12 @@ interface IImagePickConfig : MediaPickConfig {
     /**
      * 是否显示拍照按钮
      */
-    fun showCamera():Boolean
+    fun showCamera(): Boolean
+
+    /**
+     * 传入已选中图片列表
+     */
+    fun getSelectList(): List<RippleMediaModel>
 
 //    fun setCropStyle()
 //

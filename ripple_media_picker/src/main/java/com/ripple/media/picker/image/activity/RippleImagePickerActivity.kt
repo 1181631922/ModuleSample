@@ -62,6 +62,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             RippleMediaPick.getInstance().imagePickConfig
         }
 
+        RippleMediaPick.getInstance().imageList.addAll(config.getSelectList())
+
         requestMediaPermission()
     }
 
