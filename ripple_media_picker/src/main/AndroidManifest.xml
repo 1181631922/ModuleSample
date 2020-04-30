@@ -9,8 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <activity android:name=".image.activity.RippleTakePhotoAgencyActivity"></activity>
-
         <provider
             android:name=".provider.RippleMediaPickProvider"
             android:authorities="${applicationId}.provider"
@@ -33,6 +31,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".image.activity.RipplePreviewImageActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".image.activity.RippleTakePhotoAgencyActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
