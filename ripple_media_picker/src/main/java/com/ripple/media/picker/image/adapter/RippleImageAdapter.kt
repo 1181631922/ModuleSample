@@ -2,6 +2,7 @@ package com.ripple.media.picker.image.adapter
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.camera.TakePicture
 import com.ripple.media.picker.config.IImagePickConfig
-import com.ripple.media.picker.model.RippleImageModel
+import com.ripple.media.picker.config.IPreviewImageConfig
+import com.ripple.media.picker.config.impl.PreviewImageConfig
+import com.ripple.media.picker.image.activity.RipplePreviewImageActivity
 import com.ripple.media.picker.model.RippleMediaModel
-import com.ripple.media.picker.model.impl.RippleImageImpl
 import com.ripple.media.picker.util.LogUtil
 import com.ripple.media.picker.util.dp2px
 import com.ripple.media.picker.util.screenwidth
@@ -87,7 +89,8 @@ class RippleImageAdapter @JvmOverloads constructor(
 
         when (holder) {
             is RippleImageViewHolder -> {
-                val model = list[if (config.showCamera()) position - 1 else position]
+                val realPosition = if (config.showCamera()) position - 1 else position
+                val model = list[realPosition]
                 holder.imageItemCheck?.text = ""
                 holder.imageItemCheck?.background =
                     mContext.resources.getDrawable(R.drawable.ripple_image_uncheck_shape)
@@ -159,11 +162,18 @@ class RippleImageAdapter @JvmOverloads constructor(
                                 .show()
                         }
                     }
-                    itemClickListener?.invoke(it, model, position)
+                    itemClickListener?.invoke(it, model, realPosition)
                 }
 
                 holder.itemView.setOnClickListener {
                     //跳转到
+
+                    val config =
+                        PreviewImageConfig.Builder().setCurrentPosition(realPosition).setImageList(list)
+                            .build()
+                    val intent = Intent(mContext, RipplePreviewImageActivity::class.java)
+                    intent.putExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG, config)
+                    mContext.startActivity(intent)
                 }
 
             }
