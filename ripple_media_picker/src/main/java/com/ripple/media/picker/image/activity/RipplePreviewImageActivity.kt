@@ -1,5 +1,7 @@
 package com.ripple.media.picker.image.activity
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.config.IPreviewImageConfig
+import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.screenHeight
 import com.ripple.media.picker.util.screenwidth
@@ -51,8 +54,38 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
     }
 
     private fun updateImageSizeView() {
-        toolbarRightTitle?.text = "下一步(${RippleMediaPick.getInstance().imageList.size})"
-        toolbarCenterTitle?.text = "$currPosition/${list.size}"
+        val count = RippleMediaPick.getInstance().imageList.size
+        if (count > 0) {
+            toolbarRightTitle?.setTextColor(Color.WHITE)
+            toolbarRightTitle?.background =
+                resources.getDrawable(R.drawable.ripple_next_step_shape)
+            toolbarRightTitle?.text = "下一步($count)"
+            toolbarRightTitle?.setOnClickListener {
+                val imageList = RippleMediaPick.getInstance().imageList
+                if (imageList.size > 0) {
+                    val listener = RippleImagePick.getInstance().selectImageListListener
+                    if (listener != null) {
+                        listener.selectImageList(imageList)
+                        RippleImagePick.getInstance().selectImageListListener = null
+                    }
+
+                    val intent = Intent()
+                    intent.putExtra(
+                        RippleImagePick.RESULT_IMG_LIST,
+                        imageList
+                    )
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+            }
+        } else {
+            toolbarRightTitle?.setTextColor(Color.GRAY)
+            toolbarRightTitle?.background =
+                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
+            toolbarRightTitle?.text = "下一步"
+            toolbarRightTitle?.setOnClickListener(null)
+        }
+        toolbarCenterTitle?.text = (currPosition + 1).toString() + "/" + list.size
         val model = list[currPosition]
         val selectImageList = RippleMediaPick.getInstance().imageList
         if (selectImageList.contains(model)) {

@@ -42,12 +42,9 @@ class MediaPickActivity : AppCompatActivity() {
 
         mediaPick2.setOnClickListener {
             imagePick {
-                Log.d("返回数据:", it.toString())
+                Log.d("选取的图片:", it.toString())
+                Log.d("选取的图片数量:", it.size.toString())
             }
-        }
-
-        imagePick(9) {
-
         }
     }
 
@@ -74,6 +71,11 @@ class MediaPickActivity : AppCompatActivity() {
                 Log.d(
                     "result返回的数据:",
                     (data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST))
+                        .toString()
+                )
+                Log.d(
+                    "result返回的数据数量:",
+                    ((data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST)) as List<RippleMediaModel>).size
                         .toString()
                 )
             }

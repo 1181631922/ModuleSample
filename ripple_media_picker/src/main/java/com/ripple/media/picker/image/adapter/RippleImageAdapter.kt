@@ -169,11 +169,16 @@ class RippleImageAdapter @JvmOverloads constructor(
                     //跳转到
 
                     val config =
-                        PreviewImageConfig.Builder().setCurrentPosition(realPosition).setImageList(list)
+                        PreviewImageConfig.Builder().setCurrentPosition(realPosition)
+                            .setImageList(list)
                             .build()
                     val intent = Intent(mContext, RipplePreviewImageActivity::class.java)
+
                     intent.putExtra(IPreviewImageConfig.PREVIEW_IMAGE_CONFIG, config)
-                    mContext.startActivity(intent)
+                    (mContext as Activity).startActivityForResult(
+                        intent,
+                        IPreviewImageConfig.PREVIEW_RESULT
+                    )
                 }
 
             }

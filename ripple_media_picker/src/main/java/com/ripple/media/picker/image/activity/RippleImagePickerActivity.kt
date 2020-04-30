@@ -21,6 +21,7 @@ import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.camera.PictureGalleryUtil
 import com.ripple.media.picker.config.IImagePickConfig
+import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.ScanImageSource
 import com.ripple.media.picker.image.adapter.RippleFolderAdapter
@@ -133,7 +134,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     override fun onResume() {
         super.onResume()
         updateData()
-        setRightTitle(0)
+        setRightTitle(RippleMediaPick.getInstance().imageList.size)
 
         adapter?.notifyDataSetChanged()
     }
@@ -230,7 +231,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
-            LogUtil.d("picture:", msg = "size:$selectSize;所有图片刷新")
+//            LogUtil.d("picture:", msg = "size:$selectSize;所有图片刷新")
 
             /**
              * 文件夹
@@ -239,7 +240,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             folderAdapter = RippleFolderAdapter(this, mediaList)
             rippleFolderRV.adapter = folderAdapter
             folderAdapter?.notifyDataSetChanged()
-            LogUtil.d("picture:", msg = "size:$selectSize;文件夹刷新")
+//            LogUtil.d("picture:", msg = "size:$selectSize;文件夹刷新")
 
             folderAdapter?.onItemListener = { model, _, position ->
 
@@ -273,21 +274,33 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             ) {
                 operateData()
             } else {
-                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@RippleImagePickerActivity,
+                    "Permission Denied",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 finish()
             }
             REQUEST_CODE_CAMERA -> if (grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                 operateData()
             } else {
-                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@RippleImagePickerActivity,
+                    "Permission Denied",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 finish()
             }
             REQUEST_CODE_WRITE_EXTERNAL_STORAGE -> if (grantResults[0] === PackageManager.PERMISSION_GRANTED) {
                 operateData()
             } else {
-                Toast.makeText(this@RippleImagePickerActivity, "Permission Denied", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@RippleImagePickerActivity,
+                    "Permission Denied",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 finish()
             }
@@ -319,6 +332,16 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                         reloadPicture = true
                         RippleImagePick.getInstance().takePictureFile = null
                     }
+                }
+                IPreviewImageConfig.PREVIEW_RESULT -> {
+                    val imageList = RippleMediaPick.getInstance().imageList
+                    val intent = Intent()
+                    intent.putExtra(
+                        RippleImagePick.RESULT_IMG_LIST,
+                        imageList
+                    )
+                    setResult(RESULT_OK, intent)
+                    finish()
                 }
             }
         }

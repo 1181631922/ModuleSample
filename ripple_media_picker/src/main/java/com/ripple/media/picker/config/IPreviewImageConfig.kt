@@ -13,6 +13,7 @@ import java.io.Serializable
 interface IPreviewImageConfig : Serializable {
 
     companion object {
+        const val PREVIEW_RESULT = 1003
         const val PREVIEW_IMAGE_CONFIG = "preview_image_config"
     }
 
