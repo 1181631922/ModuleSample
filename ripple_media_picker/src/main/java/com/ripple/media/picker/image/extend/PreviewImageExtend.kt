@@ -1,5 +1,6 @@
 package com.ripple.media.picker.image.extend
 
+import android.app.Activity
 import android.content.Context
 import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.config.impl.PreviewImageConfig
@@ -19,4 +20,8 @@ fun Context.imagePreview(list: List<RippleMediaModel>) {
         .setSelectModel(IPreviewImageConfig.PreviewModel.NORMAL)
         .build()
     RippleImagePick.getInstance().imagePreview(this, config)
+}
+
+fun Activity.imagePreview(list: List<RippleMediaModel>) {
+    (this as Context).imagePreview(list)
 }

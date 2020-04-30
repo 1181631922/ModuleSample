@@ -10,11 +10,14 @@ import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.fanyafeng.modules.R
 import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
 import com.ripple.media.picker.config.impl.ImagePickConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
+import com.ripple.media.picker.image.activity.RippleTakePhotoAgencyActivity
 import com.ripple.media.picker.image.extend.imagePick
+import com.ripple.media.picker.image.extend.takePhoto
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.permission.annotation.NeedPermission
 import kotlinx.android.synthetic.main.activity_media_pick.*
@@ -50,6 +53,16 @@ class MediaPickActivity : AppCompatActivity() {
                 testList.addAll(it)
             }
         }
+
+        mediaPick3.setOnClickListener {
+            RippleImagePick.getInstance().takePhoto(this, 10001)
+        }
+
+        mediaPick4.setOnClickListener {
+            takePhoto {
+                Log.d("拍照后的路径：", it?.absolutePath ?: "为获取到图片")
+            }
+        }
     }
 
     private fun initData() {
@@ -71,18 +84,27 @@ class MediaPickActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 10000) {
-                Log.d(
-                    "result返回的数据:",
-                    (data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST))
-                        .toString()
-                )
-                Log.d(
-                    "result返回的数据数量:",
-                    ((data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST)) as List<RippleMediaModel>).size
-                        .toString()
-                )
+            when (requestCode) {
+                10000 -> {
+                    Log.d(
+                        "result返回的数据:",
+                        (data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST))
+                            .toString()
+                    )
+                    Log.d(
+                        "result返回的数据数量:",
+                        ((data!!.getSerializableExtra(RippleImagePick.RESULT_IMG_LIST)) as List<RippleMediaModel>).size
+                            .toString()
+                    )
+                }
+                10001 -> {
+                    Log.d(
+                        "result返回的拍照路径:",
+                        data!!.getStringExtra(IImagePickConfig.TAKE_PHOTO_PATH)
+                    )
+                }
             }
+
         }
         super.onActivityResult(requestCode, resultCode, data)
 

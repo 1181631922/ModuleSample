@@ -15,6 +15,8 @@ interface IImagePickConfig : MediaPickConfig {
     companion object {
         const val IMAGE_CONFIG_NAME = "item_image_pick_config"
 
+        const val TAKE_PHOTO_PATH = "take_photo_path"
+
         const val TAKE_PICTURE_CODE = 518
     }
 

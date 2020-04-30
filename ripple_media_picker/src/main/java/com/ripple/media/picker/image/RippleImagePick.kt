@@ -8,7 +8,10 @@ import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.IPreviewImageConfig
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
 import com.ripple.media.picker.image.activity.RipplePreviewImageActivity
+import com.ripple.media.picker.image.activity.RippleTakePhotoAgencyActivity
 import com.ripple.media.picker.image.listener.SelectImageListListener
+import com.ripple.media.picker.image.listener.TakePhotoListener
+import com.ripple.media.picker.view.photoview.IPhotoView
 import java.io.File
 
 /**
@@ -19,6 +22,8 @@ import java.io.File
  */
 class RippleImagePick private constructor() {
     var selectImageListListener: SelectImageListListener? = null
+
+    var takePhotoListener: TakePhotoListener? = null
 
     var takePictureFile: File? = null
 
@@ -67,5 +72,11 @@ class RippleImagePick private constructor() {
             intent,
             requestCode
         )
+    }
+
+    @JvmOverloads
+    fun takePhoto(context: Context, requestCode: Int = IImagePickConfig.TAKE_PICTURE_CODE) {
+        val intent = Intent(context, RippleTakePhotoAgencyActivity::class.java)
+        (context as Activity).startActivityForResult(intent, requestCode)
     }
 }

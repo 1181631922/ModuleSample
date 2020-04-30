@@ -15,7 +15,7 @@ object PictureGalleryUtil {
     /**
      * 更新系统相册
      */
-    fun updatePictureGallery(context: Context, file: File) {
+    fun updatePictureGallery(context: Context, file: File?) {
         val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val contentUri = Uri.fromFile(file)
         intent.data = contentUri

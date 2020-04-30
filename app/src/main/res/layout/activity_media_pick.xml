@@ -27,6 +27,18 @@
                 android:layout_height="wrap_content"
                 android:text="kotlin多选图片" />
 
+            <Button
+                android:id="@+id/mediaPick3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="java拍照" />
+
+            <Button
+                android:id="@+id/mediaPick4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="kotlin拍照" />
+
         </LinearLayout>
     </ScrollView>
 
