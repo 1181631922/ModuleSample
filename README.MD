@@ -22,7 +22,7 @@ PS：英文名：Ripple
 | Refresh库       | 刷新库                             | com.ripple.refresh        |
 | Router库        | 路由库，暂时先定义                       | com.ripple.router         |
 | RouterHelper库  | 路由辅助类库                          | com.ripple.router.helper  |
-| PhotoPicker库   | 图片选择库                           | com.ripple.photo.picker   |
+| MediaPicker库   | 媒体选择库                           | com.ripple.media.picker   |
 | BridgeWebView库 | webview库                        | com.ripple.web.bridge     |
 | Camera库        | 自定义相机库，暂定需要5.0之上，底层采用Camera2去实现 | com.ripple.camera         |
 | Cache库         | 缓存库                             | com.ripple.cache          |
@@ -30,6 +30,7 @@ PS：英文名：Ripple
 | Permission库    | 动态权限库                           | com.ripple.permission     |
 | Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |
+| Task库      | 多任务处理库                           | com.ripple.task |
 | Share库         | 分享库                             | com.ripple.share          |
 | FileDownload库         | 文件下载库                             | com.ripple.file.down          |
 

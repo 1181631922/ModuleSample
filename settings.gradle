@@ -12,3 +12,5 @@ include ':ripple_permission'
 include ':ripple_permission_plugin'
 include ':ripple_sdk'
 include ':ripple_sdk_kit'
+
+include ':moon_img_compress'

@@ -9,6 +9,9 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.fanyafeng.modules.R
+import com.fanyafeng.modules.dealpicture.DownloadPicture
+import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
+import com.fanyafeng.modules.dealpicture.impl.GlideDownloadPicture
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
@@ -63,6 +66,31 @@ class MediaPickActivity : AppCompatActivity() {
                 Log.d("拍照后的路径：", it?.absolutePath ?: "为获取到图片")
             }
         }
+
+        mediaPick5.setOnClickListener {
+            GlideDownloadPicture().download(
+                this,
+                "https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg",
+                null,
+                object : DownloadPicture.SimpleResultCallBack {
+                    override fun onSuccess() {
+                        super.onSuccess()
+
+                    }
+                })
+        }
+
+        mediaPick6.setOnClickListener {
+            FrescoDownloadPicture().download(
+                this,
+                "https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3252521864,872614242&fm=26&gp=0.jpg",
+                null,
+                object : DownloadPicture.SimpleResultCallBack {
+
+                })
+        }
+
+
     }
 
     private fun initData() {
