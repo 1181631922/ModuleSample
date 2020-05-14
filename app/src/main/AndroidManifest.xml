@@ -22,7 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mediapick.MediaPickActivity"></activity>
+        <activity android:name=".ninegrid.NineGridActivity"></activity>
+        <activity android:name=".widget.SudokuActivity" />
+        <activity android:name=".mediapick.MediaPickActivity" />
         <activity android:name=".permission.PermissionTestActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".main.MainActivity">
