@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.ripple.ui.RippleImageView
-import com.ripple.ui.ninegridview.NineGrid
-import com.ripple.ui.ninegridview.NineGridLoadFrame
-import com.ripple.ui.ninegridview.NineItem
-import com.ripple.ui.ninegridview.NineItemListener
+import com.ripple.ui.ninegridview.*
 import java.io.Serializable
 
 /**
@@ -66,6 +63,23 @@ import java.io.Serializable
  * |        |    |        |     |         |
  * ----------    ----------     -----------
  * ----------------------------------------
+ *
+ * 四张显示如下，未做特殊处理
+ *
+ *                       屏幕宽度
+ * ----------------------------------------
+ * ----------    ----------     -----------
+ * |        |    |        |     |         |
+ * |        |    |        |     |         |
+ * |        |    |        |     |         |
+ * |        |    |        |     |         |
+ * ----------    ----------     -----------
+ * |        |
+ * |        |
+ * |        |
+ * |        |
+ * ----------
+ * ----------------------------------------
  */
 class NineGridView @JvmOverloads constructor(
     private val mContext: Context?,
@@ -77,20 +91,20 @@ class NineGridView @JvmOverloads constructor(
     companion object {
         private val TAG = NineGridView::class.java.simpleName
 
-        /**
-         * 一行最多显示多少张图片
-         */
-        private const val PER_LINE_COUNT = 3
-
-        /**
-         * 最多显示多少行
-         */
-        private const val MAX_LINE = 3
-
-        /**
-         * 图片最大显示数量
-         */
-        private const val MAX_SIZE = 9
+//        /**
+//         * 一行最多显示多少张图片
+//         */
+//        private const val PER_LINE_COUNT = 3
+//
+//        /**
+//         * 最多显示多少行
+//         */
+//        private const val MAX_LINE = 3
+//
+//        /**
+//         * 图片最大显示数量
+//         */
+//        private const val MAX_SIZE = PER_LINE_COUNT * MAX_LINE
     }
 
     private var currentLine = 0
@@ -153,22 +167,40 @@ class NineGridView @JvmOverloads constructor(
         return nineGridConfig.getSingleImageRatio()
     }
 
+    override fun setPerLineCount(count: Int) {
+        nineGridConfig.setPerLineCount(count)
+    }
+
+    override fun getPerLineCount(): Int {
+        return nineGridConfig.getPerLineCount()
+    }
+
+    override fun setMaxLine(maxLine: Int) {
+        nineGridConfig.setMaxLine(maxLine)
+    }
+
+    override fun getMaxLine(): Int {
+        return nineGridConfig.getMaxLine()
+    }
+
     private var mImageList: List<NineItem>? = null
 
     var adapter: NineGridViewAdapter? = null
         set(value) {
             field = value
+            val perLineCount = getPerLineCount()
+            val maxSize = getMaxLine() * getPerLineCount()
             var size = value?.getImageList()?.size ?: 0
-            currentLine = if (size % PER_LINE_COUNT == 0) {
-                size / PER_LINE_COUNT
+            currentLine = if (size % perLineCount == 0) {
+                size / perLineCount
             } else {
-                size / PER_LINE_COUNT + 1
+                size / perLineCount + 1
             }
 
             val imageList = value?.getImageList()
             if (imageList?.isNotEmpty() == true) {
                 visibility = View.VISIBLE
-                val trueList = if (size > MAX_SIZE) imageList.subList(0, MAX_SIZE) else imageList
+                val trueList = if (size > maxSize) imageList.subList(0, maxSize) else imageList
                 size = trueList.size
 
                 if (mImageList != null) {
@@ -188,7 +220,6 @@ class NineGridView @JvmOverloads constructor(
 
                 } else {
                     (0 until size).forEachIndexed { _, i ->
-                        Log.d(TAG, "我看看我的i:" + i)
                         val item = getItemView(i)
                         item?.let {
                             addView(it, generateDefaultLayoutParams())
@@ -201,7 +232,12 @@ class NineGridView @JvmOverloads constructor(
                 visibility = View.GONE
             }
 
-            //最后一个条目显示
+            if (adapter?.getImageList()?.size ?: 0 > maxSize) {
+                val lastItem = getChildAt(maxSize - 1)
+                if (lastItem is RippleImageView) {
+                    lastItem.hintText = (adapter?.getImageList()?.size ?: 0 - maxSize).toString()
+                }
+            }
 
             mImageList = imageList
             requestLayout()
@@ -213,41 +249,42 @@ class NineGridView @JvmOverloads constructor(
          */
     }
 
-    private var mWidth: Int? = null
-    private var mHeight: Int? = null
+    private var itemWidth: Int? = null
+    private var itemHeight: Int? = null
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val perLineCount = getPerLineCount()
         var width = MeasureSpec.getSize(widthMeasureSpec)
         var height = 0
         var totalWidth = width - paddingLeft - paddingRight
         val imageList = adapter?.getImageList()
         val singleWidth = getSingleWidth()
-        val ratio = getSingleImageRatio()
+        val imageRatio = getSingleImageRatio()
         val divide = getDivide()
         if (imageList?.isNotEmpty() == true) {
             if (imageList.size == 1) {
-                mWidth = if (singleWidth > totalWidth) totalWidth else singleWidth
-                mWidth?.let { nineGridWidth ->
-                    mHeight = (nineGridWidth / ratio).toInt()
-                    mHeight?.let { nineGridHeight ->
+                itemWidth = if (singleWidth > totalWidth) totalWidth else singleWidth
+                itemWidth?.let { nineGridWidth ->
+                    itemHeight = (nineGridWidth / imageRatio).toInt()
+                    itemHeight?.let { nineGridHeight ->
                         if (nineGridHeight > singleWidth) {
                             val ratio = singleWidth * 1F / nineGridHeight
-                            mWidth = (nineGridWidth * ratio).toInt()
-                            mHeight = singleWidth
+                            itemWidth = (nineGridWidth * ratio).toInt()
+                            itemHeight = singleWidth
                         }
                     }
                 }
             } else {
-                mWidth = (totalWidth - divide * (PER_LINE_COUNT - 1)) / PER_LINE_COUNT
-                mHeight = mWidth
+                itemWidth = (totalWidth - divide * (perLineCount - 1)) / perLineCount
+                itemHeight = itemWidth
             }
-            mWidth?.let {
+            itemWidth?.let {
                 width =
-                    it * PER_LINE_COUNT + divide * (PER_LINE_COUNT - 1) + paddingLeft + paddingRight
+                    it * perLineCount + divide * (perLineCount - 1) + paddingLeft + paddingRight
             }
-            mHeight?.let {
+            itemHeight?.let {
                 height = it * currentLine + divide * (currentLine - 1) + paddingTop + paddingBottom
             }
         }
@@ -264,17 +301,26 @@ class NineGridView @JvmOverloads constructor(
          */
 
         val divide = getDivide()
+        val perLineCount = getPerLineCount()
+
+        Log.d(TAG, "看看divide的值：" + divide)
+        Log.d(TAG, "看看itemWidth的值：" + itemWidth)
+        Log.d(TAG, "看看itemHeight的值：" + itemHeight)
 
         val imageList = adapter?.getImageList()
         imageList?.forEachIndexed { index, item ->
             val itemView = getChildAt(index) as RippleImageView
 
-            val rowNumber: Int = index / PER_LINE_COUNT
-            val columnNumber: Int = index % PER_LINE_COUNT
-            val left = (mWidth ?: 0 + divide) * columnNumber + paddingLeft
-            val top = (mHeight ?: 0 + divide) * rowNumber + paddingTop
-            val right = left + (mWidth ?: 0)
-            val bottom = top + (mHeight ?: 0)
+            val rowNumber: Int = index / perLineCount
+            val columnNumber: Int = index % perLineCount
+            val left = ((itemWidth ?: 0) + divide) * columnNumber + paddingLeft
+            val top = ((itemHeight ?: 0) + divide) * rowNumber + paddingTop
+            val right = left + (itemWidth ?: 0)
+            val bottom = top + (itemHeight ?: 0)
+            Log.d(TAG, "left的值：" + left)
+            Log.d(TAG, "top的值：" + top)
+            Log.d(TAG, "right的值：" + right)
+            Log.d(TAG, "bottom的值：" + bottom)
 
             itemView.layout(left, top, right, bottom)
 
@@ -284,7 +330,6 @@ class NineGridView @JvmOverloads constructor(
     }
 
     private fun getItemView(position: Int): RippleImageView? {
-        Log.d(TAG, "我看看我的position:" + position)
         adapter?.let {
             val itemView: RippleImageView
             val listSize = viewList.size
@@ -292,7 +337,8 @@ class NineGridView @JvmOverloads constructor(
             if (position < listSize) {
                 itemView = viewList[position]
             } else {
-                itemView = adapter?.onCreateView(context) ?: RippleImageView(context)
+                itemView =
+                    adapter?.onCreateView(position, nineGridConfig) ?: RippleImageView(context)
                 itemView.setOnClickListener { view ->
                     nineItemListener?.onClickListener(
                         view,
@@ -310,25 +356,5 @@ class NineGridView @JvmOverloads constructor(
             return itemView
         }
         return null
-    }
-
-
-    abstract class NineGridViewAdapter(
-        private val mContext: Context,
-        private var list: List<NineItem>
-    ) : Serializable {
-
-        fun onCreateView(context: Context): RippleImageView {
-            val itemView = RippleImageView(context)
-            itemView.scaleType = ImageView.ScaleType.CENTER_CROP
-            return itemView
-        }
-
-        fun setImageList(list: List<NineItem>) {
-            this.list = list
-        }
-
-        fun getImageList(): List<NineItem> = list
-
     }
 }

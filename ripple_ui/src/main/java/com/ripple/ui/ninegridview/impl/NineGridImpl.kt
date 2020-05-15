@@ -1,7 +1,6 @@
 package com.ripple.ui.ninegridview.impl
 
 import com.ripple.ui.ninegridview.NineGrid
-import com.ripple.ui.ninegridview.NineItem
 
 /**
  * Author: fanyafeng
@@ -10,9 +9,11 @@ import com.ripple.ui.ninegridview.NineItem
  * Description: 配置的示例化代码
  */
 class NineGridImpl @JvmOverloads constructor(
-    private var divide: Int = 4,
-    private var singleWidth: Int = 270,
-    private var ratio: Float = 1F
+    private var divide: Int = 8,
+    private var singleWidth: Int = 1000,
+    private var ratio: Float = 1F,
+    private var perLineCount: Int = 3,
+    private var maxLine: Int = 3
 ) : NineGrid {
     override fun setDivide(divide: Int) {
         this.divide = divide
@@ -38,8 +39,24 @@ class NineGridImpl @JvmOverloads constructor(
         return ratio
     }
 
+    override fun setPerLineCount(count: Int) {
+        this.perLineCount = count
+    }
+
+    override fun getPerLineCount(): Int {
+        return perLineCount
+    }
+
+    override fun setMaxLine(maxLine: Int) {
+        this.maxLine = maxLine
+    }
+
+    override fun getMaxLine(): Int {
+        return maxLine
+    }
+
     override fun toString(): String {
-        return "NineGridImpl(divide=$divide, singleWidth=$singleWidth, ratio=$ratio)"
+        return "NineGridImpl(divide=$divide, singleWidth=$singleWidth, ratio=$ratio, perLineCount=$perLineCount, maxLine=$maxLine)"
     }
 
 
