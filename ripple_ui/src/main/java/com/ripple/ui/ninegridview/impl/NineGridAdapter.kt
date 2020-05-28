@@ -8,7 +8,7 @@ import com.ripple.ui.ninegridview.NineItem
  * Author: fanyafeng
  * Data: 2020/5/15 10:45
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: 九宫格实例adapter
  */
 class NineGridAdapter(private val context: Context, private val list: List<NineItem>) :
     NineGridViewAdapter(context, list) {
