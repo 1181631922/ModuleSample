@@ -13,6 +13,7 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
+import com.fanyafeng.modules.http.HttpActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
@@ -45,6 +46,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("媒体库选择", MediaPickActivity::class.java))
             add(MainModel("动态权限", PermissionTestActivity::class.java))
             add(MainModel("图片九宫格", NineGridActivity::class.java))
+            add(MainModel("网络请求", HttpActivity::class.java))
         }
 
         mainAdapter = MainAdapter(this, funcList)

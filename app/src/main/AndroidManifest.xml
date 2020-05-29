@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ninegrid.NineGridActivity"></activity>
+        <activity android:name=".http.HttpActivity"></activity>
+        <activity android:name=".ninegrid.NineGridActivity" />
         <activity android:name=".widget.SudokuActivity" />
         <activity android:name=".mediapick.MediaPickActivity" />
         <activity android:name=".permission.PermissionTestActivity" />
