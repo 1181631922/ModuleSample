@@ -19,32 +19,34 @@ package com.ripple.http.concreterealization
  * 2.json                       是否采用json格式
  *
  */
-interface IHttpParams {
+interface IRequestParams {
 
     companion object {
         const val HTTP = "http://"
         const val HTTPS = "https://"
     }
 
+    interface IHttpRequestParams : IRequestParams {
+        /**
+         * 获取网络协议
+         * 可空，如果为空的话会拼接protocol,hostname,port,path
+         */
+//    fun getProtocol(): String?
 
-    /**
-     * 获取网络协议
-     * 可空，如果为空的话会拼接protocol,hostname,port,path
-     */
-    fun getProtocol(): String?
+        /**
+         * 主机名
+         */
+        fun getHostName(): String
 
-    /**
-     * 主机名
-     */
-    fun getHostName(): String
+        /**
+         * 端口号
+         */
+//    fun getPort(): String?
 
-    /**
-     * 端口号
-     */
-    fun getPort(): String?
+        /**
+         * http路径
+         */
+        fun getPath(): String
+    }
 
-    /**
-     * http路径
-     */
-    fun getPath(): String
 }

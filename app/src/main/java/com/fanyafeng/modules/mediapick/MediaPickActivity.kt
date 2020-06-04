@@ -10,8 +10,10 @@ import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.dealpicture.DownloadPicture
+import com.fanyafeng.modules.dealpicture.impl.Base64DownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.GlideDownloadPicture
+import com.fanyafeng.modules.dealpicture.impl.Test
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
@@ -29,6 +31,7 @@ class MediaPickActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = MediaPickActivity::class.java.simpleName
+
     }
 
     private var testList = mutableListOf<RippleMediaModel>()
@@ -90,6 +93,18 @@ class MediaPickActivity : AppCompatActivity() {
                 })
         }
 
+        mediaPick7.setOnClickListener {
+            Base64DownloadPicture().download(
+                this,
+                Test.test,
+                null,
+                object : DownloadPicture.SimpleResultCallBack {
+                    override fun onSuccess() {
+
+                    }
+                }
+            )
+        }
 
     }
 
