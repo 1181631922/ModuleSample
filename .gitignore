@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 .idea
+
+./ripple_task/gradle-jcenter-push.gradle
