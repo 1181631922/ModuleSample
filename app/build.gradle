@@ -59,6 +59,7 @@ dependencies {
     implementation project(path: ':ripple_ui')
     implementation project(path: ':ripple_permission')
     implementation project(path: ':ripple_media_picker')
+    implementation project(path: ':ripple_task')
 }
 
 class GreetingPluginExtension {

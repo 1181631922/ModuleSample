@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import com.ripple.task.callback.*
 import com.ripple.task.callback.result.OnAllResult
 import com.ripple.task.callback.result.OnItemResult
@@ -223,6 +224,7 @@ class ProcessTaskImpl : ProcessTask {
                     OnItemStart.CODE_ITEM_START -> {
                         processItem =
                             bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                        Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath())
                         taskEngine.getItemResult()?.onItemStart(processItem)
                     }
                     OnItemDoing.CODE_ITEM_DOING -> {
