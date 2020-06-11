@@ -1,6 +1,5 @@
 package com.ripple.task.extend
 
-import android.os.Handler
 import com.ripple.task.callback.result.OnAllResult
 import com.ripple.task.callback.result.OnItemResult
 import com.ripple.task.config.ProcessModel
@@ -22,7 +21,7 @@ import com.ripple.task.task.impl.ProcessTaskImpl
 @JvmOverloads
 fun handleTask(
     process: ProcessModel,
-    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR,
+    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_MAX,
     lambda: HandleTaskExtra.() -> Unit
 ) {
     handleTaskList(listOf(process), processEngine, lambda)
@@ -34,7 +33,7 @@ fun handleTask(
 @JvmOverloads
 fun handleTaskList(
     processList: List<ProcessModel>,
-    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR,
+    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_MAX,
     lambda: HandleTaskExtra.() -> Unit
 ) {
     val handleTaskExtra = HandleTaskExtra(processEngine, processList)
@@ -57,11 +56,10 @@ class HandleTaskExtra(processEngine: ProcessEngine, processList: List<ProcessMod
     private var successLambda: SuccessLambda<List<ProcessModel>?> = null
     private var finishLambda: PairLambda<List<ProcessModel>?> = null
 
-    private val engine = ProcessTaskImpl()
+    private val engine = ProcessTaskImpl(processEngine)
 
 
     init {
-        engine.handleProcessEngine = processEngine
         engine.handleTaskList(processList)
     }
 

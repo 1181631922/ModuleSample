@@ -3,7 +3,8 @@ package com.ripple.task.engine
 import java.io.Serializable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 /**
  * Author: fanyafeng
@@ -21,8 +22,14 @@ interface ProcessEngine : Serializable {
          */
         val SINGLE_THREAD_EXECUTOR: ProcessEngine =
             object : ProcessEngine {
+
+                private val executor = Executors.newFixedThreadPool(2)
                 override fun getExecutorService(): ExecutorService {
-                    return Executors.newSingleThreadExecutor()
+                    return executor
+                }
+
+                override fun shutdown() {
+                    executor.shutdown()
                 }
 
             }
@@ -32,10 +39,44 @@ interface ProcessEngine : Serializable {
          * 不用纠结个数为什么这么定义，纯属个人喜欢的数字
          * 处理任务为并行处理，并且顺序是打乱的
          */
-        val MULTI_THREAD_EXECUTOR: ProcessEngine =
+        val MULTI_THREAD_EXECUTOR_MAX: ProcessEngine =
             object : ProcessEngine {
+
+                private val executor = Executors.newFixedThreadPool(2)
                 override fun getExecutorService(): ExecutorService {
-                    return Executors.newFixedThreadPool(6)
+                    return executor
+                }
+
+                override fun shutdown() {
+                    executor.shutdown()
+                }
+
+            }
+
+        val MULTI_THREAD_EXECUTOR_NORMAL: ProcessEngine =
+            object : ProcessEngine {
+
+                private val executor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
+                override fun getExecutorService(): ExecutorService {
+                    return executor
+                }
+
+                override fun shutdown() {
+                    executor.shutdown()
+                }
+
+            }
+
+        val MULTI_THREAD_EXECUTOR_MIN: ProcessEngine =
+            object : ProcessEngine {
+
+                private val executor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
+                override fun getExecutorService(): ExecutorService {
+                    return executor
+                }
+
+                override fun shutdown() {
+                    executor.shutdown()
                 }
 
             }
@@ -69,5 +110,10 @@ interface ProcessEngine : Serializable {
      * ScheduledExecutorService newScheduledThreadPool() : 创建固定大小的线程，可以延迟或定时的执行任务
      */
     fun getExecutorService(): ExecutorService
+
+    /**
+     * 停止任务
+     */
+    fun shutdown()
 
 }

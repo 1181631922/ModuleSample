@@ -15,6 +15,7 @@ import com.ripple.task.task.ProcessItemResultTask
 import com.ripple.task.task.ProcessTask
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Future
 
 /**
  * Author: fanyafeng
@@ -22,7 +23,12 @@ import java.util.concurrent.CountDownLatch
  * Email: fanyafeng@live.cn
  * Description:
  */
-class ProcessTaskImpl : ProcessTask {
+class ProcessTaskImpl @JvmOverloads constructor(
+    /**
+     * 多线程任务请求
+     */
+    private var handleProcessEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_NORMAL
+) : ProcessTask {
 
     /**
      * 所有任务回调
@@ -36,10 +42,6 @@ class ProcessTaskImpl : ProcessTask {
 
     private var countDownLatch: CountDownLatch? = null
 
-    /**
-     * 多线程任务请求
-     */
-    var handleProcessEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR
 
     private val handler = ProcessTaskImplHandler(this)
 
@@ -72,7 +74,7 @@ class ProcessTaskImpl : ProcessTask {
     fun handleTaskList(processList: List<ProcessModel>) {
         var service = getProcessEngine().getExecutorService()
         if (service.isShutdown) {
-            handleProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR
+            handleProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_NORMAL
             service = handleProcessEngine.getExecutorService()
         }
 
@@ -133,7 +135,7 @@ class ProcessTaskImpl : ProcessTask {
                 }
             }
         }
-        service.submit(processAll)
+        val allFuture: Future<*> = service.submit(processAll)
 
         processList.forEachIndexed { _, processModel ->
             val bundle = Bundle()
@@ -202,8 +204,7 @@ class ProcessTaskImpl : ProcessTask {
                     }
                 }
             }
-            service.submit(processItem)
-
+            val itemFuture = service.submit(processItem)
         }
     }
 
@@ -222,10 +223,13 @@ class ProcessTaskImpl : ProcessTask {
                 val failedResult: List<ProcessModel>
                 when (msg.what) {
                     OnItemStart.CODE_ITEM_START -> {
-                        processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
-                        Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath())
-                        taskEngine.getItemResult()?.onItemStart(processItem)
+                        bundle.getSerializable(ProcessModel.PROCESS_ITEM)?.let {
+                            processItem =
+                                it as ProcessModel
+                            taskEngine.getItemResult()?.onItemStart(processItem)
+                            Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath())
+                        }
+
                     }
                     OnItemDoing.CODE_ITEM_DOING -> {
                         processItem =

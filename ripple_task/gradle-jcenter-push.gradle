@@ -6,6 +6,7 @@ task androidJavadocs(type: Javadoc) {
     failOnError false
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    excludes = ['**/*.kt']
     allprojects {
         tasks.withType(Javadoc) {
             options.encoding = "UTF-8"
@@ -14,12 +15,12 @@ task androidJavadocs(type: Javadoc) {
 }
 
 task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
     from androidJavadocs.destinationDir
 }
 
 task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from android.sourceSets.main.java.sourceFiles
 }
 
@@ -79,15 +80,11 @@ publishing {
 }
 
 def getBintrayUserProperty() {
-    Properties properties = new Properties()//先要读取local.properties中的name和key
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty('BINTRAY_USER')
+    return hasProperty('BINTRAY_USER') ? BINTRAY_USER : ""
 }
 
 def getBintrayApiKeyProperty() {
-    Properties properties = new Properties()//先要读取local.properties中的name和key
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty('BINTRAY_APIKEY')
+    return hasProperty('BINTRAY_APIKEY') ? BINTRAY_APIKEY : ""
 }
 
 //def getGpgPassphraseProperty() {
@@ -97,15 +94,11 @@ def getBintrayApiKeyProperty() {
 //}
 
 def getUserTokenProperty() {
-    Properties properties = new Properties()//先要读取local.properties中的name和key
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty('USERTOKEN')
+    return hasProperty('USERTOKEN') ? USERTOKEN : ""
 }
 
 def getUserPasswordProperty() {
-    Properties properties = new Properties()//先要读取local.properties中的name和key
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty('USERPASSWORD')
+    return hasProperty('USERPASSWORD') ? USERPASSWORD : ""
 }
 
 // gradle bintrayUpload
