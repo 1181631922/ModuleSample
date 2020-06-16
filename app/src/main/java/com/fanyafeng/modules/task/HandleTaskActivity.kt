@@ -125,20 +125,20 @@ data class Task1 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String? = null
 ) : ProcessModel<String, String> {
-    override fun getSourcePath(): String {
+    override fun getSource(): String {
         return sourcePath
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return targetPath
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
         this.targetPath = target
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
-        return sourcePath.toUpperCase()
+    override fun parse(source: String, target: String?): String {
+        return source.toUpperCase()
     }
 }
 
@@ -146,21 +146,21 @@ data class Task2 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String = "任务2目标路径"
 ) : ProcessModel<String, String> {
-    override fun getSourcePath(): String {
+    override fun getSource(): String {
         return sourcePath
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return targetPath
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
         this.targetPath = target
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
+    override fun parse(source: String, target: String?): String {
         Thread.sleep(2000)
-        return "我是任务2$targetPath"
+        return "我是任务2$target"
     }
 
 }
@@ -169,21 +169,21 @@ data class Task3 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String = "任务三目标路径"
 ) : ProcessModel<String, String> {
-    override fun getSourcePath(): String {
+    override fun getSource(): String {
         return sourcePath
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return targetPath
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
         this.targetPath = target
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
+    override fun parse(source: String, target: String?): String {
         Thread.sleep(3000)
-        return sourcePath.toUpperCase() + "在来个任务3一起走"
+        return source.toUpperCase() + "在来个任务3一起走"
     }
 
 }

@@ -16,24 +16,24 @@ public class ProcessModelJavaImpl implements ProcessModel<String, String> {
 
     @NotNull
     @Override
-    public String getSourcePath() {
+    public String getSource() {
         return "null";
     }
 
     @Nullable
     @Override
-    public String getTargetPath() {
+    public String getTarget() {
         return "null";
     }
 
     @Override
-    public void setTargetPath(@NotNull String target) {
+    public void setTarget(@NotNull String target) {
 
     }
 
     @NotNull
     @Override
-    public String parse(@NotNull String sourcePath, @Nullable String targetPath) {
+    public String parse(@NotNull String source, @Nullable String target) {
         return "null";
     }
 }

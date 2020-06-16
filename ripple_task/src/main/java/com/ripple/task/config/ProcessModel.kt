@@ -18,17 +18,17 @@ interface ProcessModel<S, T> : Serializable {
     /**
      * 获取需要处理的源路径
      */
-    fun getSourcePath(): S
+    fun getSource(): S
 
     /**
      * 目标路径
      */
-    fun getTargetPath(): T?
+    fun getTarget(): T?
 
     /**
      * 处理后的目标路径不能为空
      */
-    fun setTargetPath(target: T)
+    fun setTarget(target: T)
 
     /**
      * 任务解析器
@@ -38,12 +38,30 @@ interface ProcessModel<S, T> : Serializable {
      *
      * 分为以下两种以下两种情况：
      * 1.处理文件类
-     * @param sourcePath 文件原路径
-     * @param targetPath 文件目标路径
+     * @param source 文件原路径
+     * @param target 文件目标路径
      *
      * 2.有处理规则，和原路径，那么方法的返回值就是处理结果
-     * @param sourcePath 文件原路径
+     * @param source 文件原路径
      *
      */
-    fun parse(sourcePath: S, targetPath: T?): T
+    fun parse(source: S, target: T?): T
+
+    /**
+     * 简化接口调用
+     */
+    abstract class ProcessSimpleModel<S, T>(var sourcePath: S, var targetPath: T) : ProcessModel<S, T> {
+
+        override fun getSource(): S {
+            return sourcePath
+        }
+
+        override fun getTarget(): T? {
+            return targetPath
+        }
+
+        override fun setTarget(target: T) {
+            this.targetPath = target
+        }
+    }
 }

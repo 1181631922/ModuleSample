@@ -25,13 +25,13 @@ interface ProcessItemResultTask<M : ProcessModel<S, T>, S, T> : Runnable, Serial
         val processModel = getProcessModel()
         itemResult?.onItemStart(processModel)
 
-        val sourcePath = processModel.getSourcePath()
-        val targetPath = processModel.getTargetPath()
+        val sourcePath = processModel.getSource()
+        val targetPath = processModel.getTarget()
 
         try {
             itemResult?.onItemDoing(processModel)
             val target = processModel.parse(sourcePath, targetPath)
-            processModel.setTargetPath(target)
+            processModel.setTarget(target)
             itemResult?.onItemSuccess(processModel)
         } catch (e: Exception) {
             itemResult?.onItemFailed(processModel)

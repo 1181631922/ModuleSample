@@ -15,8 +15,8 @@ import com.ripple.task.task.ProcessItemResultTask
 import com.ripple.task.task.ProcessTask
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 /**
  * Author: fanyafeng
@@ -71,6 +71,8 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
     fun handleTask(process: ProcessModel<S, T>) {
         handleTaskList(listOf(process))
     }
+
+    private var executorServiceInner: ExecutorService? = null
 
     fun handleTaskList(processList: List<ProcessModel<S, T>>) {
         var service = getProcessEngine().getExecutorService()
@@ -132,12 +134,14 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
                             failedResultList
                         )
                         Message.obtain(handler, OnFinish.CODE_FINISH, bundle).sendToTarget()
+                        executorServiceInner?.shutdown()
                     }
                 }
             }
         }
 //        val allFuture: Future<*> = service.submit(processAll)
-        Executors.newSingleThreadExecutor().execute(processAll)
+        executorServiceInner = Executors.newSingleThreadExecutor()
+        executorServiceInner?.execute(processAll)
 
         processList.forEachIndexed { _, processModel ->
             val bundle = Bundle()
@@ -157,9 +161,6 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
 
                         override fun onItemStart(startResult: ProcessModel<S, T>) {
                             super.onItemStart(startResult)
-                            /**
-                             * 测试
-                             */
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, startResult)
                             Message.obtain(handler, OnItemStart.CODE_ITEM_START, bundle)
                                 .sendToTarget()
@@ -232,7 +233,7 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
                             processItem =
                                 it as ProcessModel<S, T>
                             taskEngine.getItemResult()?.onItemStart(processItem)
-                            Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath().toString())
+                            Log.d("CODE_ITEM_START ITEM", processItem.getSource().toString())
                         }
 
                     }

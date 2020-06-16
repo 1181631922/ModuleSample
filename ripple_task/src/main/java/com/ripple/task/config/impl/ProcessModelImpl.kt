@@ -9,18 +9,18 @@ import com.ripple.task.config.ProcessModel
  * Description:
  */
 class ProcessModelImpl : ProcessModel<String, String> {
-    override fun getSourcePath(): String {
+    override fun getSource(): String {
         return ""
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return ""
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
+    override fun parse(source: String, target: String?): String {
         return ""
     }
 

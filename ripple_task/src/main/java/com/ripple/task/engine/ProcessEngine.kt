@@ -1,10 +1,8 @@
 package com.ripple.task.engine
 
 import java.io.Serializable
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Author: fanyafeng
@@ -17,14 +15,26 @@ interface ProcessEngine : Serializable {
 
     companion object {
 
-        internal var singleExecutorInner = Executors.newFixedThreadPool(2)
+        internal var singleExecutorInner = Executors.newSingleThreadExecutor(object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-内部单线程池-" + atomic.getAndIncrement())
+            }
+        })
         internal val SINGLE_THREAD_EXECUTOR_INNER: ProcessEngine =
             object : ProcessEngine {
                 override fun getExecutorService(): ExecutorService {
                     return if (!singleExecutorInner.isShutdown) {
                         singleExecutorInner
                     } else {
-                        singleExecutorInner = Executors.newFixedThreadPool(2)
+                        singleExecutorInner = Executors.newSingleThreadExecutor(object :
+                            ThreadFactory {
+                            val atomic = AtomicInteger(1)
+                            override fun newThread(r: Runnable): Thread {
+                                return Thread(r, "ripple-task-内部单线程池-" + atomic.getAndIncrement())
+                            }
+                        })
                         singleExecutorInner
                     }
                 }
@@ -39,14 +49,26 @@ interface ProcessEngine : Serializable {
          * 单线程处理器
          * 处理任务为串行处理
          */
-        private var singleExecutor = Executors.newFixedThreadPool(2)
+        private var singleExecutor = Executors.newSingleThreadExecutor(object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-内置单线程池-" + atomic.getAndIncrement())
+            }
+        })
         val SINGLE_THREAD_EXECUTOR: ProcessEngine =
             object : ProcessEngine {
                 override fun getExecutorService(): ExecutorService {
                     return if (!singleExecutor.isShutdown) {
                         singleExecutor
                     } else {
-                        singleExecutor = Executors.newFixedThreadPool(2)
+                        singleExecutor = Executors.newSingleThreadExecutor(object :
+                            ThreadFactory {
+                            val atomic = AtomicInteger(1)
+                            override fun newThread(r: Runnable): Thread {
+                                return Thread(r, "ripple-task-内置单线程池-" + atomic.getAndIncrement())
+                            }
+                        })
                         singleExecutor
                     }
                 }
@@ -62,14 +84,26 @@ interface ProcessEngine : Serializable {
          * 不用纠结个数为什么这么定义，纯属个人喜欢的数字
          * 处理任务为并行处理，并且顺序是打乱的
          */
-        private var maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY)
+        private var maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-内置最大线程池-" + atomic.getAndIncrement())
+            }
+        })
         val MULTI_THREAD_EXECUTOR_MAX: ProcessEngine =
             object : ProcessEngine {
                 override fun getExecutorService(): ExecutorService {
                     return if (!maxExecutor.isShutdown) {
                         maxExecutor
                     } else {
-                        maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY)
+                        maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY, object :
+                            ThreadFactory {
+                            val atomic = AtomicInteger(1)
+                            override fun newThread(r: Runnable): Thread {
+                                return Thread(r, "ripple-task-内置最大线程池-" + atomic.getAndIncrement())
+                            }
+                        })
                         maxExecutor
                     }
                 }
@@ -80,7 +114,13 @@ interface ProcessEngine : Serializable {
 
             }
 
-        private var normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
+        private var normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-内置一般线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val MULTI_THREAD_EXECUTOR_NORMAL: ProcessEngine =
             object : ProcessEngine {
@@ -89,7 +129,13 @@ interface ProcessEngine : Serializable {
                     return if (!normalExecutor.isShutdown) {
                         normalExecutor
                     } else {
-                        normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
+                        normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY, object :
+                            ThreadFactory {
+                            val atomic = AtomicInteger(1)
+                            override fun newThread(r: Runnable): Thread {
+                                return Thread(r, "ripple-task-内置一般线程池-" + atomic.getAndIncrement())
+                            }
+                        })
                         normalExecutor
                     }
                 }
@@ -100,7 +146,13 @@ interface ProcessEngine : Serializable {
 
             }
 
-        private var minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
+        private var minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-内置最小线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val MULTI_THREAD_EXECUTOR_MIN: ProcessEngine =
             object : ProcessEngine {
@@ -109,7 +161,13 @@ interface ProcessEngine : Serializable {
                     return if (!minExecutor.isShutdown) {
                         minExecutor
                     } else {
-                        minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
+                        minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY, object :
+                            ThreadFactory {
+                            val atomic = AtomicInteger(1)
+                            override fun newThread(r: Runnable): Thread {
+                                return Thread(r, "ripple-task-内置最小线程池-" + atomic.getAndIncrement())
+                            }
+                        })
                         minExecutor
                     }
                 }

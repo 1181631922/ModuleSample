@@ -4,6 +4,8 @@ import java.io.Serializable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ThreadFactory
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
 /**
@@ -22,7 +24,13 @@ interface ScheduledProcessEngine : Serializable {
          * 处理任务为串行处理
          */
 
-        private var singleExecutor = Executors.newSingleThreadScheduledExecutor()
+        private var singleExecutor = Executors.newSingleThreadScheduledExecutor(object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-scheduled-内部单线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val SINGLE_THREAD_EXECUTOR: ScheduledProcessEngine = object : ScheduledProcessEngine {
 
@@ -30,7 +38,13 @@ interface ScheduledProcessEngine : Serializable {
                 return if (!singleExecutor.isShutdown) {
                     singleExecutor
                 } else {
-                    singleExecutor = Executors.newSingleThreadScheduledExecutor()
+                    singleExecutor = Executors.newSingleThreadScheduledExecutor(object :
+                        ThreadFactory {
+                        val atomic = AtomicInteger(1)
+                        override fun newThread(r: Runnable): Thread {
+                            return Thread(r, "ripple-task-scheduled-内部单线程池-" + atomic.getAndIncrement())
+                        }
+                    })
                     singleExecutor
                 }
             }
@@ -43,7 +57,13 @@ interface ScheduledProcessEngine : Serializable {
         /**
          * 处理任务为并行处理，并且顺序是打乱的
          */
-        private var maxExecutor = Executors.newScheduledThreadPool(Thread.MAX_PRIORITY)
+        private var maxExecutor = Executors.newScheduledThreadPool(Thread.MAX_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-scheduled内置最大线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val MULTI_THREAD_EXECUTOR_MAX: ScheduledProcessEngine = object : ScheduledProcessEngine {
 
@@ -51,7 +71,13 @@ interface ScheduledProcessEngine : Serializable {
                 return if (!maxExecutor.isShutdown) {
                     maxExecutor
                 } else {
-                    maxExecutor = Executors.newScheduledThreadPool(Thread.MAX_PRIORITY)
+                    maxExecutor = Executors.newScheduledThreadPool(Thread.MAX_PRIORITY, object :
+                        ThreadFactory {
+                        val atomic = AtomicInteger(1)
+                        override fun newThread(r: Runnable): Thread {
+                            return Thread(r, "ripple-task-scheduled内置最大线程池-" + atomic.getAndIncrement())
+                        }
+                    })
                     maxExecutor
                 }
             }
@@ -61,14 +87,26 @@ interface ScheduledProcessEngine : Serializable {
             }
         }
 
-        private var normalExecutor = Executors.newScheduledThreadPool(Thread.NORM_PRIORITY)
+        private var normalExecutor = Executors.newScheduledThreadPool(Thread.NORM_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-scheduled内置一般线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val MULTI_THREAD_EXECUTOR_NORMAL: ScheduledProcessEngine = object : ScheduledProcessEngine {
             override fun getScheduledProcessService(): ScheduledExecutorService {
                 return if (!normalExecutor.isShutdown) {
                     normalExecutor
                 } else {
-                    normalExecutor = Executors.newScheduledThreadPool(Thread.NORM_PRIORITY)
+                    normalExecutor = Executors.newScheduledThreadPool(Thread.NORM_PRIORITY, object :
+                        ThreadFactory {
+                        val atomic = AtomicInteger(1)
+                        override fun newThread(r: Runnable): Thread {
+                            return Thread(r, "ripple-task-scheduled内置一般线程池-" + atomic.getAndIncrement())
+                        }
+                    })
                     normalExecutor
                 }
             }
@@ -78,7 +116,13 @@ interface ScheduledProcessEngine : Serializable {
             }
         }
 
-        private var minExecutor = Executors.newScheduledThreadPool(Thread.MIN_PRIORITY)
+        private var minExecutor = Executors.newScheduledThreadPool(Thread.MIN_PRIORITY, object :
+            ThreadFactory {
+            val atomic = AtomicInteger(1)
+            override fun newThread(r: Runnable): Thread {
+                return Thread(r, "ripple-task-scheduled内置最小线程池-" + atomic.getAndIncrement())
+            }
+        })
 
         val MULTI_THREAD_EXECUTOR_MIN: ScheduledProcessEngine = object : ScheduledProcessEngine {
 
@@ -86,7 +130,13 @@ interface ScheduledProcessEngine : Serializable {
                 return if (!minExecutor.isShutdown) {
                     minExecutor
                 } else {
-                    minExecutor = Executors.newScheduledThreadPool(Thread.MIN_PRIORITY)
+                    minExecutor = Executors.newScheduledThreadPool(Thread.MIN_PRIORITY, object :
+                        ThreadFactory {
+                        val atomic = AtomicInteger(1)
+                        override fun newThread(r: Runnable): Thread {
+                            return Thread(r, "ripple-task-scheduled内置最小线程池-" + atomic.getAndIncrement())
+                        }
+                    })
                     minExecutor
                 }
             }
