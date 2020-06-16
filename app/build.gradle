@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'ripple-permission-plugin'
+//apply plugin: 'ripple-permission-plugin'
 
 repositories {
     flatDir {
@@ -39,9 +39,9 @@ android {
     }
 }
 
-rippleIgnorePermission {
-    ignoreContainPathList = ["com/fanyafeng/modules"]
-}
+//rippleIgnorePermission {
+//    ignoreContainPathList = ["com/fanyafeng/modules"]
+//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
