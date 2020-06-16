@@ -9,5 +9,6 @@ import com.ripple.task.task.ProcessItemResultTask
  * Email: fanyafeng@live.cn
  * Description:
  */
-abstract class AbsProcessItemResultTask<T : ProcessModel> : ProcessItemResultTask<T> {
+abstract class AbsProcessItemResultTask<M : ProcessModel<S, T>, S, T> :
+    ProcessItemResultTask<M, S, T> {
 }

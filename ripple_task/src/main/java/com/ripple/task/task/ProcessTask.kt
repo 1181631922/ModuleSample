@@ -11,7 +11,7 @@ import com.ripple.task.engine.ProcessEngine
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface ProcessTask {
+interface ProcessTask<S, T> {
 
     /**
      * 所有单个任务回调，任务回调包含以下所有回调，但是为了简化使用
@@ -35,7 +35,7 @@ interface ProcessTask {
      * 单项任务完成回调
      * [com.ripple.task.callback.OnItemFinish]
      */
-    fun getItemResult(): OnItemResult<ProcessModel>?
+    fun getItemResult(): OnItemResult<ProcessModel<S, T>>?
 
     /**
      * 所有任务回调，基本同上除去具体回调
@@ -55,7 +55,7 @@ interface ProcessTask {
      * 所有任务完成结束回调
      * [com.ripple.task.callback.OnFinish]
      */
-    fun getAllResult(): OnAllResult<List<ProcessModel>>?
+    fun getAllResult(): OnAllResult<List<ProcessModel<S, T>>>?
 
     /**
      * 获取任务处理器引擎

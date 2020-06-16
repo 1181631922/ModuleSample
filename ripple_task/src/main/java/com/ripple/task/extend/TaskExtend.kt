@@ -16,13 +16,26 @@ import com.ripple.task.task.impl.ProcessTaskImpl
  */
 
 /**
+ * 内部维持一个单线程队列
+ * 会跟随进程存活在后台
+ * 如需任务处理直接交给其处理即可
+ */
+@JvmOverloads
+fun <S, T> serialBackgroundTask(
+    process: ProcessModel<S, T>,
+    lambda: (HandleTaskExtra<S, T>.() -> Unit)? = null
+) {
+    handleTaskList(listOf(process), ProcessEngine.SINGLE_THREAD_EXECUTOR_INNER, lambda)
+}
+
+/**
  * 默认为并行多线程任务
  */
 @JvmOverloads
-fun handleTask(
-    process: ProcessModel,
+fun <S, T> handleTask(
+    process: ProcessModel<S, T>,
     processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_MAX,
-    lambda: HandleTaskExtra.() -> Unit
+    lambda: (HandleTaskExtra<S, T>.() -> Unit)? = null
 ) {
     handleTaskList(listOf(process), processEngine, lambda)
 }
@@ -31,152 +44,143 @@ fun handleTask(
  * 默认为并行多线程任务
  */
 @JvmOverloads
-fun handleTaskList(
-    processList: List<ProcessModel>,
-    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_MAX,
-    lambda: HandleTaskExtra.() -> Unit
+fun <S, T> handleTaskList(
+    processList: List<ProcessModel<S, T>>,
+    processEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_NORMAL,
+    lambda: (HandleTaskExtra<S, T>.() -> Unit?)? = null
 ) {
     val handleTaskExtra = HandleTaskExtra(processEngine, processList)
-    handleTaskExtra.apply {
-        lambda()
+    lambda?.let {
+        handleTaskExtra.apply {
+            it()
+        }
     }
 }
 
-class HandleTaskExtra(processEngine: ProcessEngine, processList: List<ProcessModel>) {
+class HandleTaskExtra<S, T>(processEngine: ProcessEngine, processList: List<ProcessModel<S, T>>) {
 
-    private var itemStartLambda: SuccessLambda<ProcessModel> = null
-    private var itemDoingLambda: SuccessLambda<ProcessModel> = null
-    private var itemInterruptedLambda: SuccessLambda<ProcessModel> = null
-    private var itemFailedLambda: SuccessLambda<ProcessModel> = null
-    private var itemSuccessLambda: SuccessLambda<ProcessModel> = null
-    private var itemFinishLambda: SuccessLambda<ProcessModel> = null
+    private var itemStartLambda: SuccessLambda<ProcessModel<S, T>> = null
+    private var itemDoingLambda: SuccessLambda<ProcessModel<S, T>> = null
+    private var itemInterruptedLambda: SuccessLambda<ProcessModel<S, T>> = null
+    private var itemFailedLambda: SuccessLambda<ProcessModel<S, T>> = null
+    private var itemSuccessLambda: SuccessLambda<ProcessModel<S, T>> = null
+    private var itemFinishLambda: SuccessLambda<ProcessModel<S, T>> = null
     private var startLambda: SuccessLambda<Unit> = null
-    private var doingLambda: SuccessLambda<List<ProcessModel>?> = null
-    private var failedLambda: SuccessLambda<List<ProcessModel>?> = null
-    private var successLambda: SuccessLambda<List<ProcessModel>?> = null
-    private var finishLambda: PairLambda<List<ProcessModel>?> = null
+    private var doingLambda: SuccessLambda<List<ProcessModel<S, T>>?> = null
+    private var failedLambda: SuccessLambda<List<ProcessModel<S, T>>?> = null
+    private var successLambda: SuccessLambda<List<ProcessModel<S, T>>?> = null
+    private var finishLambda: PairLambda<List<ProcessModel<S, T>>?> = null
 
-    private val engine = ProcessTaskImpl(processEngine)
+    private val engine = ProcessTaskImpl<S, T>(processEngine)
 
 
     init {
         engine.handleTaskList(processList)
-    }
-
-
-    fun onItemStart(itemStartLambda: SuccessLambda<ProcessModel>) {
-        this.itemStartLambda = itemStartLambda
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemStart(startResult: ProcessModel) {
+        engine.onItemResult = object : OnItemResult<ProcessModel<S, T>> {
+            override fun onItemStart(startResult: ProcessModel<S, T>) {
                 super.onItemStart(startResult)
-                this@HandleTaskExtra.itemStartLambda?.invoke(startResult)
+                itemStartLambda?.invoke(startResult)
             }
-        }
-    }
 
-    fun onItemDoing(itemDoingLambda: SuccessLambda<ProcessModel>) {
-        this.itemDoingLambda = itemDoingLambda
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemDoing(doingResult: ProcessModel) {
+            override fun onItemDoing(doingResult: ProcessModel<S, T>) {
                 super.onItemDoing(doingResult)
-                this@HandleTaskExtra.itemDoingLambda?.invoke(doingResult)
+                itemDoingLambda?.invoke(doingResult)
             }
-        }
-    }
 
-    fun onItemInterrupted(itemInterruptedLambda: SuccessLambda<ProcessModel>) {
-        this.itemInterruptedLambda = itemInterruptedLambda
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemInterrupted(interruptedResult: ProcessModel) {
+            override fun onItemInterrupted(interruptedResult: ProcessModel<S, T>) {
                 super.onItemInterrupted(interruptedResult)
-                this@HandleTaskExtra.itemInterruptedLambda?.invoke(interruptedResult)
+                itemInterruptedLambda?.invoke(interruptedResult)
             }
-        }
-    }
 
-    fun onItemFailed(itemFailedLambda: SuccessLambda<ProcessModel>) {
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemFailed(failedResult: ProcessModel) {
+            override fun onItemFailed(failedResult: ProcessModel<S, T>) {
                 super.onItemFailed(failedResult)
-                this@HandleTaskExtra.itemFailedLambda?.invoke(failedResult)
+                itemFailedLambda?.invoke(failedResult)
             }
-        }
-    }
 
-    fun onItemSuccess(itemSuccessLambda: SuccessLambda<ProcessModel>) {
-        this.itemSuccessLambda = itemSuccessLambda
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemSuccess(successResult: ProcessModel) {
+            override fun onItemSuccess(successResult: ProcessModel<S, T>) {
                 super.onItemSuccess(successResult)
-                this@HandleTaskExtra.itemSuccessLambda?.invoke(successResult)
+                itemSuccessLambda?.invoke(successResult)
+            }
+
+            override fun onItemFinish(finishResult: ProcessModel<S, T>) {
+                itemFinishLambda?.invoke(finishResult)
+            }
+        }
+        engine.onAllResult = object : OnAllResult<List<ProcessModel<S, T>>> {
+            override fun onStart() {
+                super.onStart()
+                startLambda?.invoke(Unit)
+            }
+
+            override fun onDoing(doingItem: List<ProcessModel<S, T>>?) {
+                super.onDoing(doingItem)
+                doingLambda?.invoke(doingItem)
+            }
+
+            override fun onFailed(failedResult: List<ProcessModel<S, T>>?) {
+                super.onFailed(failedResult)
+                failedLambda?.invoke(failedResult)
+            }
+
+            override fun onSuccess(successResult: List<ProcessModel<S, T>>?) {
+                super.onSuccess(successResult)
+                successLambda?.invoke(successResult)
+            }
+
+            override fun onFinish(
+                finishResult: List<ProcessModel<S, T>>?,
+                unFinishResult: List<ProcessModel<S, T>>?
+            ) {
+                finishLambda?.invoke(finishResult, unFinishResult)
             }
         }
     }
 
-    fun onItemFinish(itemFinishLambda: SuccessLambda<ProcessModel>) {
-        this.itemSuccessLambda = itemSuccessLambda
-        engine.onItemResult = object : OnItemResult.OnItemSimpleResult<ProcessModel> {
-            override fun onItemFinish(finishResult: ProcessModel) {
-                super.onItemFinish(finishResult)
-                this@HandleTaskExtra.itemFinishLambda?.invoke(finishResult)
-            }
-        }
 
+    fun onItemStart(itemStartLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemStartLambda = itemStartLambda
+    }
+
+    fun onItemDoing(itemDoingLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemDoingLambda = itemDoingLambda
+    }
+
+    fun onItemInterrupted(itemInterruptedLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemInterruptedLambda = itemInterruptedLambda
+    }
+
+    fun onItemFailed(itemFailedLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemFailedLambda = itemFailedLambda
+    }
+
+    fun onItemSuccess(itemSuccessLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemSuccessLambda = itemSuccessLambda
+    }
+
+    fun onItemFinish(itemFinishLambda: SuccessLambda<ProcessModel<S, T>>) {
+        this.itemFinishLambda = itemFinishLambda
     }
 
     fun onStart(startLambda: SuccessLambda<Unit>) {
         this.startLambda = startLambda
-        engine.onAllResult = object : OnAllResult.OnAllSimpleResult<List<ProcessModel>> {
-            override fun onStart() {
-                super.onStart()
-                this@HandleTaskExtra.startLambda?.invoke(Unit)
-            }
-        }
     }
 
-    fun onDoing(doingLambda: SuccessLambda<List<ProcessModel>?>) {
+    fun onDoing(doingLambda: SuccessLambda<List<ProcessModel<S, T>>?>) {
         this.doingLambda = doingLambda
-        engine.onAllResult = object : OnAllResult.OnAllSimpleResult<List<ProcessModel>> {
-            override fun onDoing(doingItem: List<ProcessModel>?) {
-                super.onDoing(doingItem)
-                this@HandleTaskExtra.doingLambda?.invoke(doingItem)
-            }
-        }
     }
 
-    fun onFailed(failedLambda: SuccessLambda<List<ProcessModel>?>) {
+    fun onFailed(failedLambda: SuccessLambda<List<ProcessModel<S, T>>?>) {
         this.failedLambda = failedLambda
-        engine.onAllResult = object : OnAllResult.OnAllSimpleResult<List<ProcessModel>> {
-            override fun onFailed(failedResult: List<ProcessModel>?) {
-                super.onFailed(failedResult)
-                this@HandleTaskExtra.failedLambda?.invoke(failedResult)
-            }
-        }
     }
 
-    fun onSuccess(successLambda: SuccessLambda<List<ProcessModel>?>) {
+    fun onSuccess(successLambda: SuccessLambda<List<ProcessModel<S, T>>?>) {
         this.successLambda = successLambda
-        engine.onAllResult = object : OnAllResult.OnAllSimpleResult<List<ProcessModel>> {
-            override fun onSuccess(successResult: List<ProcessModel>?) {
-                super.onSuccess(successResult)
-                this@HandleTaskExtra.successLambda?.invoke(successResult)
-            }
-        }
     }
 
     fun onFinish(
-        finishLambda: PairLambda<List<ProcessModel>?>
+        finishLambda: PairLambda<List<ProcessModel<S, T>>?>
     ) {
         this.finishLambda = finishLambda
-        engine.onAllResult = object : OnAllResult.OnAllSimpleResult<List<ProcessModel>> {
-            override fun onFinish(
-                finishResult: List<ProcessModel>?,
-                unFinishResult: List<ProcessModel>?
-            ) {
-                super.onFinish(finishResult, unFinishResult)
-                this@HandleTaskExtra.finishLambda?.invoke(finishResult, unFinishResult)
-            }
-        }
     }
 
 }

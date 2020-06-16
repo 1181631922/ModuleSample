@@ -86,6 +86,37 @@ handleTaskList(
 }
 ```
 
+### 2.3 新增周期任务
+
+```
+val eng = ScheduledProcessEngine.SINGLE_THREAD_EXECUTOR
+
+val scheduleTask = ScheduledProcessTaskImpl(eng)
+
+btn2.setOnClickListener {
+    scheduleTask.scheduleAtFixedRate({
+        handleTaskList(
+            listOf(
+                Task1("abdaafda"),
+                Task2("不会输出"),
+                Task3("abdaafda又变大写了")
+            )
+        ) {
+
+            onFinish { finishResult, unFinishResult ->
+                println("结果回调" + finishResult.toString())
+
+                println(unFinishResult.toString())
+            }
+        }
+    }, 0L, 1L, TimeUnit.SECONDS)
+
+}
+
+btn4.setOnClickListener {
+    eng.shutdown()
+}
+```
 
 
 

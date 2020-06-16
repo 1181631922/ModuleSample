@@ -8,7 +8,7 @@ import com.ripple.task.config.ProcessModel
  * Email: fanyafeng@live.cn
  * Description:
  */
-class ProcessModelImpl:ProcessModel{
+class ProcessModelImpl : ProcessModel<String, String> {
     override fun getSourcePath(): String {
         return ""
     }

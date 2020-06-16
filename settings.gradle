@@ -1,3 +1,4 @@
+include ':ripple_gradle_helper_plugin'
 rootProject.name='ModuleSample'
 include ':app'
 include ':ripple_ui'

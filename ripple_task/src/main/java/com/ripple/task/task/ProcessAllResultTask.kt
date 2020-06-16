@@ -11,11 +11,11 @@ import java.util.concurrent.CountDownLatch
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface ProcessAllResultTask<T : List<ProcessModel>> : Runnable, Serializable {
+interface ProcessAllResultTask<M : List<ProcessModel<S, T>>, S, T> : Runnable, Serializable {
 
     fun getCountDownLatch(): CountDownLatch
 
-    fun getAllResult(): OnAllResult<T>
+    fun getAllResult(): OnAllResult<M>
 
     override fun run() {
         val allResult = getAllResult()

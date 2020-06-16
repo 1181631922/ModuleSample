@@ -16,20 +16,43 @@ interface ProcessEngine : Serializable {
 
 
     companion object {
+
+        internal var singleExecutorInner = Executors.newFixedThreadPool(2)
+        internal val SINGLE_THREAD_EXECUTOR_INNER: ProcessEngine =
+            object : ProcessEngine {
+                override fun getExecutorService(): ExecutorService {
+                    return if (!singleExecutorInner.isShutdown) {
+                        singleExecutorInner
+                    } else {
+                        singleExecutorInner = Executors.newFixedThreadPool(2)
+                        singleExecutorInner
+                    }
+                }
+
+                override fun shutdown() {
+                    singleExecutorInner.shutdown()
+                }
+
+            }
+
         /**
          * 单线程处理器
          * 处理任务为串行处理
          */
+        private var singleExecutor = Executors.newFixedThreadPool(2)
         val SINGLE_THREAD_EXECUTOR: ProcessEngine =
             object : ProcessEngine {
-
-                private val executor = Executors.newFixedThreadPool(2)
                 override fun getExecutorService(): ExecutorService {
-                    return executor
+                    return if (!singleExecutor.isShutdown) {
+                        singleExecutor
+                    } else {
+                        singleExecutor = Executors.newFixedThreadPool(2)
+                        singleExecutor
+                    }
                 }
 
                 override fun shutdown() {
-                    executor.shutdown()
+                    singleExecutor.shutdown()
                 }
 
             }
@@ -39,44 +62,60 @@ interface ProcessEngine : Serializable {
          * 不用纠结个数为什么这么定义，纯属个人喜欢的数字
          * 处理任务为并行处理，并且顺序是打乱的
          */
+        private var maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY)
         val MULTI_THREAD_EXECUTOR_MAX: ProcessEngine =
             object : ProcessEngine {
-
-                private val executor = Executors.newFixedThreadPool(2)
                 override fun getExecutorService(): ExecutorService {
-                    return executor
+                    return if (!maxExecutor.isShutdown) {
+                        maxExecutor
+                    } else {
+                        maxExecutor = Executors.newFixedThreadPool(Thread.MAX_PRIORITY)
+                        maxExecutor
+                    }
                 }
 
                 override fun shutdown() {
-                    executor.shutdown()
+                    maxExecutor.shutdown()
                 }
 
             }
+
+        private var normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
 
         val MULTI_THREAD_EXECUTOR_NORMAL: ProcessEngine =
             object : ProcessEngine {
 
-                private val executor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
                 override fun getExecutorService(): ExecutorService {
-                    return executor
+                    return if (!normalExecutor.isShutdown) {
+                        normalExecutor
+                    } else {
+                        normalExecutor = Executors.newFixedThreadPool(Thread.NORM_PRIORITY)
+                        normalExecutor
+                    }
                 }
 
                 override fun shutdown() {
-                    executor.shutdown()
+                    normalExecutor.shutdown()
                 }
 
             }
 
+        private var minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
+
         val MULTI_THREAD_EXECUTOR_MIN: ProcessEngine =
             object : ProcessEngine {
 
-                private val executor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
                 override fun getExecutorService(): ExecutorService {
-                    return executor
+                    return if (!minExecutor.isShutdown) {
+                        minExecutor
+                    } else {
+                        minExecutor = Executors.newFixedThreadPool(Thread.MIN_PRIORITY)
+                        minExecutor
+                    }
                 }
 
                 override fun shutdown() {
-                    executor.shutdown()
+                    minExecutor.shutdown()
                 }
 
             }

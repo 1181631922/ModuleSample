@@ -8,7 +8,7 @@ import java.io.Serializable
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface ProcessModel : Serializable {
+interface ProcessModel<S, T> : Serializable {
 
     companion object {
         const val PROCESS_ITEM = "process_item"
@@ -18,17 +18,17 @@ interface ProcessModel : Serializable {
     /**
      * 获取需要处理的源路径
      */
-    fun getSourcePath(): String
+    fun getSourcePath(): S
 
     /**
      * 目标路径
      */
-    fun getTargetPath(): String?
+    fun getTargetPath(): T?
 
     /**
      * 处理后的目标路径不能为空
      */
-    fun setTargetPath(target: String)
+    fun setTargetPath(target: T)
 
     /**
      * 任务解析器
@@ -45,5 +45,5 @@ interface ProcessModel : Serializable {
      * @param sourcePath 文件原路径
      *
      */
-    fun parse(sourcePath: String, targetPath: String?): String
+    fun parse(sourcePath: S, targetPath: T?): T
 }

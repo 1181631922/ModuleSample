@@ -11,13 +11,13 @@ import java.util.concurrent.CountDownLatch
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface ProcessItemResultTask<T : ProcessModel> : Runnable, Serializable {
+interface ProcessItemResultTask<M : ProcessModel<S, T>, S, T> : Runnable, Serializable {
 
-    fun getProcessModel(): T
+    fun getProcessModel(): M
 
     fun getCountDownLatch(): CountDownLatch
 
-    fun getItemResult(): OnItemResult<T>?
+    fun getItemResult(): OnItemResult<M>?
 
 
     override fun run() {

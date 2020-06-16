@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * Email: fanyafeng@live.cn
  * Description:
  */
-public class ProcessModelJavaImpl implements ProcessModel {
+public class ProcessModelJavaImpl implements ProcessModel<String, String> {
 
 
     @NotNull

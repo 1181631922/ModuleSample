@@ -39,10 +39,13 @@ class HandleTaskActivity : AppCompatActivity() {
                 )
             ) {
 
-                onFinish { finishResult, unFinishResult ->
-                    println("结果回调" + finishResult.toString())
+                onItemFinish {
+                    println("单个成功结果回调：" + it.toString())
+                }
 
-                    println(unFinishResult.toString())
+                onFinish { finishResult, unFinishResult ->
+                    println("成功结果回调：" + finishResult.toString())
+                    println("失败结果回调：" + unFinishResult.toString())
                 }
             }
         }
@@ -53,26 +56,25 @@ class HandleTaskActivity : AppCompatActivity() {
         val scheduleTask = ScheduledProcessTaskImpl(eng)
 
         btn2.setOnClickListener {
+            scheduleTask.scheduleAtFixedRate({
+                handleTaskList(
+                    listOf(
+                        Task1("abdaafda"),
+                        Task2("不会输出"),
+                        Task3("abdaafda又变大写了")
+                    )
+                ) {
 
-            if (!eng.getScheduledProcessService().isShutdown) {
+                    onItemFinish {
 
-                scheduleTask.scheduleAtFixedRate({
-                    handleTaskList(
-                        listOf(
-                            Task1("abdaafda"),
-                            Task2("不会输出"),
-                            Task3("abdaafda又变大写了")
-                        )
-                    ) {
-
-                        onFinish { finishResult, unFinishResult ->
-                            println("结果回调" + finishResult.toString())
-
-                            println(unFinishResult.toString())
-                        }
                     }
-                }, 0L, 1L, TimeUnit.SECONDS)
-            }
+
+                    onFinish { finishResult, unFinishResult ->
+                        println("成功结果回调：" + finishResult.toString())
+                        println("失败结果回调：" + unFinishResult.toString())
+                    }
+                }
+            }, 0L, 1L, TimeUnit.SECONDS)
 
         }
 
@@ -82,15 +84,14 @@ class HandleTaskActivity : AppCompatActivity() {
 
         btn3.setOnClickListener {
             val executor = ProcessEngine.SINGLE_THREAD_EXECUTOR
-            val task = ProcessTaskImpl(executor)
-            task.onAllResult = object : OnAllResult<List<ProcessModel>> {
+            val task = ProcessTaskImpl<String, String>(executor)
+            task.onAllResult = object : OnAllResult<List<ProcessModel<String, String>>> {
                 override fun onFinish(
-                    finishResult: List<ProcessModel>?,
-                    unFinishResult: List<ProcessModel>?
+                    finishResult: List<ProcessModel<String, String>>?,
+                    unFinishResult: List<ProcessModel<String, String>>?
                 ) {
-                    println("结果回调" + finishResult.toString())
-
-                    println(unFinishResult.toString())
+                    println("成功结果回调：" + finishResult.toString())
+                    println("失败结果回调：" + unFinishResult.toString())
                 }
 
 
@@ -123,7 +124,7 @@ class HandleTaskActivity : AppCompatActivity() {
 data class Task1 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String? = null
-) : ProcessModel {
+) : ProcessModel<String, String> {
     override fun getSourcePath(): String {
         return sourcePath
     }
@@ -144,7 +145,7 @@ data class Task1 @JvmOverloads constructor(
 data class Task2 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String = "任务2目标路径"
-) : ProcessModel {
+) : ProcessModel<String, String> {
     override fun getSourcePath(): String {
         return sourcePath
     }
@@ -167,7 +168,7 @@ data class Task2 @JvmOverloads constructor(
 data class Task3 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String = "任务三目标路径"
-) : ProcessModel {
+) : ProcessModel<String, String> {
     override fun getSourcePath(): String {
         return sourcePath
     }

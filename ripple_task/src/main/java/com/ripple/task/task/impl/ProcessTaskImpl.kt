@@ -15,6 +15,7 @@ import com.ripple.task.task.ProcessItemResultTask
 import com.ripple.task.task.ProcessTask
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 /**
@@ -23,31 +24,31 @@ import java.util.concurrent.Future
  * Email: fanyafeng@live.cn
  * Description:
  */
-class ProcessTaskImpl @JvmOverloads constructor(
+class ProcessTaskImpl<S, T> @JvmOverloads constructor(
     /**
      * 多线程任务请求
      */
     private var handleProcessEngine: ProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_NORMAL
-) : ProcessTask {
+) : ProcessTask<S, T> {
 
     /**
      * 所有任务回调
      */
-    var onAllResult: OnAllResult<List<ProcessModel>>? = null
+    var onAllResult: OnAllResult<List<ProcessModel<S, T>>>? = null
 
     /**
      * 单个任务回调
      */
-    var onItemResult: OnItemResult<ProcessModel>? = null
+    var onItemResult: OnItemResult<ProcessModel<S, T>>? = null
 
     private var countDownLatch: CountDownLatch? = null
 
 
-    private val handler = ProcessTaskImplHandler(this)
+    private val handler: ProcessTaskImplHandler<S, T> = ProcessTaskImplHandler(this)
 
-    private val failedResultList = arrayListOf<ProcessModel>()
+    private val failedResultList = arrayListOf<ProcessModel<S, T>>()
 
-    private val successResultList = arrayListOf<ProcessModel>()
+    private val successResultList = arrayListOf<ProcessModel<S, T>>()
 
     init {
         failedResultList.clear()
@@ -55,11 +56,11 @@ class ProcessTaskImpl @JvmOverloads constructor(
     }
 
 
-    override fun getAllResult(): OnAllResult<List<ProcessModel>>? {
+    override fun getAllResult(): OnAllResult<List<ProcessModel<S, T>>>? {
         return onAllResult
     }
 
-    override fun getItemResult(): OnItemResult<ProcessModel>? {
+    override fun getItemResult(): OnItemResult<ProcessModel<S, T>>? {
         return onItemResult
     }
 
@@ -67,11 +68,11 @@ class ProcessTaskImpl @JvmOverloads constructor(
         return handleProcessEngine
     }
 
-    fun handleTask(process: ProcessModel) {
+    fun handleTask(process: ProcessModel<S, T>) {
         handleTaskList(listOf(process))
     }
 
-    fun handleTaskList(processList: List<ProcessModel>) {
+    fun handleTaskList(processList: List<ProcessModel<S, T>>) {
         var service = getProcessEngine().getExecutorService()
         if (service.isShutdown) {
             handleProcessEngine = ProcessEngine.MULTI_THREAD_EXECUTOR_NORMAL
@@ -80,24 +81,24 @@ class ProcessTaskImpl @JvmOverloads constructor(
 
         countDownLatch = CountDownLatch(processList.size)
 
-        val processAll = object : ProcessAllResultTask<List<ProcessModel>> {
+        val processAll = object : ProcessAllResultTask<List<ProcessModel<S, T>>, S, T> {
             override fun getCountDownLatch(): CountDownLatch {
                 return countDownLatch!!
             }
 
-            override fun getAllResult(): OnAllResult<List<ProcessModel>> {
-                return object : OnAllResult<List<ProcessModel>> {
+            override fun getAllResult(): OnAllResult<List<ProcessModel<S, T>>> {
+                return object : OnAllResult<List<ProcessModel<S, T>>> {
 
                     override fun onStart() {
                         super.onStart()
                         Message.obtain(handler, OnStart.CODE_START, Bundle()).sendToTarget()
                     }
 
-                    override fun onDoing(doingItem: List<ProcessModel>?) {
+                    override fun onDoing(doingItem: List<ProcessModel<S, T>>?) {
                         super.onDoing(doingItem)
                     }
 
-                    override fun onFailed(failedResult: List<ProcessModel>?) {
+                    override fun onFailed(failedResult: List<ProcessModel<S, T>>?) {
                         super.onFailed(failedResult)
                         val bundle = Bundle()
                         bundle.putSerializable(
@@ -107,7 +108,7 @@ class ProcessTaskImpl @JvmOverloads constructor(
                         Message.obtain(handler, OnFailed.CODE_FAILED, bundle).sendToTarget()
                     }
 
-                    override fun onSuccess(successResult: List<ProcessModel>?) {
+                    override fun onSuccess(successResult: List<ProcessModel<S, T>>?) {
                         super.onSuccess(successResult)
                         val bundle = Bundle()
                         bundle.putSerializable(
@@ -118,8 +119,8 @@ class ProcessTaskImpl @JvmOverloads constructor(
                     }
 
                     override fun onFinish(
-                        finishResult: List<ProcessModel>?,
-                        unFinishResult: List<ProcessModel>?
+                        finishResult: List<ProcessModel<S, T>>?,
+                        unFinishResult: List<ProcessModel<S, T>>?
                     ) {
                         val bundle = Bundle()
                         bundle.putSerializable(
@@ -135,14 +136,15 @@ class ProcessTaskImpl @JvmOverloads constructor(
                 }
             }
         }
-        val allFuture: Future<*> = service.submit(processAll)
+//        val allFuture: Future<*> = service.submit(processAll)
+        Executors.newSingleThreadExecutor().execute(processAll)
 
         processList.forEachIndexed { _, processModel ->
             val bundle = Bundle()
 
-            val processItem = object : ProcessItemResultTask<ProcessModel> {
+            val processItem = object : ProcessItemResultTask<ProcessModel<S, T>, S, T> {
 
-                override fun getProcessModel(): ProcessModel {
+                override fun getProcessModel(): ProcessModel<S, T> {
                     return processModel
                 }
 
@@ -150,17 +152,20 @@ class ProcessTaskImpl @JvmOverloads constructor(
                     return countDownLatch!!
                 }
 
-                override fun getItemResult(): OnItemResult<ProcessModel>? {
-                    return object : OnItemResult<ProcessModel> {
+                override fun getItemResult(): OnItemResult<ProcessModel<S, T>>? {
+                    return object : OnItemResult<ProcessModel<S, T>> {
 
-                        override fun onItemStart(startResult: ProcessModel) {
+                        override fun onItemStart(startResult: ProcessModel<S, T>) {
                             super.onItemStart(startResult)
+                            /**
+                             * 测试
+                             */
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, startResult)
                             Message.obtain(handler, OnItemStart.CODE_ITEM_START, bundle)
                                 .sendToTarget()
                         }
 
-                        override fun onItemDoing(doingResult: ProcessModel) {
+                        override fun onItemDoing(doingResult: ProcessModel<S, T>) {
                             super.onItemDoing(doingResult)
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, doingResult)
                             Message.obtain(handler, OnItemDoing.CODE_ITEM_DOING, bundle)
@@ -173,14 +178,14 @@ class ProcessTaskImpl @JvmOverloads constructor(
                             Message.obtain(handler, OnDoing.CODE_DOING, bundle).sendToTarget()
                         }
 
-                        override fun onItemInterrupted(interruptedResult: ProcessModel) {
+                        override fun onItemInterrupted(interruptedResult: ProcessModel<S, T>) {
                             super.onItemInterrupted(interruptedResult)
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, interruptedResult)
                             Message.obtain(handler, OnItemInterrupted.CODE_ITEM_INTERRUPTED, bundle)
                                 .sendToTarget()
                         }
 
-                        override fun onItemFailed(failedResult: ProcessModel) {
+                        override fun onItemFailed(failedResult: ProcessModel<S, T>) {
                             super.onItemFailed(failedResult)
                             failedResultList.add(failedResult)
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, failedResult)
@@ -188,7 +193,7 @@ class ProcessTaskImpl @JvmOverloads constructor(
                                 .sendToTarget()
                         }
 
-                        override fun onItemSuccess(successResult: ProcessModel) {
+                        override fun onItemSuccess(successResult: ProcessModel<S, T>) {
                             super.onItemSuccess(successResult)
                             successResultList.add(successResult)
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, successResult)
@@ -196,7 +201,7 @@ class ProcessTaskImpl @JvmOverloads constructor(
                                 .sendToTarget()
                         }
 
-                        override fun onItemFinish(finishResult: ProcessModel) {
+                        override fun onItemFinish(finishResult: ProcessModel<S, T>) {
                             bundle.putSerializable(ProcessModel.PROCESS_ITEM, finishResult)
                             Message.obtain(handler, OnItemFinish.CODE_ITEM_FINISH, bundle)
                                 .sendToTarget()
@@ -208,54 +213,54 @@ class ProcessTaskImpl @JvmOverloads constructor(
         }
     }
 
-    class ProcessTaskImplHandler(processTask: ProcessTask) :
+    class ProcessTaskImplHandler<S, T>(processTask: ProcessTask<S, T>) :
         Handler(Looper.getMainLooper()) {
 
-        private val weakReference: WeakReference<ProcessTask> = WeakReference(processTask)
+        private val weakReference: WeakReference<ProcessTask<S, T>> = WeakReference(processTask)
 
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             val task = weakReference.get()
             task?.let { taskEngine ->
                 val bundle = msg.obj as Bundle
-                val processItem: ProcessModel
-                val successResult: List<ProcessModel>
-                val failedResult: List<ProcessModel>
+                val processItem: ProcessModel<S, T>
+                val successResult: List<ProcessModel<S, T>>
+                val failedResult: List<ProcessModel<S, T>>
                 when (msg.what) {
                     OnItemStart.CODE_ITEM_START -> {
                         bundle.getSerializable(ProcessModel.PROCESS_ITEM)?.let {
                             processItem =
-                                it as ProcessModel
+                                it as ProcessModel<S, T>
                             taskEngine.getItemResult()?.onItemStart(processItem)
-                            Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath())
+                            Log.d("CODE_ITEM_START ITEM", processItem.getSourcePath().toString())
                         }
 
                     }
                     OnItemDoing.CODE_ITEM_DOING -> {
                         processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel<S, T>
                         taskEngine.getItemResult()?.onItemDoing(processItem)
                     }
                     OnItemInterrupted.CODE_ITEM_INTERRUPTED -> {
                         processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel<S, T>
                         taskEngine.getItemResult()?.onItemInterrupted(processItem)
                     }
                     OnItemFailed.CODE_ITEM_FAILED -> {
                         processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel<S, T>
                         taskEngine.getItemResult()?.onItemFailed(processItem)
                     }
 
                     OnItemSuccess.CODE_ITEM_SUCCESS -> {
                         processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel<S, T>
                         taskEngine.getItemResult()?.onItemSuccess(processItem)
                     }
 
                     OnItemFinish.CODE_ITEM_FINISH -> {
                         processItem =
-                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel
+                            bundle.getSerializable(ProcessModel.PROCESS_ITEM) as ProcessModel<S, T>
                         taskEngine.getItemResult()?.onItemFinish(processItem)
                     }
 
@@ -265,24 +270,24 @@ class ProcessTaskImpl @JvmOverloads constructor(
 
                     OnDoing.CODE_DOING -> {
                         processItem =
-                            bundle.getSerializable(OnDoing.RESULT_DOING) as ProcessModel
+                            bundle.getSerializable(OnDoing.RESULT_DOING) as ProcessModel<S, T>
                         taskEngine.getAllResult()?.onDoing(listOf(processItem))
                     }
                     OnFailed.CODE_FAILED -> {
                         failedResult =
-                            bundle.getSerializable(OnFailed.RESULT_FAILED) as List<ProcessModel>
+                            bundle.getSerializable(OnFailed.RESULT_FAILED) as List<ProcessModel<S, T>>
                         taskEngine.getAllResult()?.onFailed(failedResult)
                     }
                     OnSuccess.CODE_SUCCESS -> {
                         successResult =
-                            bundle.getSerializable(OnSuccess.RESULT_SUCCESS) as List<ProcessModel>
+                            bundle.getSerializable(OnSuccess.RESULT_SUCCESS) as List<ProcessModel<S, T>>
                         taskEngine.getAllResult()?.onSuccess(successResult)
                     }
                     OnFinish.CODE_FINISH -> {
                         failedResult =
-                            bundle.getSerializable(OnFailed.RESULT_FAILED) as List<ProcessModel>
+                            bundle.getSerializable(OnFailed.RESULT_FAILED) as List<ProcessModel<S, T>>
                         successResult =
-                            bundle.getSerializable(OnSuccess.RESULT_SUCCESS) as List<ProcessModel>
+                            bundle.getSerializable(OnSuccess.RESULT_SUCCESS) as List<ProcessModel<S, T>>
                         taskEngine.getAllResult()?.onFinish(successResult, failedResult)
                     }
                     else -> {
