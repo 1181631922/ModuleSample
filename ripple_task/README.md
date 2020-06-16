@@ -6,32 +6,53 @@
 ## 1. 引入
 
 ```
-implementation 'com.ripple.component:task:0.0.4'
+implementation 'com.ripple.component:task:xxx'
 ```
 ## 2. 使用
 ### 2.1 定义taskmodel
 首先需要定义`taskmodel`，定义完成后便可以使用了，下面定义了三个不同的任务
 
 ```
-data class Task2 @JvmOverloads constructor(
+data class Task1 @JvmOverloads constructor(
     private val sourcePath: String,
-    private var targetPath: String = "任务2目标路径"
-) : ProcessModel {
-    override fun getSourcePath(): String {
+    private var targetPath: String? = null
+) : ProcessModel<String, String> {
+    override fun getSource(): String {
         return sourcePath
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return targetPath
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
         this.targetPath = target
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
+    override fun parse(source: String, target: String?): String {
+        return source.toUpperCase()
+    }
+}
 
-        return "我是任务2$targetPath"
+data class Task2 @JvmOverloads constructor(
+    private val sourcePath: String,
+    private var targetPath: String = "任务2目标路径"
+) : ProcessModel<String, String> {
+    override fun getSource(): String {
+        return sourcePath
+    }
+
+    override fun getTarget(): String? {
+        return targetPath
+    }
+
+    override fun setTarget(target: String) {
+        this.targetPath = target
+    }
+
+    override fun parse(source: String, target: String?): String {
+        Thread.sleep(2000)
+        return "我是任务2$target"
     }
 
 }
@@ -39,22 +60,22 @@ data class Task2 @JvmOverloads constructor(
 data class Task3 @JvmOverloads constructor(
     private val sourcePath: String,
     private var targetPath: String = "任务三目标路径"
-) : ProcessModel {
-    override fun getSourcePath(): String {
+) : ProcessModel<String, String> {
+    override fun getSource(): String {
         return sourcePath
     }
 
-    override fun getTargetPath(): String? {
+    override fun getTarget(): String? {
         return targetPath
     }
 
-    override fun setTargetPath(target: String) {
+    override fun setTarget(target: String) {
         this.targetPath = target
     }
 
-    override fun parse(sourcePath: String, targetPath: String?): String {
-
-        return sourcePath.toUpperCase() + "在来个任务3一起走"
+    override fun parse(source: String, target: String?): String {
+        Thread.sleep(3000)
+        return source.toUpperCase() + "在来个任务3一起走"
     }
 
 }
@@ -91,7 +112,7 @@ handleTaskList(
 ```
 val eng = ScheduledProcessEngine.SINGLE_THREAD_EXECUTOR
 
-val scheduleTask = ScheduledProcessTaskImpl(eng)
+val scheduleTask = ScheduledProcessTaskImpl<String,String>(eng)
 
 btn2.setOnClickListener {
     scheduleTask.scheduleAtFixedRate({
@@ -126,3 +147,8 @@ btn4.setOnClickListener {
 2.支持单任务，多任务执行，但是暂不支持延迟任务，周期任务（不过可以通过java的ScheduledExectorService完成此功能）
 ##### 0.0.5
 1.通过添加ScheduledProcessEngine接口进行支持延迟，周期任务
+
+##### 0.0.6
+1.重构代码（之前固定使用的源和目标都是String，现在修改为泛型，由使用者去指定类型）
+2.优化内置，内部线程调用，添加线程name，方便定位问题
+3.优化lambda回调，减少对象的创建
