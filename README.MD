@@ -30,7 +30,7 @@ PS：英文名：Ripple
 |----------------|---------------------------------|---------------------------|-------------------|
 | Base库          | 底层base库，定义功能（app的基本功能）不定义实现     | com.ripple.base.kit       |暂无|
 | BaseSdk        | 实现base的功能                       | com.ripple.base.sdk       |暂无|
-| UI库            | 通用UI库                           | com.ripple.ui             |暂无|
+| UI库            | 通用UI库                           | com.ripple.ui             |https://github.com/fanyafeng/ripple_ui|
 | TOOL库            | 通用工具库包括android和java                           | com.ripple.tool             |暂无|
 | Http库         | 网络库                             | com.ripple.http          |暂无|
 | Dialog库        | 封装系统dialog                      | com.ripple.dialog         |https://github.com/fanyafeng/ripple_dialog|
@@ -42,8 +42,8 @@ PS：英文名：Ripple
 | Camera库        | 自定义相机库，暂定需要5.0之上，底层采用Camera2去实现 | com.ripple.camera         |暂无|
 | Cache库         | 缓存库                             | com.ripple.cache          |暂无|
 | DB库            | 数据库                             | com.ripple.db             |暂无|
-| Permission库    | 动态权限库                           | com.ripple.permission     |暂无|
-| Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |暂无|
+| Permission库    | 动态权限库                           | com.ripple.permission     |https://github.com/fanyafeng/ripple_permission|
+| Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |https://github.com/fanyafeng/ripple_permission_plugin|
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |暂无|
 | Task库      | 多任务处理库                           | com.ripple.task |https://github.com/fanyafeng/ripple_task|
 | Share库         | 分享库                             | com.ripple.share          |暂无|
