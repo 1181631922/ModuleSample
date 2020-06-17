@@ -55,15 +55,19 @@ PS：英文名：Ripple
 
 ### <a id="3">三 常用ui控件库</a>
 
-**博客地址**
+[README](https://github.com/1181631922/ModuleSample/tree/master/ripple_ui)
 
+
+**博客地址**
+1. [类似微信朋友圈图片九宫格](https://blog.csdn.net/qq_23195583/article/details/106816151)
 
 **3.1 设计以及使用**
-1. 
+1. [类似微信朋友圈图片九宫格](https://github.com/1181631922/ModuleSample/blob/master/ripple_ui/doc/ninegrid.md)
 
 
 
 ###  <a id="18">十八 批量任务处理器Task库</a>
+[README](https://github.com/1181631922/ModuleSample/tree/master/ripple_task)
 
 **博客地址：**
 1. [多任务处理器初版](https://blog.csdn.net/qq_23195583/article/details/106569808)
