@@ -6,7 +6,7 @@
 ## 1. 引入
 
 ```
-implementation 'com.ripple.component:task:xxx'
+implementation 'com.ripple.component:task:0.0.6'
 ```
 ## 2. 使用
 ### 2.1 定义taskmodel
@@ -142,6 +142,9 @@ btn4.setOnClickListener {
 
 
 -------
+
+#### 版本更新：
+
 ##### 0.0.4
 1.将任务进行接口化，完成抽离
 2.支持单任务，多任务执行，但是暂不支持延迟任务，周期任务（不过可以通过java的ScheduledExectorService完成此功能）
@@ -152,3 +155,4 @@ btn4.setOnClickListener {
 1.重构代码（之前固定使用的源和目标都是String，现在修改为泛型，由使用者去指定类型）
 2.优化内置，内部线程调用，添加线程name，方便定位问题
 3.优化lambda回调，减少对象的创建
+

@@ -38,11 +38,11 @@ interface ProcessModel<S, T> : Serializable {
      *
      * 分为以下两种以下两种情况：
      * 1.处理文件类
-     * @param source 文件原路径
-     * @param target 文件目标路径
+     * @param source 源
+     * @param target 结果
      *
      * 2.有处理规则，和原路径，那么方法的返回值就是处理结果
-     * @param source 文件原路径
+     * @param source 源
      *
      */
     fun parse(source: S, target: T?): T
