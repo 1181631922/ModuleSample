@@ -32,20 +32,20 @@ class NineGridActivity : BaseActivity() {
             add(
                 SimpleNineItem("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg")
             )
-//            add(
-//                SimpleNineItem("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg")
-//            )
-//            add(
-//                SimpleNineItem(
-//                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
-//                )
-//            )
-//            add(SimpleNineItem("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"))
-//            add(
-//                SimpleNineItem(
-//                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
-//                )
-//            )
+            add(
+                SimpleNineItem("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg")
+            )
+            add(
+                SimpleNineItem(
+                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
+                )
+            )
+            add(SimpleNineItem("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"))
+            add(
+                SimpleNineItem(
+                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
+                )
+            )
         }
 
         gridView.loadFrame = MyLoadFrame()

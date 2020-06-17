@@ -1,21 +1,7 @@
 ## 前言
 利用业余时间完成一整套自用框架，一方面是想尽量不依赖第三方库，另一方面也算是对自己技术的检测吧
 PS：英文名：Ripple
-## 一、库详解
-### 1.1 多任务处理器
-**博客地址：**
-1. [多任务处理器初版](https://blog.csdn.net/qq_23195583/article/details/106569808)
-2. [多任务处理器更新](https://blog.csdn.net/qq_23195583/article/details/106794355)
-
-**1.1.1 设计原理：**
-1. [最初设计原理](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple.md)
-2. [优化设计](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple2.md)
-
-**1.1.2 使用：**
-1. [多任务处理器库使用](https://github.com/1181631922/ModuleSample/tree/master/ripple_task)
-
-
-## 二、规划
+## 一、规划
 ### 1.先大体规划一下自己的方向
 1. 本身可以处理，不用引用任何第三方库的，会从一下几个方面入手
     * 通用UI，本身会定义通用UI，但是不会很多，就是比较最起码是在这个项目中会经常用到的
@@ -45,7 +31,7 @@ PS：英文名：Ripple
 | Permission库    | 动态权限库                           | com.ripple.permission     |https://github.com/fanyafeng/ripple_permission|
 | Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |https://github.com/fanyafeng/ripple_permission_plugin|
 | Compress库      | 图片压缩库                           | com.ripple.photo.compress |暂无|
-| Task库      | 多任务处理库                           | com.ripple.task |https://github.com/fanyafeng/ripple_task|
+| [Task库](#18)   | [批量任务处理库](#18)                         | com.ripple.task |https://github.com/fanyafeng/ripple_task|
 | Share库         | 分享库                             | com.ripple.share          |暂无|
 | FileDownload库         | 文件下载库                             | com.ripple.file.down          |暂无|
 
@@ -64,6 +50,34 @@ PS：英文名：Ripple
 6. 中间会有一些其他知识的分享
 
 暂时只有这么多了，剩下的就是希望不要断更
+
+## 二、库详解
+
+### <a id="3">三 常用ui控件库</a>
+
+**博客地址**
+
+
+**3.1 设计以及使用**
+1. 
+
+
+
+###  <a id="18">十八 批量任务处理器Task库</a>
+
+**博客地址：**
+1. [多任务处理器初版](https://blog.csdn.net/qq_23195583/article/details/106569808)
+2. [多任务处理器更新](https://blog.csdn.net/qq_23195583/article/details/106794355)
+
+**18.1 设计原理：**
+1. [最初设计原理](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple.md)
+2. [优化设计](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple2.md)
+
+**18.2 使用：**
+1. [多任务处理器库使用](https://github.com/1181631922/ModuleSample/tree/master/ripple_task)
+
+
+
 
 
 
