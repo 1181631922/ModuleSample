@@ -2,15 +2,13 @@ package com.fanyafeng.modules.ninegrid
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.ui.RippleImageView
-import com.ripple.ui.ninegridview.NineGridLoadFrame
-import com.ripple.ui.ninegridview.NineGridViewAdapter
-import com.ripple.ui.ninegridview.NineItem
-import com.ripple.ui.ninegridview.SimpleNineItem
+import com.ripple.ui.ninegridview.*
 import com.ripple.ui.ninegridview.impl.NineGridAdapter
 import com.ripple.ui.ninegridview.impl.NineGridImpl
 import com.ripple.ui.ninegridview.impl.NineGridView
@@ -51,7 +49,13 @@ class NineGridActivity : BaseActivity() {
         }
 
         gridView.loadFrame = MyLoadFrame()
+        gridView.nineGridConfig = NineGridImpl()
         gridView.adapter = NineGridAdapter(this, imageList)
+        gridView.nineItemListener = object : NineItemListener.SimpleNineItemListener {
+            override fun onClickListener(view: View, item: NineItem, position: Int) {
+                println("我被点击了")
+            }
+        }
 
 
     }
@@ -67,5 +71,4 @@ class MyLoadFrame : NineGridLoadFrame {
     override fun displayImage(context: Context, path: String, imageView: RippleImageView) {
         Glide.with(context).load(path).into(imageView)
     }
-
 }
