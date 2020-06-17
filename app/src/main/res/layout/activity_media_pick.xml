@@ -39,6 +39,24 @@
                 android:layout_height="wrap_content"
                 android:text="kotlin拍照" />
 
+
+            <Button
+                android:id="@+id/mediaPick5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="glide存储照片" />
+
+            <Button
+                android:id="@+id/mediaPick6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="fresco存储照片" />
+
+            <Button
+                android:id="@+id/mediaPick7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="base64存储照片" />
         </LinearLayout>
     </ScrollView>
 

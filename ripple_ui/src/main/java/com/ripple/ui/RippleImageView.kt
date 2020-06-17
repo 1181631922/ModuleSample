@@ -2,7 +2,12 @@ package com.ripple.ui
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -41,8 +46,24 @@ open class RippleImageView @JvmOverloads constructor(
         this.onRippleImageViewListener = onRippleImageViewListener
     }
 
-    init {
+    var hintText: String? = null
+        set(value) {
+            field = value
+            value?.let {
+                if (it.isNotEmpty()) {
+                    invalidate()
+                }
+            }
+        }
 
+    private var paint: TextPaint? = null
+    private var currentLayout: StaticLayout? = null
+
+    init {
+        paint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        paint?.isAntiAlias = true
+        paint?.color = Color.WHITE
+        paint?.textSize = 120F
     }
 
     override fun onDetachedFromWindow() {
@@ -77,6 +98,25 @@ open class RippleImageView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         onRippleImageViewListener?.onDraw(canvas)
+
+
+        hintText?.let { message ->
+            currentLayout = StaticLayout(
+                message,
+                paint,
+                width,
+                Layout.Alignment.ALIGN_CENTER,
+                1.2f,
+                0.0f,
+                false
+            )
+            currentLayout?.let {
+                canvas?.drawColor(Color.parseColor("#66000000"))
+                canvas?.translate(0F, (height - it.height).toFloat() / 2)
+                it.draw(canvas)
+                canvas?.translate(0F, -(height - it.height).toFloat() / 2)
+            }
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

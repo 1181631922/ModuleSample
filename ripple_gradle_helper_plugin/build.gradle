@@ -1,0 +1,34 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation gradleApi()
+    implementation 'org.ow2.asm:asm:7.1'
+    implementation 'org.ow2.asm:asm-commons:7.0'
+    implementation 'com.android.tools.build:gradle:4.0.0'
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
+
+
+//publish to local directory
+def versionName = "1.0.0"
+group "com.ripple.gradle.helper.plugin"
+version versionName
+
+//当前项目可以发布到本地文件夹中
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //定义本地maven仓库地址
+            repository(url: uri('./repo'))
+        }
+    }
+}

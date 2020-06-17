@@ -13,8 +13,11 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
+import com.fanyafeng.modules.http.HttpActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
+import com.fanyafeng.modules.ninegrid.NineGridActivity
+import com.fanyafeng.modules.task.HandleTaskActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
@@ -43,6 +46,9 @@ class MainActivity : BaseActivity() {
         funcList.apply {
             add(MainModel("媒体库选择", MediaPickActivity::class.java))
             add(MainModel("动态权限", PermissionTestActivity::class.java))
+            add(MainModel("图片九宫格", NineGridActivity::class.java))
+            add(MainModel("网络请求", HttpActivity::class.java))
+            add(MainModel("多任务处理", HandleTaskActivity::class.java))
         }
 
         mainAdapter = MainAdapter(this, funcList)

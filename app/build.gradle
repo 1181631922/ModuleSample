@@ -21,18 +21,15 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        buildConfigField "Boolean", "API_VERSION_CODE", "false"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
 
         release {
-            buildConfigField "Boolean", "API_VERSION_CODE", "false"
             minifyEnabled false
         }
 
         release {
-            buildConfigField "Boolean", "API_VERSION_CODE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -57,9 +54,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    implementation 'com.facebook.fresco:fresco:2.2.0'
+
     implementation project(path: ':ripple_ui')
     implementation project(path: ':ripple_permission')
     implementation project(path: ':ripple_media_picker')
+    implementation project(path: ':ripple_task')
 }
 
 class GreetingPluginExtension {
