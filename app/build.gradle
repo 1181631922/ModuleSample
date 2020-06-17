@@ -36,6 +36,25 @@ android {
     }
 }
 
+task testLocalProperties {
+    def str = "你好"
+    Properties properties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    properties.load(inputStream)
+    def myUser = properties.getProperty("BINTRAY_USER")
+
+    doFirst {
+        println("I am in doFirst")
+    }
+
+    doLast {
+        println("I am in doLast")
+        println(USER)
+        println(str)
+        println(myUser)
+    }
+}
+
 rippleIgnorePermission {
     ignoreContainPathList = ["com/fanyafeng/modules"]
 }

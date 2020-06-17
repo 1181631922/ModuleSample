@@ -26,28 +26,28 @@ PS：英文名：Ripple
 3. 自己会定义一些底层的sdk规则，然后自己再去进行实现.
 
 
-| 库名称            | 库描述                             | module名字                  |
-|----------------|---------------------------------|---------------------------|
-| Base库          | 底层base库，定义功能（app的基本功能）不定义实现     | com.ripple.base.kit       |
-| BaseSdk        | 实现base的功能                       | com.ripple.base.sdk       |
-| UI库            | 通用UI库                           | com.ripple.ui             |
-| TOOL库            | 通用工具库包括android和java                           | com.ripple.tool             |
-| Http库         | 网络库                             | com.ripple.http          |
-| Dialog库        | 封装系统dialog                      | com.ripple.dialog         |
-| Refresh库       | 刷新库                             | com.ripple.refresh        |
-| Router库        | 路由库，暂时先定义                       | com.ripple.router         |
-| RouterHelper库  | 路由辅助类库                          | com.ripple.router.helper  |
-| MediaPicker库   | 媒体选择库                           | com.ripple.media.picker   |
-| BridgeWebView库 | webview库                        | com.ripple.web.bridge     |
-| Camera库        | 自定义相机库，暂定需要5.0之上，底层采用Camera2去实现 | com.ripple.camera         |
-| Cache库         | 缓存库                             | com.ripple.cache          |
-| DB库            | 数据库                             | com.ripple.db             |
-| Permission库    | 动态权限库                           | com.ripple.permission     |
-| Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |
-| Compress库      | 图片压缩库                           | com.ripple.photo.compress |
-| Task库      | 多任务处理库                           | com.ripple.task |
-| Share库         | 分享库                             | com.ripple.share          |
-| FileDownload库         | 文件下载库                             | com.ripple.file.down          |
+| 库名称            | 库描述                             | module名字                  |开源库托管地址|
+|----------------|---------------------------------|---------------------------|-------------------|
+| Base库          | 底层base库，定义功能（app的基本功能）不定义实现     | com.ripple.base.kit       |暂无|
+| BaseSdk        | 实现base的功能                       | com.ripple.base.sdk       |暂无|
+| UI库            | 通用UI库                           | com.ripple.ui             |暂无|
+| TOOL库            | 通用工具库包括android和java                           | com.ripple.tool             |暂无|
+| Http库         | 网络库                             | com.ripple.http          |暂无|
+| Dialog库        | 封装系统dialog                      | com.ripple.dialog         |https://github.com/fanyafeng/ripple_dialog|
+| Refresh库       | 刷新库                             | com.ripple.refresh        |暂无|
+| Router库        | 路由库，暂时先定义                       | com.ripple.router         |暂无|
+| RouterHelper库  | 路由辅助类库                          | com.ripple.router.helper  |暂无|
+| MediaPicker库   | 媒体选择库                           | com.ripple.media.picker   |暂无|
+| BridgeWebView库 | webview库                        | com.ripple.web.bridge     |暂无|
+| Camera库        | 自定义相机库，暂定需要5.0之上，底层采用Camera2去实现 | com.ripple.camera         |暂无|
+| Cache库         | 缓存库                             | com.ripple.cache          |暂无|
+| DB库            | 数据库                             | com.ripple.db             |暂无|
+| Permission库    | 动态权限库                           | com.ripple.permission     |暂无|
+| Permission库（gradle）    | 动态权限gradle库                           | com.ripple.permission.gradle     |暂无|
+| Compress库      | 图片压缩库                           | com.ripple.photo.compress |暂无|
+| Task库      | 多任务处理库                           | com.ripple.task |https://github.com/fanyafeng/ripple_task|
+| Share库         | 分享库                             | com.ripple.share          |暂无|
+| FileDownload库         | 文件下载库                             | com.ripple.file.down          |暂无|
 
 
 4. 以下为上面提到的库的详细说明以及使用
