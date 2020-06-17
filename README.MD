@@ -3,7 +3,16 @@
 PS：英文名：Ripple
 ## 一、库详解
 ### 1.1 多任务处理器
-1. [设计原理]()
+**博客地址：**
+1. [多任务处理器初版](https://blog.csdn.net/qq_23195583/article/details/106569808)
+2. [多任务处理器更新](https://blog.csdn.net/qq_23195583/article/details/106794355)
+
+**1.1.1 设计原理：**
+1. [最初设计原理](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple.md)
+2. [优化设计](https://github.com/1181631922/ModuleSample/blob/master/ripple_task/doc/DesignPrinciple2.md)
+
+**1.1.2 使用：**
+1. [多任务处理器库使用](https://github.com/1181631922/ModuleSample/tree/master/ripple_task)
 
 
 ## 二、规划
