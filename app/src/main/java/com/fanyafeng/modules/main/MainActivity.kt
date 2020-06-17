@@ -13,6 +13,7 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.common.MainModel
+import com.fanyafeng.modules.dialog.RippleDialogActivity
 import com.fanyafeng.modules.http.HttpActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
@@ -49,6 +50,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("图片九宫格", NineGridActivity::class.java))
             add(MainModel("网络请求", HttpActivity::class.java))
             add(MainModel("多任务处理", HandleTaskActivity::class.java))
+            add(MainModel("dialog封装", RippleDialogActivity::class.java))
         }
 
         mainAdapter = MainAdapter(this, funcList)
