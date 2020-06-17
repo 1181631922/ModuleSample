@@ -58,9 +58,9 @@ task testLocalProperties {
     }
 }
 
-rippleIgnorePermission {
-    ignoreContainPathList = ["com/fanyafeng/modules"]
-}
+//rippleIgnorePermission {
+//    ignoreContainPathList = ["com/fanyafeng/modules"]
+//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
