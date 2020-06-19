@@ -4,6 +4,10 @@
 >ripple_dialog对dialog和toast进行了封装
 
 ### 导入sdk
+首先需要在根目录的`build.gradle`中导入`maven`地址：
+```
+maven { url 'https://dl.bintray.com/fanyafeng/ripple' }
+```
 在module的build.gradle中添加依赖：
 
 ```
