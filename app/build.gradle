@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'ripple-permission-plugin'
+//apply plugin: 'ripple-permission-plugin'
 
 repositories {
     flatDir {
@@ -36,6 +36,9 @@ android {
     }
 }
 
+//rippleIgnorePermission {
+//    ignoreContainPathList = ["com/fanyafeng/modules"]
+//}
 task testLocalProperties {
     def str = "你好"
     Properties properties = new Properties()
@@ -55,9 +58,9 @@ task testLocalProperties {
     }
 }
 
-rippleIgnorePermission {
-    ignoreContainPathList = ["com/fanyafeng/modules"]
-}
+//rippleIgnorePermission {
+//    ignoreContainPathList = ["com/fanyafeng/modules"]
+//}
 
 //        ./gradlew :app:dependencies --configuration implementation
 dependencies {

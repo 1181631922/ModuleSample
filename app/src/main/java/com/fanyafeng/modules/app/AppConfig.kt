@@ -4,6 +4,7 @@ import android.app.Application
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
 import com.fanyafeng.modules.mediapick.config.RippleImageLoadFrameImpl
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.permission.RipplePermissionImpl
