@@ -11,7 +11,7 @@ dependencies {
     implementation gradleApi()
     implementation 'org.ow2.asm:asm:7.1'
     implementation 'org.ow2.asm:asm-commons:7.0'
-    implementation 'com.android.tools.build:gradle:4.0.0'
+    implementation 'com.android.tools.build:gradle:3.6.3'
 }
 
 sourceCompatibility = "7"
@@ -32,3 +32,5 @@ uploadArchives {
         }
     }
 }
+
+apply from: './gradle-jcenter-push.gradle'

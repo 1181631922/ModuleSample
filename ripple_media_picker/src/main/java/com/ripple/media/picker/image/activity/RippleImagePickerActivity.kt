@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
@@ -51,6 +52,9 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     private var folderList = ArrayList<RippleFolderModel>()
 
     private var config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig
+
+    private lateinit var closeArrow: Drawable
+    private lateinit var openArrow: Drawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +129,11 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         rippleFolderRV.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false)
         (rippleImageRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         (rippleFolderRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+        closeArrow = resources.getDrawable(R.drawable.folder_close_arrow)
+        closeArrow.setBounds(0, 0, closeArrow.minimumWidth, closeArrow.minimumHeight)
+        openArrow = resources.getDrawable(R.drawable.folder_open_arrow)
+        openArrow.setBounds(0, 0, openArrow.minimumWidth, openArrow.minimumHeight)
     }
 
     private fun initData() {
@@ -146,6 +155,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         toolbarCenterTitle!!.setOnClickListener {
             setRippleFolderRV()
         }
+        toolbarCenterTitle?.setCompoundDrawables(null, null, closeArrow, null)
 
         toolbarRightTitle?.setOnClickListener {
             val imageList = RippleMediaPick.getInstance().imageList
@@ -181,23 +191,25 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         if (isShown) {
             rippleFolderRV.visibility = View.GONE
             rippleFolderShape.visibility = View.GONE
+            toolbarCenterTitle?.setCompoundDrawables(null, null, closeArrow, null)
         } else {
             rippleFolderRV.visibility = View.VISIBLE
             rippleFolderShape.visibility = View.VISIBLE
+            toolbarCenterTitle?.setCompoundDrawables(null, null, openArrow, null)
         }
     }
 
     private fun setRightTitle(count: Int) {
         if (count > 0) {
             toolbarRightTitle?.setTextColor(Color.WHITE)
-            toolbarRightTitle?.background =
-                resources.getDrawable(R.drawable.ripple_next_step_shape)
-            toolbarRightTitle?.text = "下一步($count)"
+//            toolbarRightTitle?.background =
+//                resources.getDrawable(R.drawable.ripple_next_step_shape)
+            toolbarRightTitle?.text = "确认($count)"
         } else {
             toolbarRightTitle?.setTextColor(Color.GRAY)
-            toolbarRightTitle?.background =
-                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
-            toolbarRightTitle?.text = "下一步"
+//            toolbarRightTitle?.background =
+//                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
+            toolbarRightTitle?.text = "确认"
         }
 
     }

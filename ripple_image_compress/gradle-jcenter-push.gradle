@@ -1,33 +1,33 @@
 apply plugin: 'maven-publish'
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-//task androidJavadocs(type: Javadoc) {
-//    failOnError false
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//    excludes = ['**/*.kt']
-//    allprojects {
-//        tasks.withType(Javadoc) {
-//            options.encoding = "UTF-8"
-//        }
-//    }
-//}
+task androidJavadocs(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    excludes = ['**/*.kt']
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.encoding = "UTF-8"
+        }
+    }
+}
 
-//task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-//    archiveClassifier = 'javadoc'
-//    from androidJavadocs.destinationDir
-//}
-//
-//task androidSourcesJar(type: Jar) {
-//    archiveClassifier = 'sources'
-//    from android.sourceSets.main.java.sourceFiles
-//}
-//
-//artifacts {
-//    archives androidJavadocsJar
-//    archives androidSourcesJar
-//}
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+artifacts {
+    archives androidJavadocsJar
+    archives androidSourcesJar
+}
 
 publishing {
     publications {
@@ -35,9 +35,9 @@ publishing {
             groupId GROUP
             version VERSION_NAME
             artifactId POM_ARTIFACT_ID
-            artifact "${project.buildDir}/libs/${project.name}-1.0.0.jar"
-//            artifact androidJavadocsJar
-//            artifact androidSourcesJar
+            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
+            artifact androidJavadocsJar
+            artifact androidSourcesJar
 
             pom.withXml {
                 Node root = asNode()
@@ -107,7 +107,7 @@ bintray {
         issueTrackerUrl = ISSUE_URL
         vcsUrl = GIT_URL
         licenses = ['Apache-2.0']
-        labels = ['android', 'jar']
+        labels = ['android', 'aar']
         publicDownloadNumbers = true
 
         version {

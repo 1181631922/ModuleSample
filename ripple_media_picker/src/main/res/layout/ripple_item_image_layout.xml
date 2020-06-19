@@ -14,16 +14,24 @@
             android:layout_height="match_parent"
             android:layout_margin="0.5dp" />
 
-        <TextView
-            android:id="@+id/imageItemCheck"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="14dp" />
+        <RelativeLayout
+            android:id="@+id/checkLayout"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/imageItemCheck"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/imageItemUnCheck"
@@ -35,8 +43,8 @@
             android:background="@android:color/holo_red_dark"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:textSize="14dp" />
+            android:textSize="14dp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

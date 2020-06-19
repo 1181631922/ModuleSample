@@ -1,7 +1,7 @@
-package com.dmall.compress.image.engine
+package com.ripple.image.compress.engine
 
-import com.dmall.handle.task.engine.ProcessEngine
 import com.ripple.image.compress.service.ImageCompressService
+import com.ripple.task.engine.ProcessEngine
 import java.io.Serializable
 
 /**

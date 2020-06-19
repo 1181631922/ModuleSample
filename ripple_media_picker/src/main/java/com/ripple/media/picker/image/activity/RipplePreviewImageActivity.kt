@@ -69,9 +69,9 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
         val count = RippleMediaPick.getInstance().imageList.size
         if (count > 0) {
             toolbarRightTitle?.setTextColor(Color.WHITE)
-            toolbarRightTitle?.background =
-                resources.getDrawable(R.drawable.ripple_next_step_shape)
-            toolbarRightTitle?.text = "下一步($count)"
+//            toolbarRightTitle?.background =
+//                resources.getDrawable(R.drawable.ripple_next_step_shape)
+            toolbarRightTitle?.text = "确认($count)"
             toolbarRightTitle?.setOnClickListener {
                 val imageList = RippleMediaPick.getInstance().imageList
                 if (imageList.size > 0) {
@@ -92,9 +92,9 @@ class RipplePreviewImageActivity : RippleBaseActivity() {
             }
         } else {
             toolbarRightTitle?.setTextColor(Color.GRAY)
-            toolbarRightTitle?.background =
-                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
-            toolbarRightTitle?.text = "下一步"
+//            toolbarRightTitle?.background =
+//                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
+            toolbarRightTitle?.text = "确认"
             toolbarRightTitle?.setOnClickListener(null)
         }
         toolbarCenterTitle?.text = (currPosition + 1).toString() + "/" + list.size

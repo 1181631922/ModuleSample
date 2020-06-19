@@ -117,7 +117,7 @@ class RippleImageAdapter @JvmOverloads constructor(
                     ITEM_WIDTH
                 )
 
-                holder.imageItemCheck?.setOnClickListener {
+                holder.checkLayout?.setOnClickListener {
 
                     //点击选择图片
                     val modelList = RippleMediaPick.getInstance().imageList
@@ -174,7 +174,8 @@ class RippleImageAdapter @JvmOverloads constructor(
                             .setImageList(list)
                             .setSelectModel(IPreviewImageConfig.PreviewModel.NORMAL)
                             .build()
-                    RippleImagePick.getInstance().imagePreview(mContext,config,IPreviewImageConfig.PREVIEW_RESULT)
+                    RippleImagePick.getInstance()
+                        .imagePreview(mContext, config, IPreviewImageConfig.PREVIEW_RESULT)
                 }
 
             }
@@ -231,12 +232,14 @@ class RippleImageAdapter @JvmOverloads constructor(
         var imageItemIcon: RippleImageView? = null
         var imageItemCheck: TextView? = null
         var imageItemUnCheck: TextView? = null
+        var checkLayout: RelativeLayout? = null
 
         init {
             imageItemLayout = item.findViewById(R.id.imageItemLayout)
             imageItemIcon = item.findViewById(R.id.imageItemIcon)
             imageItemCheck = item.findViewById(R.id.imageItemCheck)
             imageItemUnCheck = item.findViewById(R.id.imageItemUnCheck)
+            checkLayout = item.findViewById(R.id.checkLayout)
         }
     }
 

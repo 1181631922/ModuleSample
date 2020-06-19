@@ -59,6 +59,7 @@ rippleIgnorePermission {
     ignoreContainPathList = ["com/fanyafeng/modules"]
 }
 
+//        ./gradlew :app:dependencies --configuration implementation
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -80,6 +81,14 @@ dependencies {
     implementation project(path: ':ripple_permission')
     implementation project(path: ':ripple_media_picker')
     implementation project(path: ':ripple_task')
+
+//    projectMaven 'ripple_ui|com.ripple.component:ui:1.1.2'
+}
+
+
+
+interface MyDepend extends DependencyHandler{
+    Dependency getProjectMaven()
 }
 
 class GreetingPluginExtension {
@@ -105,5 +114,32 @@ class GreetingPlugin implements Plugin<Project> {
                 println(extension.message)
             }
         }
+    }
+}
+
+task testDependencies {
+    doFirst {
+        //根目录的名字：project.rootProject
+        //获取module：project.rootProject.findProject('module_name')
+        def itemModuleProject = project.rootProject.findProject("app")
+        if (itemModuleProject != null) {
+            println("获取的module名字：" + itemModuleProject.name)
+            def buildGradle = itemModuleProject.buildFile
+            println("gradle名字：" + buildGradle.path)
+            itemModuleProject.buildscript.getSourceFile().eachLine {
+                if (it.contains("apply plugin: 'kotlin-android'")) {
+                    println("引用了kotlin android插件")
+                }
+            }
+
+        } else {
+            println("查找module失败")
+        }
+//        def setting = project.rootProject.buildFile
+//        println(setting.toString())
+    }
+
+    doLast {
+
     }
 }

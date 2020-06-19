@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import com.dmall.compress.image.engine.ImageCompressEngine
+import com.ripple.image.compress.engine.ImageCompressEngine
 import com.ripple.image.compress.model.ImageItem
 import com.ripple.image.compress.service.ImageCompressService
 import com.ripple.image.compress.service.impl.ImageCompressServiceImpl
@@ -112,8 +112,6 @@ class ImageCompressEngineImpl : ImageCompressEngine {
     private val successImageResult: ArrayList<ImageItem> = arrayListOf()
 
 
-    private val executorService: ExecutorService = Executors.newFixedThreadPool(10)
-
     init {
         failedImageResult.clear()
         successImageResult.clear()
@@ -126,6 +124,8 @@ class ImageCompressEngineImpl : ImageCompressEngine {
         compressImageList(listOf(image))
     }
 
+    private var executorServiceInner: ExecutorService? = null
+
 
     /**
      * 压缩图片列表
@@ -136,49 +136,50 @@ class ImageCompressEngineImpl : ImageCompressEngine {
 
         var executorService = executorProcess.getExecutorService()
         if (executorService.isShutdown) {
-            executorService = Executors.newFixedThreadPool(2)
+            executorService = Executors.newFixedThreadPool(Thread.MAX_PRIORITY)
         }
-
-        executorService.submit(
+        executorServiceInner = Executors.newSingleThreadExecutor()
+        executorServiceInner?.submit(
             ImageCompressResultTaskImpl(mCountDownLatch!!,
-            object : OnFailed<List<ImageItem>> {
-                override fun onFailed(failedResult: List<ImageItem>?) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(
-                        ImageCompressEngine.IMAGE_LIST_FAILED,
-                        failedImageResult
-                    )
-                    Message.obtain(compressHandler, CODE_ALL_FAILED, bundle).sendToTarget()
-                }
+                object : OnFailed<List<ImageItem>> {
+                    override fun onFailed(failedResult: List<ImageItem>?) {
+                        val bundle = Bundle()
+                        bundle.putSerializable(
+                            ImageCompressEngine.IMAGE_LIST_FAILED,
+                            failedImageResult
+                        )
+                        Message.obtain(compressHandler, CODE_ALL_FAILED, bundle).sendToTarget()
+                    }
 
-            }, object : OnSuccess<List<ImageItem>> {
-                override fun onSuccess(successResult: List<ImageItem>?) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(
-                        ImageCompressEngine.IMAGE_LIST_SUCCESS,
-                        successImageResult
-                    )
-                    Message.obtain(compressHandler, CODE_ALL_SUCCESS, bundle).sendToTarget()
-                }
+                }, object : OnSuccess<List<ImageItem>> {
+                    override fun onSuccess(successResult: List<ImageItem>?) {
+                        val bundle = Bundle()
+                        bundle.putSerializable(
+                            ImageCompressEngine.IMAGE_LIST_SUCCESS,
+                            successImageResult
+                        )
+                        Message.obtain(compressHandler, CODE_ALL_SUCCESS, bundle).sendToTarget()
+                    }
 
-            }, object : OnFinish<List<ImageItem>> {
-                override fun onFinish(
-                    finishResult: List<ImageItem>?,
-                    unFinishResult: List<ImageItem>?
-                ) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(
-                        ImageCompressEngine.IMAGE_LIST_SUCCESS,
-                        successImageResult
-                    )
-                    bundle.putSerializable(
-                        ImageCompressEngine.IMAGE_LIST_FAILED,
-                        failedImageResult
-                    )
-                    Message.obtain(compressHandler, CODE_ALL_FINISH, bundle).sendToTarget()
-                }
+                }, object : OnFinish<List<ImageItem>> {
+                    override fun onFinish(
+                        finishResult: List<ImageItem>?,
+                        unFinishResult: List<ImageItem>?
+                    ) {
+                        val bundle = Bundle()
+                        bundle.putSerializable(
+                            ImageCompressEngine.IMAGE_LIST_SUCCESS,
+                            successImageResult
+                        )
+                        bundle.putSerializable(
+                            ImageCompressEngine.IMAGE_LIST_FAILED,
+                            failedImageResult
+                        )
+                        Message.obtain(compressHandler, CODE_ALL_FINISH, bundle).sendToTarget()
+                        executorServiceInner?.shutdown()
+                    }
 
-            })
+                })
         )
 
 
