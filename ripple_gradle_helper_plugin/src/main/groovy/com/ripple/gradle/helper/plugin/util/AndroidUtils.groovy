@@ -17,10 +17,22 @@ class AndroidUtils {
     def public static applicationId = 'com.android.application'
     def public static libraryId = 'com.android.library'
 
+    /**
+     * 是否是一个application
+     *
+     * @param project
+     * @return
+     */
     static boolean isApplication(Project project) {
         project.pluginManager.hasPlugin(applicationId)
     }
 
+    /**
+     * 是否是一个lib
+     *
+     * @param project
+     * @return
+     */
     static boolean isLibrary(Project project){
         project.pluginManager.hasPlugin(libraryId)
     }

@@ -11,7 +11,7 @@ maven { url 'https://dl.bintray.com/fanyafeng/ripple' }
 在module的build.gradle中添加依赖：
 
 ```
-implementation 'com.ripple.component:dialog:0.0.1'
+implementation 'com.ripple.component:dialog:0.0.2'
 ```
 ### 一、RippleDialog快速使用
 快速接入使用：常用的dialog形式为中心显示和底部显示（这里根据ui提供的规范进行了默认定义，即：中心显示默认使用系统动画；点击外围不解散；背景半透明；相应用户操作进行消失操作，底部显示默认底部弹出动画；点击外围解散；背景半透明；相应用户操作进行消失操作）

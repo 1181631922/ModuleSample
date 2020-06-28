@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
-import com.ripple.dialog.util.Preconditions
+import com.ripple.tool.judge.checkNotNullRipple
 
 /**
  * Author： fanyafeng
@@ -30,7 +30,7 @@ object RippleToast {
     @JvmOverloads
     fun show(context: Context, charSequence: CharSequence = "", view: View? = null, duration: Int = Toast.LENGTH_SHORT, gravity: Int = GRAVITY_DEFAULT, xOffset: Int = 0, yOffset: Int = 0) {
         toast?.cancel()
-        Preconditions.checkNotNull(charSequence, "charSequence is null")
+        checkNotNullRipple(charSequence, "charSequence is null")
         toast = Toast.makeText(context, charSequence, duration)
         if (gravity != GRAVITY_DEFAULT) {
             toast!!.setGravity(gravity, xOffset, yOffset)

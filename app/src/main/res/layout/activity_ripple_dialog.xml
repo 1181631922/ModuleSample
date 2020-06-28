@@ -33,6 +33,18 @@
                 android:layout_height="wrap_content"
                 android:text="toast提示" />
 
+            <Button
+                android:id="@+id/btn4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="测试DialogFragment" />
+
+            <Button
+                android:id="@+id/btn5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="测试DialogFragment底部显示" />
+
         </LinearLayout>
 
     </ScrollView>

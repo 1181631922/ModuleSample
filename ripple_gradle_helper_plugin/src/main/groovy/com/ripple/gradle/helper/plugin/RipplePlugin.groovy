@@ -147,13 +147,18 @@ import org.gradle.api.Project;
  *  7.zipAlign工具对6中的signed.apk进行对其处理，所谓对其，主要过程是将apk包中所有的资源文件距离文件起始编译为4字节整数倍，
  *  这样通过内存映射访问apk文件时的速度会更快。对齐的作用主要是为了减少运行时内存的使用。
  *  PS：是不是好奇为什么是4字节对齐
- *  答案：https://blog.csdn.net/wordwarwordwar/article/details/79864996
+ *  答案：https://zhuanlan.zhihu.com/p/57914017
+ *
+ *  对于ANdroid Gradle Plugin版本在1.5.0以及以上的情况，Google官方提供了transformapi用作字节码插桩的入口。
+ *  说的直白一点就是可以通过自定义Gradle插件，重写里面transform方法就可以在"Java Compiler"过程结束之后"dex"过程开始之前获得回调
+ *  这正是自己吗重新编制的时机
+ *  一些字节码知识：https://juejin.im/post/5aa0e7eff265da2395308f48
  *
  *
  */
 class RipplePlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        def eextension = project.extensions.getByName('android')
+        def extension = project.extensions.getByName('android')
     }
 }

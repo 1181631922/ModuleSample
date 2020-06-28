@@ -1,26 +1,24 @@
 package com.ripple.tool.judge
 
+
 /**
  * Author: fanyafeng
- * Data: 2020/3/6 18:10
+ * Data: 2020/6/23 16:58
  * Email: fanyafeng@live.cn
- * Description: 用来做判空，有返回值
+ * Description:
  */
-
-/**
- * 判断对象是否为空
- */
-fun <T> checkNotNull(reference: T?, errorMessage: Any = "引用对象为空"): T {
-    if (reference == null) {
-        throw NullPointerException(errorMessage.toString())
+object Preconditions {
+    fun <T> checkNotNullRipple(reference: T?, errorMessage: Any = "引用对象为空"): T {
+        if (reference == null) {
+            throw NullPointerException(errorMessage.toString())
+        }
+        return reference
     }
-    return reference
-}
 
 
-fun <T> checkArgument(expression: Boolean, errorMessage: Any) {
-    if (!expression) {
-        throw IllegalArgumentException(errorMessage.toString())
+    fun <T> checkArgumentRipple(expression: Boolean, errorMessage: Any) {
+        if (!expression) {
+            throw IllegalArgumentException(errorMessage.toString())
+        }
     }
 }
-

@@ -3,8 +3,10 @@ package com.fanyafeng.modules.dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.fragment.app.DialogFragment
 import com.fanyafeng.modules.R
 import com.ripple.dialog.widget.impl.RippleDialog
+import com.ripple.dialog.widget.impl.RippleDialogFragment
 import com.ripple.dialog.widget.impl.RippleToast
 import kotlinx.android.synthetic.main.activity_ripple_dialog.*
 
@@ -38,9 +40,30 @@ class RippleDialogActivity : AppCompatActivity() {
             RippleToast.show(this, "toast提示")
         }
 
+        btn4.setOnClickListener {
+            val view =
+                LayoutInflater.from(this).inflate(R.layout.ripple_dialog_layout_center_dialog, null)
+            val dialog = RippleDialogFragment(this, view)
+            dialog.show()
+        }
+
+        btn5.setOnClickListener {
+            val view =
+                LayoutInflater.from(this).inflate(R.layout.ripple_dialog_layout_center_dialog, null)
+            val dialog = RippleDialogFragment(this, view)
+            dialog.showBottom()
+        }
     }
 
     private fun initData() {
 
+    }
+
+    private fun showFragmentDialog() {
+        val dialogFragment = DialogFragment()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }
