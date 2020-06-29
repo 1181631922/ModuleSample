@@ -1,6 +1,8 @@
 package com.ripple.dialog.widget
 
 import android.content.Intent
+import androidx.annotation.NonNull
+import androidx.fragment.app.FragmentManager
 
 
 /**
@@ -11,6 +13,10 @@ import android.content.Intent
  */
 
 interface IRippleDialogFragment : IRippleBaseDialog {
+
+    companion object {
+        const val RIPPLE_DIALOG_FRAGMENT_TAG = "ripple_dialog_fragment_tag"
+    }
 
     /**
      * activity回调结果
@@ -26,4 +32,17 @@ interface IRippleDialogFragment : IRippleBaseDialog {
      * supplied when adding the fragment.
      */
     fun getId(): Int
+
+    /**
+     * Display the dialog, adding the fragment to the given FragmentManager.  This
+     * is a convenience for explicitly creating a transaction, adding the
+     * fragment to it with the given tag, and {@link FragmentTransaction#commit() committing} it.
+     * This does <em>not</em> add the transaction to the fragment back stack.  When the fragment
+     * is dismissed, a new transaction will be executed to remove it from
+     * the activity.
+     * @param manager The FragmentManager this fragment will be added to.
+     * @param tag The tag for this fragment, as per
+     * {@link FragmentTransaction#add(Fragment, String) FragmentTransaction.add}.
+     */
+    fun show(manager: FragmentManager, tag: String)
 }

@@ -11,6 +11,7 @@ import com.ripple.dialog.R
 import com.ripple.dialog.callback.RippleDialogInterface
 import com.ripple.dialog.config.RippleDialogConfig
 import com.ripple.dialog.widget.impl.RippleDialog
+import com.ripple.tool.kttypelians.SuccessLambda
 
 /**
  * Author： fanyafeng

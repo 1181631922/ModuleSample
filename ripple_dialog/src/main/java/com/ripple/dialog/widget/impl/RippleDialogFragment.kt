@@ -7,11 +7,13 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.ripple.dialog.R
 import com.ripple.dialog.callback.RippleDialogInterface
 import com.ripple.dialog.config.RippleDialogConfig
 import com.ripple.dialog.widget.IRippleBaseDialog
 import com.ripple.dialog.widget.IRippleDialogFragment
+import com.ripple.dialog.widget.IRippleDialogFragment.Companion.RIPPLE_DIALOG_FRAGMENT_TAG
 import com.ripple.dialog.widget.RippleBaseDialog
 import com.ripple.dialog.widget.RippleBaseDialogFragment
 
@@ -29,6 +31,7 @@ class RippleDialogFragment : IRippleDialogFragment {
     private var contentView: View? = null
     private var context: Context? = null
 
+
     constructor(context: Context, view: View) {
         this.context = context
         this.dialogConfig = RippleDialogConfig.Builder()
@@ -37,25 +40,27 @@ class RippleDialogFragment : IRippleDialogFragment {
             .setContentView(view)
             .setCancel(true)
             .build()
-        baseDialogFragment = RippleBaseDialogFragment(dialogConfig!!)
-        contentView = dialogConfig!!.contentView
     }
 
     constructor(dialogConfig: RippleDialogConfig) {
         this.dialogConfig = dialogConfig
-        baseDialogFragment = RippleBaseDialogFragment(this.dialogConfig!!)
-        contentView = dialogConfig.contentView
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     }
 
     override fun getId(): Int {
-        return 0
+        return baseDialogFragment?.id ?: 0
+    }
+
+    override fun show(manager: FragmentManager, tag: String) {
+        baseDialogFragment = RippleBaseDialogFragment(dialogConfig!!)
+        contentView = dialogConfig!!.contentView
+        baseDialogFragment?.show(manager, tag)
     }
 
     override fun show() {
-        baseDialogFragment?.show((context as FragmentActivity).supportFragmentManager, "tag")
+        show((context as FragmentActivity).supportFragmentManager, RIPPLE_DIALOG_FRAGMENT_TAG)
     }
 
     override fun showCenter() {
@@ -65,6 +70,7 @@ class RippleDialogFragment : IRippleDialogFragment {
 
     override fun showBottom() {
         dialogConfig?.gravity = Gravity.BOTTOM
+        dialogConfig?.animation = R.style.RippleMenuAnimation
         show()
     }
 

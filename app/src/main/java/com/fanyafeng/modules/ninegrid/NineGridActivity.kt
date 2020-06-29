@@ -3,15 +3,13 @@ package com.fanyafeng.modules.ninegrid
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
-import com.ripple.ui.RippleImageView
+import com.ripple.ui.widget.RippleImageView
 import com.ripple.ui.ninegridview.*
 import com.ripple.ui.ninegridview.impl.NineGridAdapter
 import com.ripple.ui.ninegridview.impl.NineGridImpl
-import com.ripple.ui.ninegridview.impl.NineGridView
 import kotlinx.android.synthetic.main.activity_nine_grid.*
 
 class NineGridActivity : BaseActivity() {
