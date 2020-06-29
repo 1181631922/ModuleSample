@@ -28,8 +28,8 @@ open class ChooseItemView @JvmOverloads constructor(
         rippleChooseItemView.setBackgroundResource(R.drawable.choose_view_unselected)
     }
 
-    private var checked = false
-    private var checkable = true
+    protected var mChecked = false
+    protected var mCheckable = true
 
     fun <T : IChooseModel> initData(model: T) {
         rippleChooseItemView.text = model.getChooseItemTitle()
@@ -40,40 +40,40 @@ open class ChooseItemView @JvmOverloads constructor(
     fun getChooseItemView() = getChildAt(0)
 
     override fun isCheckable(): Boolean {
-        return checkable
+        return mCheckable
     }
 
     override fun setCheckable(isCheckable: Boolean) {
-        checkable = isCheckable
-        if (!checkable) {
+        mCheckable = isCheckable
+        if (!mCheckable) {
             rippleChooseItemView.setBackgroundResource(R.drawable.choose_view_unselectable)
         }
     }
 
     override fun isChecked(): Boolean {
-        return if (!checkable) {
+        return if (!mCheckable) {
             false
         } else {
-            checked
+            mChecked
         }
     }
 
     override fun setChecked(isChecked: Boolean) {
-        if (checkable) {
-            checked = isChecked
-            if (checked) {
+        if (mCheckable) {
+            mChecked = isChecked
+            if (mChecked) {
                 rippleChooseItemView.setBackgroundResource(R.drawable.choose_view_selected)
             } else {
                 rippleChooseItemView.setBackgroundResource(R.drawable.choose_view_unselected)
             }
         } else {
-            //不能进行操作，可以在此添加回调
+            rippleChooseItemView.setBackgroundResource(R.drawable.choose_view_unselectable)
         }
     }
 
     override fun toggle() {
-        if (checkable) {
-            setChecked(!checked)
+        if (mCheckable) {
+            setChecked(!mChecked)
         }
     }
 }

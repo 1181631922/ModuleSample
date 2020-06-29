@@ -131,14 +131,9 @@ interface IRippleBaseDialog {
     /**
      * 这里还需要监听用户的返回键
      * 很有可能开发者需要在此处进行相应的操作
+     * 监听返回键默认拦截返回操作
      */
     fun setOnBackPressListener(listener: RippleDialogInterface.OnBackPressListener?)
-
-    /**
-     * 因为不确定用户是否需要进行其他操作
-     * 此处会将所有手势都去交给用户去处理
-     */
-    fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean
 
 
 }

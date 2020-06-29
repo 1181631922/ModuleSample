@@ -10,6 +10,7 @@ import com.ripple.dialog.config.RippleDialogConfig
 import com.ripple.dialog.widget.IRippleBaseDialog
 import com.ripple.dialog.widget.RippleBaseDialog
 import com.ripple.dialog.widget.IRippleDialog
+import com.ripple.tool.kttypelians.PairReturnLambda
 
 /**
  * Author： fanyafeng
@@ -92,8 +93,10 @@ class RippleDialog : IRippleDialog {
 
     override fun interceptBackPressed(interceptBackPressed: Boolean) {
         if (interceptBackPressed) {
-            onBackPressListener?.let {
-                setOnBackPressListener(it)
+            baseDialog?.onBackPressListener = {
+                onBackPressListener?.let {
+                    setOnBackPressListener(it)
+                }
             }
         }
     }
@@ -104,16 +107,15 @@ class RippleDialog : IRippleDialog {
 
     override fun setOnBackPressListener(listener: RippleDialogInterface.OnBackPressListener?) {
         onBackPressListener = listener
-    }
-
-    override fun setOnDismissListener(listener: RippleDialogInterface.OnDismissListener?) {
-        baseDialog!!.setOnDismissListener {
-            listener?.onDismiss()
+        baseDialog?.onBackPressListener = {
+            onBackPressListener?.onBackPress()
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        return baseDialog?.onKeyDownListener?.invoke(keyCode, event) ?: false
+    override fun setOnDismissListener(listener: RippleDialogInterface.OnDismissListener?) {
+        baseDialog?.setOnDismissListener {
+            listener?.onDismiss()
+        }
     }
 
 }

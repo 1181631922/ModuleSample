@@ -22,11 +22,6 @@ class RippleBaseDialog(private var dialogConfig: RippleDialogConfig) :
      */
     var onBackPressListener: SuccessLambda<Unit> = null
 
-    /**
-     * 监听所有用户手势
-     */
-    var onKeyDownListener: PairReturnLambda<Int, KeyEvent, Boolean> = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkNotNullRipple(dialogConfig, "dialog dialogConfig is null")
@@ -50,14 +45,6 @@ class RippleBaseDialog(private var dialogConfig: RippleDialogConfig) :
             onBackPressListener?.invoke(Unit)
         } else {
             super.onBackPressed()
-        }
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        return if (onKeyDownListener != null) {
-            onKeyDownListener?.invoke(keyCode, event) ?: false
-        } else {
-            super.onKeyDown(keyCode, event)
         }
     }
 }

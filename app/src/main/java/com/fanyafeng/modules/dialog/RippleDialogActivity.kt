@@ -2,9 +2,11 @@ package com.fanyafeng.modules.dialog
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import com.fanyafeng.modules.R
+import com.ripple.dialog.callback.RippleDialogInterface
 import com.ripple.dialog.widget.impl.RippleDialog
 import com.ripple.dialog.widget.impl.RippleDialogFragment
 import com.ripple.dialog.widget.impl.RippleToast
@@ -26,6 +28,19 @@ class RippleDialogActivity : AppCompatActivity() {
             val view =
                 LayoutInflater.from(this).inflate(R.layout.ripple_dialog_layout_center_dialog, null)
             val dialog = RippleDialog(this, view)
+            dialog.setCancel(false)
+//            dialog.interceptBackPressed(true)
+            dialog.setOnDismissListener(object : RippleDialogInterface.OnDismissListener {
+                override fun onDismiss() {
+                    println("弹窗消失")
+                }
+
+            })
+            dialog.setOnBackPressListener(object : RippleDialogInterface.OnBackPressListener {
+                override fun onBackPress() {
+                    dialog.dismiss()
+                }
+            })
             dialog.showCenter()
         }
 
@@ -51,6 +66,13 @@ class RippleDialogActivity : AppCompatActivity() {
             val view =
                 LayoutInflater.from(this).inflate(R.layout.ripple_dialog_layout_center_dialog, null)
             val dialog = RippleDialogFragment(this, view)
+            dialog.setOnDismissListener(object : RippleDialogInterface.OnDismissListener {
+                override fun onDismiss() {
+                    println("dialog消失")
+                }
+            })
+            dialog.setOnActivityResult()
+            dialog.interceptBackPressed(true)
             dialog.showBottom()
         }
     }

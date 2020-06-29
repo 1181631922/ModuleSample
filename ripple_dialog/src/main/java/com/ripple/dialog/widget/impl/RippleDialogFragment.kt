@@ -31,6 +31,7 @@ class RippleDialogFragment : IRippleDialogFragment {
     private var contentView: View? = null
     private var context: Context? = null
 
+    private var onBackPressListener: RippleDialogInterface.OnBackPressListener? = null
 
     constructor(context: Context, view: View) {
         this.context = context
@@ -40,13 +41,20 @@ class RippleDialogFragment : IRippleDialogFragment {
             .setContentView(view)
             .setCancel(true)
             .build()
+        baseDialogFragment = RippleBaseDialogFragment(dialogConfig!!)
+        contentView = dialogConfig!!.contentView
     }
 
     constructor(dialogConfig: RippleDialogConfig) {
         this.dialogConfig = dialogConfig
+        baseDialogFragment = RippleBaseDialogFragment(this.dialogConfig!!)
+        contentView = this.dialogConfig!!.contentView
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun setOnActivityResult(onActivityResult: RippleDialogInterface.OnActivityResult) {
+        baseDialogFragment?.onActivityResult = { first: Int?, second: Int?, third: Intent? ->
+            onActivityResult.onActivityResult(first, second, third)
+        }
     }
 
     override fun getId(): Int {
@@ -54,8 +62,6 @@ class RippleDialogFragment : IRippleDialogFragment {
     }
 
     override fun show(manager: FragmentManager, tag: String) {
-        baseDialogFragment = RippleBaseDialogFragment(dialogConfig!!)
-        contentView = dialogConfig!!.contentView
         baseDialogFragment?.show(manager, tag)
     }
 
@@ -95,21 +101,28 @@ class RippleDialogFragment : IRippleDialogFragment {
     }
 
     override fun setOnDismissListener(listener: RippleDialogInterface.OnDismissListener?) {
+        baseDialogFragment?.onDismissListener = {
+            listener?.onDismiss()
+        }
     }
-
 
     override fun isShowing(): Boolean {
         return baseDialogFragment?.isVisible ?: false
     }
 
     override fun interceptBackPressed(interceptBackPressed: Boolean) {
+        if (interceptBackPressed) {
+            baseDialogFragment?.onBackPressListener = {
+                onBackPressListener?.onBackPress()
+            }
+        }
     }
 
     override fun setOnBackPressListener(listener: RippleDialogInterface.OnBackPressListener?) {
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        return false
+        onBackPressListener = listener
+        baseDialogFragment?.onBackPressListener = {
+            listener?.onBackPress()
+        }
     }
 
 }

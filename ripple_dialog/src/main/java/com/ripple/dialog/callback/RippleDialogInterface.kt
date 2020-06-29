@@ -1,5 +1,6 @@
 package com.ripple.dialog.callback
 
+import android.content.Intent
 import android.view.KeyEvent
 
 
@@ -35,5 +36,12 @@ interface RippleDialogInterface {
      */
     interface OnKeyDownListener {
         fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean
+    }
+
+    /**
+     * activity result回调
+     */
+    interface OnActivityResult {
+        fun onActivityResult(requestCode: Int?, resultCode: Int?, data: Intent?)
     }
 }

@@ -3,6 +3,7 @@ package com.ripple.dialog.widget
 import android.content.Intent
 import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentManager
+import com.ripple.dialog.callback.RippleDialogInterface
 
 
 /**
@@ -24,7 +25,7 @@ interface IRippleDialogFragment : IRippleBaseDialog {
      * android原有的dialog并不支持
      * 只有在DialogFragment才有，因为DialogFragment是继承的Fragment
      */
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    fun setOnActivityResult(onActivityResult: RippleDialogInterface.OnActivityResult)
 
     /**
      * Return the identifier this fragment is known by.  This is either
@@ -45,4 +46,5 @@ interface IRippleDialogFragment : IRippleBaseDialog {
      * {@link FragmentTransaction#add(Fragment, String) FragmentTransaction.add}.
      */
     fun show(manager: FragmentManager, tag: String)
+
 }
