@@ -32,6 +32,8 @@ class FlowLayoutActivity : BaseActivity() {
     private fun initView() {
 
 
+
+
         (0 until 5).forEach {
             val model = object : IChooseModel {
                 override fun getChooseItemTitle(): String {
@@ -43,7 +45,7 @@ class FlowLayoutActivity : BaseActivity() {
                 }
 
                 override fun getChooseItemChecked(): Boolean {
-                    return false
+                    return it == 0
                 }
             }
             list.add(model)
@@ -51,6 +53,7 @@ class FlowLayoutActivity : BaseActivity() {
             itemView.setInnerTagWrapContent()
             chooseItemView.addItemView(itemView, model)
         }
+
 
         chooseItemView.onItemAbleClickListener = { view, position, model ->
             Log.d(TAG, "被点击：" + position)
@@ -65,11 +68,11 @@ class FlowLayoutActivity : BaseActivity() {
             LinearLayout.LayoutParams(itemWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
 //        layoutParams.leftMargin = 5.dp2px
 //        layoutParams.rightMargin = 5.dp2px
-
+        splitFlowView.setMinChooseCount(1)
         4.forEachAnchor { it, isFirst, isLast ->
-            println("我是得几个：" + it)
-            println("是否是第一个：" + isFirst.toString())
-            println("是否是最后一个：" + isLast.toString())
+//            println("我是得几个：" + it)
+//            println("是否是第一个：" + isFirst.toString())
+//            println("是否是最后一个：" + isLast.toString())
             val model = object : IChooseModel {
                 override fun getChooseItemTitle(): String {
                     return "我是第$it"
@@ -80,7 +83,7 @@ class FlowLayoutActivity : BaseActivity() {
                 }
 
                 override fun getChooseItemChecked(): Boolean {
-                    return false
+                    return it == 0
                 }
             }
             list.add(model)
@@ -91,7 +94,7 @@ class FlowLayoutActivity : BaseActivity() {
 
 
         splitFlowView.onItemClickListener =
-            { first: View?, position: Int?, third: IChooseModel?, fourth: Boolean? ->
+            { first: View?, position: Int?, third: IChooseModel?, fourth: Boolean?, fifth: Boolean? ->
                 println("被点击位置：" + position)
             }
 
@@ -120,7 +123,7 @@ class FlowLayoutActivity : BaseActivity() {
         }
 
         btn2.setOnClickListener {
-            Log.d(TAG, "最后结果：" + chooseItemView.getSelectedResult())
+            Log.d(TAG, "最后结果：" + chooseItemView.getSelectedResult().toString())
         }
 
     }
