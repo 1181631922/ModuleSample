@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.*
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.BuildConfig
 import com.fanyafeng.modules.R
@@ -20,6 +21,7 @@ import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
+import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
@@ -42,6 +44,60 @@ class MainActivity : BaseActivity() {
     private fun initView() {
         functionList.layoutManager = LinearLayoutManager(this)
 
+        functionList.addOnScrollListener(object : OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                when (newState) {
+                    /**
+                     * 暂定状态
+                     */
+                    SCROLL_STATE_IDLE -> {
+                        println("暂停状态")
+                        //静默加载应放在此处
+//                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                        val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+//                        println("newState最后一个可见view：" + lastVisiblePosition)
+//                        if (funcList.size - lastVisiblePosition <= 20) {
+//                            40.forEach {
+//                                funcList.add(MainModel("媒体库选择", MediaPickActivity::class.java))
+//                            }
+//                            mainAdapter?.notifyDataSetChanged()
+//                        }
+                    }
+                    /**
+                     * 拖动状态
+                     */
+                    SCROLL_STATE_DRAGGING -> {
+                        println("拖动状态")
+
+                    }
+                    /**
+                     *
+                     */
+                    SCROLL_STATE_SETTLING -> {
+                        println("这是啥")
+                    }
+                }
+
+
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+//                println("newState最后一个可见view：" + lastVisiblePosition)
+//                if (funcList.size - lastVisiblePosition <= 20) {
+//                    40.forEach {
+//                        funcList.add(MainModel("媒体库选择", MediaPickActivity::class.java))
+//                    }
+//                    mainAdapter?.notifyDataSetChanged()
+//                }
+            }
+
+        })
+
+
     }
 
     private fun initData() {
@@ -55,13 +111,17 @@ class MainActivity : BaseActivity() {
             add(MainModel("流式layout", FlowLayoutActivity::class.java))
         }
 
+//        20.forEach {
+//            funcList.add(MainModel("媒体库选择", MediaPickActivity::class.java))
+//        }
+
         mainAdapter = MainAdapter(this, funcList)
         functionList.adapter = mainAdapter
     }
 }
 
 class MainAdapter(private val mContext: Context, private val funcList: MutableList<MainModel>) :
-    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+    Adapter<MainAdapter.MainViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val item =
@@ -82,7 +142,7 @@ class MainAdapter(private val mContext: Context, private val funcList: MutableLi
         }
     }
 
-    inner class MainViewHolder(item: View) : RecyclerView.ViewHolder(item) {
+    inner class MainViewHolder(item: View) : ViewHolder(item) {
 
         var functionListTitle: AppCompatButton? = null
 

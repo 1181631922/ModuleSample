@@ -1,5 +1,6 @@
 package com.fanyafeng.modules.dialog
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
@@ -71,7 +72,11 @@ class RippleDialogActivity : AppCompatActivity() {
                     println("dialog消失")
                 }
             })
-            dialog.setOnActivityResult()
+            dialog.setOnActivityResult(object : RippleDialogInterface.OnActivityResult {
+                override fun onActivityResult(requestCode: Int?, resultCode: Int?, data: Intent?) {
+                    println("activity回调")
+                }
+            })
             dialog.interceptBackPressed(true)
             dialog.showBottom()
         }
