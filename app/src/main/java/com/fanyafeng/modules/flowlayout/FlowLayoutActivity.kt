@@ -8,6 +8,7 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.tool.density.dp2px
 import com.ripple.tool.extend.forEachAnchor
+import com.ripple.tool.extend.forEach
 import com.ripple.tool.int.oneQuadra
 import com.ripple.tool.screen.getScreenWidth
 import com.ripple.ui.flowview.IChooseModel
@@ -32,7 +33,7 @@ class FlowLayoutActivity : BaseActivity() {
     private fun initView() {
 
 
-        (0 until 5).forEach {
+        5.forEach {
             val model = ChooseModel("我是第$it", it != 3, it == 0)
             list.add(model)
             val itemView = ChooseItemView(this)
@@ -41,6 +42,10 @@ class FlowLayoutActivity : BaseActivity() {
             chooseItemView.addItemView(itemView, model)
         }
 
+        chooseItemView.onItemClickListener={ first, position, third, fourth, fifth ->
+            //不论按钮状态，只要点击就会有回调
+            Log.d(TAG, "被点击：" + position)
+        }
 
         chooseItemView.onItemAbleClickListener = { view, position, model ->
             Log.d(TAG, "被点击：" + position)
