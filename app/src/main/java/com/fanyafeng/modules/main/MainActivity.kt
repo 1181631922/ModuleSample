@@ -21,6 +21,7 @@ import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
+import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
@@ -109,6 +110,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("多任务处理", HandleTaskActivity::class.java))
             add(MainModel("dialog封装", RippleDialogActivity::class.java))
             add(MainModel("流式layout", FlowLayoutActivity::class.java))
+            add(MainModel("可折叠layout", FoldViewActivity::class.java))
         }
 
 //        20.forEach {

@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".flowlayout.FlowLayoutActivity"></activity>
+        <activity android:name=".testfoldview.FoldViewActivity"></activity>
+        <activity android:name=".flowlayout.FlowLayoutActivity" />
         <activity
             android:name=".dialog.RippleDialogActivity"
             android:configChanges="orientation|screenSize" />

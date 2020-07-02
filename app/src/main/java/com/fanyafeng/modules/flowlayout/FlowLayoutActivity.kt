@@ -32,25 +32,12 @@ class FlowLayoutActivity : BaseActivity() {
     private fun initView() {
 
 
-
-
         (0 until 5).forEach {
-            val model = object : IChooseModel {
-                override fun getChooseItemTitle(): String {
-                    return "我是第" + it
-                }
-
-                override fun getChooseItemCheckable(): Boolean {
-                    return it != 3
-                }
-
-                override fun getChooseItemChecked(): Boolean {
-                    return it == 0
-                }
-            }
+            val model = ChooseModel("我是第$it", it != 3, it == 0)
             list.add(model)
             val itemView = ChooseItemView(this)
             itemView.setInnerTagWrapContent()
+            itemView.chooseViewUnselected=R.drawable.choose_view_normal
             chooseItemView.addItemView(itemView, model)
         }
 
@@ -73,19 +60,7 @@ class FlowLayoutActivity : BaseActivity() {
 //            println("我是得几个：" + it)
 //            println("是否是第一个：" + isFirst.toString())
 //            println("是否是最后一个：" + isLast.toString())
-            val model = object : IChooseModel {
-                override fun getChooseItemTitle(): String {
-                    return "我是第$it"
-                }
-
-                override fun getChooseItemCheckable(): Boolean {
-                    return it != 3
-                }
-
-                override fun getChooseItemChecked(): Boolean {
-                    return it == 0
-                }
-            }
+            val model = ChooseModel("我是第$it", it != 3, it == 0)
             list.add(model)
             val itemView = ChooseItemView(this)
             itemView.layoutParams = layoutParams
@@ -102,21 +77,11 @@ class FlowLayoutActivity : BaseActivity() {
 
     private fun initData() {
         val viewList = mutableListOf<Pair<IChooseModel, ChooseItemView>>()
-        (0 until 7).forEach { _ ->
-            val model = object : IChooseModel {
-                override fun getChooseItemTitle(): String {
-                    return "我是新增的第二个view"
-                }
-
-                override fun getChooseItemCheckable(): Boolean {
-                    return true
-                }
-
-                override fun getChooseItemChecked(): Boolean {
-                    return false
-                }
-            }
-            viewList.add(Pair(model, ChooseItemView(this)))
+        (0 until 7).forEach { it ->
+            val model = ChooseModel("我是新增的第$it 个view", true, (it == 3 || it == 4))
+            val itemView = ChooseItemView(this)
+//            itemView.setInnerTagWrapContent()
+            viewList.add(Pair(model, itemView))
         }
         btn1.setOnClickListener {
             chooseItemView.updateView(viewList)
@@ -124,7 +89,28 @@ class FlowLayoutActivity : BaseActivity() {
 
         btn2.setOnClickListener {
             Log.d(TAG, "最后结果：" + chooseItemView.getSelectedResult().toString())
+            Log.d(TAG, "所有列表状态：" + chooseItemView.getAllDataList().toString())
         }
 
     }
+}
+
+data class ChooseModel(var title: String, var checkable: Boolean, var checked: Boolean) :
+    IChooseModel {
+    override fun getChooseItemTitle(): String {
+        return title
+    }
+
+    override fun getChooseItemCheckable(): Boolean {
+        return checkable
+    }
+
+    override fun getChooseItemChecked(): Boolean {
+        return checked
+    }
+
+    override fun setChooseItemChecked(isChecked: Boolean) {
+        checked = isChecked
+    }
+
 }
