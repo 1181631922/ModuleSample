@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
@@ -397,10 +398,9 @@ class FlowLayoutActivity : BaseActivity() {
             )
             allSpecListItem.chooseModelList.forEachIndexed { innerIndex, specItem ->
                 val innerItem = SpecificationChooseView(context)
-                innerItem.setTagHeight()
                 innerItem.tag = innerIndex
                 innerItem.chooseViewUnselected = R.drawable.choose_view_normal
-                innerItem.setInnerTagWrapContent()
+                innerItem.setInnerTagLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 32.dp2px))
                 itemFlowView.addItemView(innerItem, specItem)
                 itemFlowView.onItemClickListener =
                     { view, position, model, isCheckable, checkRepeat ->
