@@ -20,6 +20,7 @@ import com.fanyafeng.modules.http.HttpActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
+import com.fanyafeng.modules.stickynavigationlayout.StickyNavigationLayoutActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.ripple.tool.extend.forEach
@@ -111,6 +112,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("dialog封装", RippleDialogActivity::class.java))
             add(MainModel("流式layout", FlowLayoutActivity::class.java))
             add(MainModel("可折叠layout", FoldViewActivity::class.java))
+            add(MainModel("嵌套滑动", StickyNavigationLayoutActivity::class.java))
         }
 
 //        20.forEach {

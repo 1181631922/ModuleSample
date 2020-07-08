@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".stickynavigationlayout.StickyNavigationLayoutActivity">
+
+    <com.ripple.ui.stickynavigationlayout.impl.StickyNavigationLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/stickyNavigationLayoutTopView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@android:color/holo_orange_dark" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/stickyNavigationLayoutIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            app:tabGravity="center"
+            app:tabIndicatorColor="#0ddcff"
+            app:tabMode="fixed" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/stickyNavigationLayoutViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </com.ripple.ui.stickynavigationlayout.impl.StickyNavigationLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

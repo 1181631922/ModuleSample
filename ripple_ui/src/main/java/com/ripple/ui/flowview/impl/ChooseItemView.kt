@@ -25,32 +25,48 @@ import kotlinx.android.synthetic.main.item_choose_view_layout.view.*
  *
  */
 open class ChooseItemView @JvmOverloads constructor(
-    private val mContext: Context,
+    private var mContext: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) :
-    FrameLayout(mContext, attrs, defStyleAttr), IChooseItemView {
+) : FrameLayout(mContext, attrs, defStyleAttr), IChooseItemView {
 
-    protected var mChecked = false
-    protected var mCheckable = true
+    private var mChecked = false
+    private var mCheckable = true
 
     /**
      * 标签背景的三种状态
      */
-    var chooseViewUnselectable = R.drawable.choose_view_unselectable
-    var chooseViewSelected = R.drawable.choose_view_selected
-    var chooseViewUnselected = R.drawable.choose_view_unselected
+    open var chooseViewUnselectable = R.drawable.choose_view_unselectable
+    open var chooseViewSelected = R.drawable.choose_view_selected
+    open var chooseViewUnselected = R.drawable.choose_view_unselected
 
     /**
      * 标签内部字体的三种颜色
      */
-    var unselectableTagColor = Color.parseColor("#cccccc")
-    var selectedTagColor = Color.parseColor("#ff680a")
-    var unselectedTagColor = Color.BLACK
+    open var unselectableTagColor = Color.parseColor("#cccccc")
+    open var selectedTagColor = Color.parseColor("#ff680a")
+    open var unselectedTagColor = Color.BLACK
 
     init {
+        initView()
+    }
+
+    private fun initView() {
         LayoutInflater.from(mContext).inflate(R.layout.item_choose_view_layout, this)
         rippleChooseItemView.setBackgroundResource(chooseViewUnselected)
+    }
+
+    fun <T : ChooseItemView> updateStatus(newItemView: T) {
+        //将新的itemView的属性赋值到旧的itemView上
+        setInnerTagLayoutParams(newItemView.getInnerTagLayoutParams())
+        //更新标签选中态背景
+        this.chooseViewUnselected = newItemView.chooseViewUnselected
+        this.chooseViewSelected = newItemView.chooseViewSelected
+        this.chooseViewUnselectable = newItemView.chooseViewUnselectable
+        //更新标签选中态字体颜色
+        this.unselectableTagColor = newItemView.unselectableTagColor
+        this.unselectedTagColor = newItemView.unselectedTagColor
+        this.selectedTagColor = newItemView.selectedTagColor
     }
 
 
@@ -62,10 +78,16 @@ open class ChooseItemView @JvmOverloads constructor(
 
     fun getChooseItemView() = getChildAt(0)
 
+    /**
+     * 是否可点击
+     */
     override fun isCheckable(): Boolean {
         return mCheckable
     }
 
+    /**
+     * 设置点击状态
+     */
     override fun setCheckable(isCheckable: Boolean) {
         mCheckable = isCheckable
         if (!mCheckable) {
@@ -74,6 +96,9 @@ open class ChooseItemView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 获取选中状态
+     */
     override fun isChecked(): Boolean {
         return if (!mCheckable) {
             false
@@ -82,6 +107,9 @@ open class ChooseItemView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 设置选中状态
+     */
     override fun setChecked(isChecked: Boolean) {
         if (mCheckable) {
             mChecked = isChecked
@@ -98,6 +126,9 @@ open class ChooseItemView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 变换选中状态
+     */
     override fun toggle() {
         if (mCheckable) {
             setChecked(!mChecked)
@@ -110,6 +141,12 @@ open class ChooseItemView @JvmOverloads constructor(
     fun setInnerTagLayoutParams(layoutParams: RelativeLayout.LayoutParams) {
         rippleChooseItemView.layoutParams = layoutParams
     }
+
+    /**
+     * 获取内部标签LayoutParams
+     */
+    fun getInnerTagLayoutParams(): RelativeLayout.LayoutParams =
+        rippleChooseItemView.layoutParams as RelativeLayout.LayoutParams
 
     /**
      * 设置内部标签match_parent
@@ -140,4 +177,11 @@ open class ChooseItemView @JvmOverloads constructor(
     }
 
     fun getTagView() = rippleChooseItemView
+
+    fun setTagHeight() {
+        rippleChooseItemView.height = 60.dp2px
+        invalidate()
+    }
+
+    fun getTagLayoutView() = rippleChooseItemViewLayout
 }
