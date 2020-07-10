@@ -1,5 +1,6 @@
 package com.fanyafeng.modules.testfoldview
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.fanyafeng.modules.BaseActivity
@@ -17,7 +18,9 @@ class FoldViewActivity : BaseActivity() {
 
     private fun initView() {
 //        foldView1.setFoldViewOnlyUnfold(true)
-        foldView1.setFoldViewDesc("测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试大多发的发的发的发的发的发的发测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试")
+        foldView1.setDescTextViewBackGroundColor(Color.RED)
+        foldView1.setFoldControlTextViewBackGroundColor(Color.RED)
+        foldView1.setFoldViewDesc("测试试测试测试测试测试测试测试")
     }
 
     private fun initData() {

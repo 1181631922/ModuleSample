@@ -2,14 +2,19 @@ package com.fanyafeng.modules.ninegrid
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
+import com.fanyafeng.modules.test.LogHelper
+import com.fanyafeng.modules.test.Zprint
+import com.ripple.log.extend.logD
+import com.ripple.log.extend.logDWithClassJump
+import com.ripple.log.extend.logVWithClassJump
+import com.ripple.log.extend.withClassJump
+import com.ripple.tool.density.dp2pxF
 import com.ripple.ui.ninegridview.NineGridLoadFrame
 import com.ripple.ui.ninegridview.NineItem
 import com.ripple.ui.ninegridview.NineItemListener
@@ -17,7 +22,6 @@ import com.ripple.ui.ninegridview.SimpleNineItem
 import com.ripple.ui.ninegridview.impl.NineGridAdapter
 import com.ripple.ui.ninegridview.impl.NineGridImpl
 import com.ripple.ui.widget.RippleImageView
-import com.ripple.tool.density.dp2pxF
 import kotlinx.android.synthetic.main.activity_nine_grid.*
 
 
@@ -30,6 +34,7 @@ class NineGridActivity : BaseActivity() {
         setContentView(R.layout.activity_nine_grid)
         title = "图片九宫格"
 
+        LogHelper.initDebuggable(this)
 
         initView()
         initData()
@@ -60,20 +65,33 @@ class NineGridActivity : BaseActivity() {
                     "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
                 )
             )
+            add(
+                SimpleNineItem(
+                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
+                )
+            )
+            add(
+                SimpleNineItem(
+                    "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1589448934&di=7c200678673481d850c0370f1a2ae67e&src=http://b2-q.mafengwo.net/s5/M00/91/06/wKgB3FH_RVuATULaAAH7UzpKp6043.jpeg"
+                )
+            )
         }
 
         gridView.loadFrame = MyLoadFrame()
-        gridView.nineGridConfig = NineGridImpl(maxLine = 1)
+        gridView.nineGridConfig = NineGridImpl(maxLine = 2)
         val maxCount =
             gridView.nineGridConfig.getMaxLine() * gridView.nineGridConfig.getPerLineCount()
         gridView.adapter = NineGridAdapter(this, imageList, maxCount)
+        gridView.onItemClickListener = { view, item, position ->
+
+        }
         gridView.nineItemListener = object : NineItemListener.SimpleNineItemListener {
             override fun onClickListener(view: View, item: NineItem, position: Int) {
                 println("我被点击了：" + position)
             }
         }
 
-        gridView.onItemClickListener={first, second, third ->
+        gridView.onItemClickListener = { first, second, third ->
             println("我被点击了：" + third)
         }
 
@@ -81,8 +99,33 @@ class NineGridActivity : BaseActivity() {
     }
 
     private fun initData() {
-
+        nineTest.setOnClickListener {
+//            Log.d("TAG", "测试点击")
+            Log.d("打印当前行数：", "行数" + line(Exception()))
+            Log.d("打印当前方法名：", "方法名" + method(Exception()))
+            Zprint.log(this.javaClass, "是否能够定位到类")
+            withClassJump()
+            println("9是否能打印:" + 9.logVWithClassJump())
+            logD("打印日志")
+        }
     }
+
+    private fun line(e: Exception): Int {
+        val trace = e.stackTrace
+        if (trace.isEmpty()) {
+            return -1
+        }
+        return trace[0].lineNumber.logDWithClassJump()
+    }
+
+    private fun method(e: Exception): String {
+        val trace = e.stackTrace
+        if (trace.isEmpty()) {
+            return ""
+        }
+        return trace[0].methodName
+    }
+
 
 }
 

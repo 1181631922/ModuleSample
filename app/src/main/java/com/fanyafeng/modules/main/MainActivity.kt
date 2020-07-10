@@ -23,6 +23,7 @@ import com.fanyafeng.modules.ninegrid.NineGridActivity
 import com.fanyafeng.modules.stickynavigationlayout.StickyNavigationLayoutActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
+import com.fanyafeng.modules.testlog.TestLogActivity
 import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
@@ -113,6 +114,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("流式layout", FlowLayoutActivity::class.java))
             add(MainModel("可折叠layout", FoldViewActivity::class.java))
             add(MainModel("嵌套滑动", StickyNavigationLayoutActivity::class.java))
+            add(MainModel("测试log工具类", TestLogActivity::class.java))
         }
 
 //        20.forEach {

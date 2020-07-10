@@ -1,23 +1,25 @@
 package com.ripple.log
 
-import android.util.Log
-import kotlin.reflect.KClass
+import com.ripple.log.extend.logD
 
 
 /**
  * Author: fanyafeng
  * Data: 2020/7/6 13:34
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: log工厂
+ * 一些比较常用的log封装
  */
 object LogFactory {
     @JvmOverloads
-    fun d(msg: String?, tag: String? = "TAG") {
-        Log.d(tag, msg)
+    fun d(msg: String, tag: String = RippleLog.getInstance().tag) {
+        logD(msg, tag)
     }
 
-    fun d(tag: Class<*>, msg: String?) {
-        d(tag.simpleName, msg)
+    /**
+     * 打印类名以及msg
+     */
+    fun d(clazz: Class<*>, msg: String) {
+        logD(msg, clazz.simpleName)
     }
-
 }
