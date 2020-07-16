@@ -434,7 +434,7 @@ class FlowLayoutActivity : BaseActivity() {
     }
 }
 
-class ParentLayoutModel(var titleView: TextView, var chooseView: ChooseFlowView)
+data class ParentLayoutModel(var titleView: TextView, var chooseView: ChooseFlowView)
 
 data class GroupChooseModel(var title: String? = null, var chooseModelList: List<ChooseModel>)
 

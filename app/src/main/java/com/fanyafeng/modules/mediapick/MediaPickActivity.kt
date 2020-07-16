@@ -14,6 +14,12 @@ import com.fanyafeng.modules.dealpicture.impl.Base64DownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.GlideDownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.Test
+import com.ripple.image.compress.config.CompressConfig
+import com.ripple.image.compress.config.impl.LD
+import com.ripple.image.compress.config.impl.SimpleCompressConfig
+import com.ripple.image.compress.extend.compressImageList
+import com.ripple.image.compress.model.ImageItem
+import com.ripple.log.extend.logD
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.MediaPickConfig
@@ -24,8 +30,10 @@ import com.ripple.media.picker.image.activity.RippleTakePhotoAgencyActivity
 import com.ripple.media.picker.image.extend.imagePick
 import com.ripple.media.picker.image.extend.takePhoto
 import com.ripple.media.picker.model.RippleMediaModel
+import com.ripple.media.picker.model.SimpleImageModel
 import com.ripple.permission.annotation.NeedPermission
 import kotlinx.android.synthetic.main.activity_media_pick.*
+import java.io.File
 
 class MediaPickActivity : AppCompatActivity() {
 
@@ -34,7 +42,7 @@ class MediaPickActivity : AppCompatActivity() {
 
     }
 
-    private var testList = mutableListOf<RippleMediaModel>()
+    private var testList = mutableListOf<MyMediaModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +64,20 @@ class MediaPickActivity : AppCompatActivity() {
             imagePick(config) {
                 Log.d("选取的图片:", it.toString())
                 Log.d("选取的图片数量:", it.size.toString())
-                testList.addAll(it)
+                it.forEach { item ->
+                    testList.add(MyMediaModel(item.getPath()))
+                }
+
+                compressImageList(testList) {
+                    onFinish { finishResult, unFinishResult ->
+                        finishResult.logD()
+                        val targetDir = finishResult!![0].getCompressConfig().getTargetDir()
+                        val targetPath = finishResult!![0].getCompressConfig().getTargetPath()
+                        val filePath = File(targetDir, targetPath).absolutePath.logD()
+
+
+                    }
+                }
             }
         }
 
@@ -152,4 +173,24 @@ class MediaPickActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+}
+
+class MyMediaModel(var imagePath: String) : RippleMediaModel, SimpleImageModel, ImageItem {
+    override fun getPath(): String {
+        return imagePath
+    }
+
+    override fun getSourcePath(): String {
+        return imagePath
+    }
+
+
+    override fun getCompressConfig(): CompressConfig {
+        return SimpleCompressConfig.Builder().create()
+    }
+
+    override fun getTag(): Any? {
+        return null
+    }
+
 }

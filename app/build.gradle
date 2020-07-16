@@ -25,13 +25,32 @@ android {
     }
     buildTypes {
 
-        release {
-            minifyEnabled false
+        debug {
+            buildConfigField "String", "ENVIRONMENT", "\"http://114.55.11.71:80/ecom/\""
         }
+
 
         release {
             minifyEnabled false
+            buildConfigField "String", "ENVIRONMENT", "\"http://xyl.com/ecom/\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+
+        println("获取buildType:" + variant.buildType.name)
+
+        tasks.all {
+
+            String variantName = variant.name
+//            println("测试打印name：" + it.name)
+            if ("assemble${variantName.capitalize()}".equals(it.name)) {
+                it.dolast {
+//                    println("测试打印name：" + it.name)
+                }
+            }
+
         }
     }
 }
@@ -73,6 +92,8 @@ dependencies {
     implementation project(path: ':ripple_tool')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':ripple_log')
+    implementation project(path: ':ripple_http')
+    implementation project(path: ':ripple_image_compress')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -92,9 +113,19 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0"
 }
 
+task printlnFileName {
+    doLast {
+        Properties properties = new Properties()
+        InputStream inputStream = project.rootProject.file('version_file/release.properties').newDataInputStream()
+        properties.load(inputStream)
+
+        String name = properties.getProperty("name")
+        println(name)
+    }
+}
 
 
-interface MyDepend extends DependencyHandler{
+interface MyDepend extends DependencyHandler {
     Dependency getProjectMaven()
 }
 

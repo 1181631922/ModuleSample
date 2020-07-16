@@ -17,10 +17,22 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btn1"
+                android:id="@+id/httpGetASync1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="get请求" />
+                android:text="get异步请求" />
+
+            <Button
+                android:id="@+id/httpGetASync2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get异步请求带param" />
+
+            <Button
+                android:id="@+id/httpGetSync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get同步请求" />
 
 
         </LinearLayout>
