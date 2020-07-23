@@ -36,8 +36,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation project(path: ':ripple_tool')
-
+//    implementation project(path: ':ripple_tool')
+    implementation 'com.ripple.component:tool:0.0.7'
+//    implementation project(path: ':ripple_log')
+    implementation 'com.ripple.component:log:0.0.2'
 }
 
 apply from: './gradle-jcenter-push.gradle'

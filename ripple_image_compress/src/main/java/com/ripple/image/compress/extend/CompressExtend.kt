@@ -5,8 +5,8 @@ import com.ripple.image.compress.model.ImageItem
 import com.ripple.image.compress.service.ImageCompressService
 import com.ripple.image.compress.RippleImageCompress
 import com.ripple.task.callback.*
-import com.ripple.task.lambda.PairLambda
-import com.ripple.task.lambda.SuccessLambda
+import com.ripple.tool.kttypelians.PairLambda
+import com.ripple.tool.kttypelians.SuccessLambda
 import java.io.File
 
 /**
@@ -61,7 +61,7 @@ class ImageCompressExtra(imageList: List<ImageItem>) {
     private var itemSuccessLambda: SuccessLambda<ImageItem> = null
     private var failedLambda: SuccessLambda<List<ImageItem>?> = null
     private var successLambda: SuccessLambda<List<ImageItem>?> = null
-    private var finishLambda: PairLambda<List<ImageItem>?> = null
+    private var finishLambda: PairLambda<List<ImageItem>?, List<ImageItem>?> = null
 
     private val engine = ImageCompressEngineImpl()
 
@@ -117,7 +117,7 @@ class ImageCompressExtra(imageList: List<ImageItem>) {
     }
 
     fun onFinish(
-        finishLambda: PairLambda<List<ImageItem>?>
+        finishLambda: PairLambda<List<ImageItem>?, List<ImageItem>?>
     ) {
         this.finishLambda = finishLambda
         engine.onFinish = object : OnFinish<List<ImageItem>> {

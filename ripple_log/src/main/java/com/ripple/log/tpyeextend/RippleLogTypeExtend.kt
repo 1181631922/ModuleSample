@@ -1,7 +1,7 @@
-package com.ripple.log.extend
+package com.ripple.log.tpyeextend
 
 import com.ripple.log.RippleLog
-import java.lang.StringBuilder
+import com.ripple.log.extend.getPrintLogHeaderWithMsg
 
 /**
  * Author: fanyafeng
@@ -10,19 +10,19 @@ import java.lang.StringBuilder
  * Description: 常用数据类型的log扩展类
  */
 @JvmOverloads
-fun <T> T.logV(tag: String = RippleLog.getInstance().tag): T {
-    logV(this.toString(), tag)
+fun <T> T.toLogV(tag: String = RippleLog.getInstance().tag): T {
+    com.ripple.log.extend.logV(toString(), tag)
     return this
 }
 
 @JvmOverloads
-fun <T> T.logVWithClassJump(tag: String = RippleLog.getInstance().tag): T {
+fun <T> T.toLogVWithClassJump(tag: String = RippleLog.getInstance().tag): T {
     /**
      * 线程安全
      */
     val stringBuffer = getPrintLogHeaderWithMsg()
     stringBuffer.append(this.toString())
-    logV(
+    com.ripple.log.extend.logV(
         stringBuffer.toString(),
         tag
     )
@@ -30,19 +30,19 @@ fun <T> T.logVWithClassJump(tag: String = RippleLog.getInstance().tag): T {
 }
 
 @JvmOverloads
-fun <T> T.logD(tag: String = RippleLog.getInstance().tag): T {
-    logD(this.toString(), tag)
+fun <T> T.toLogD(tag: String = RippleLog.getInstance().tag): T {
+    com.ripple.log.extend.logD(toString(), tag)
     return this
 }
 
 @JvmOverloads
-fun <T> T.logDWithClassJump(tag: String = RippleLog.getInstance().tag): T {
+fun <T> T.toLogDWithClassJump(tag: String = RippleLog.getInstance().tag): T {
     /**
      * 线程安全
      */
     val stringBuffer = getPrintLogHeaderWithMsg()
     stringBuffer.append(this.toString())
-    logD(
+    com.ripple.log.extend.logD(
         stringBuffer.toString(),
         tag
     )
@@ -50,19 +50,19 @@ fun <T> T.logDWithClassJump(tag: String = RippleLog.getInstance().tag): T {
 }
 
 @JvmOverloads
-fun <T> T.logI(tag: String = RippleLog.getInstance().tag): T {
-    logI(this.toString(), tag)
+fun <T> T.toLogI(tag: String = RippleLog.getInstance().tag): T {
+    com.ripple.log.extend.logI(this.toString(), tag)
     return this
 }
 
 @JvmOverloads
-fun <T> T.logIWithClassJump(tag: String = RippleLog.getInstance().tag): T {
+fun <T> T.toLogIWithClassJump(tag: String = RippleLog.getInstance().tag): T {
     /**
      * 线程安全
      */
     val stringBuffer = getPrintLogHeaderWithMsg()
     stringBuffer.append(this.toString())
-    logI(
+    com.ripple.log.extend.logI(
         stringBuffer.toString(),
         tag
     )
@@ -70,19 +70,19 @@ fun <T> T.logIWithClassJump(tag: String = RippleLog.getInstance().tag): T {
 }
 
 @JvmOverloads
-fun <T> T.logW(tag: String = RippleLog.getInstance().tag): T {
-    logW(this.toString(), tag = tag)
+fun <T> T.toLogW(tag: String = RippleLog.getInstance().tag): T {
+    com.ripple.log.extend.logW(this.toString(), tag = tag)
     return this
 }
 
 @JvmOverloads
-fun <T> T.logWWithClassJump(tag: String = RippleLog.getInstance().tag): T {
+fun <T> T.toLogWWithClassJump(tag: String = RippleLog.getInstance().tag): T {
     /**
      * 线程安全
      */
     val stringBuffer = getPrintLogHeaderWithMsg()
     stringBuffer.append(this.toString())
-    logW(
+    com.ripple.log.extend.logW(
         stringBuffer.toString(),
         tag = tag
     )
@@ -90,19 +90,19 @@ fun <T> T.logWWithClassJump(tag: String = RippleLog.getInstance().tag): T {
 }
 
 @JvmOverloads
-fun <T> T.logE(tag: String = RippleLog.getInstance().tag): T {
-    logE(this.toString(), tag)
+fun <T> T.toLogE(tag: String = RippleLog.getInstance().tag): T {
+    com.ripple.log.extend.logE(this.toString(), tag)
     return this
 }
 
 @JvmOverloads
-fun <T> T.logEWithClassJump(tag: String = RippleLog.getInstance().tag): T {
+fun <T> T.toLogEWithClassJump(tag: String = RippleLog.getInstance().tag): T {
     /**
      * 线程安全
      */
     val stringBuffer = getPrintLogHeaderWithMsg()
     stringBuffer.append(this.toString())
-    logE(
+    com.ripple.log.extend.logE(
         stringBuffer.toString(),
         tag
     )

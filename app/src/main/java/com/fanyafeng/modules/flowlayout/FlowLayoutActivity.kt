@@ -400,6 +400,7 @@ class FlowLayoutActivity : BaseActivity() {
                 val innerItem = SpecificationChooseView(context)
                 innerItem.tag = innerIndex
                 innerItem.chooseViewUnselected = R.drawable.choose_view_normal
+                innerItem.chooseViewUnselectable=R.drawable.specification_choose_view_unselectable_broken
                 innerItem.setInnerTagLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 32.dp2px))
                 itemFlowView.addItemView(innerItem, specItem)
                 itemFlowView.onItemClickListener =

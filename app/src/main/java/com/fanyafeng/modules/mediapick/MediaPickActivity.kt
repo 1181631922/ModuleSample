@@ -6,8 +6,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
-import com.bumptech.glide.Glide
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.dealpicture.DownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.Base64DownloadPicture
@@ -15,18 +13,15 @@ import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.GlideDownloadPicture
 import com.fanyafeng.modules.dealpicture.impl.Test
 import com.ripple.image.compress.config.CompressConfig
-import com.ripple.image.compress.config.impl.LD
 import com.ripple.image.compress.config.impl.SimpleCompressConfig
 import com.ripple.image.compress.extend.compressImageList
 import com.ripple.image.compress.model.ImageItem
-import com.ripple.log.extend.logD
+import com.ripple.log.tpyeextend.toLogD
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.config.IImagePickConfig
-import com.ripple.media.picker.config.MediaPickConfig
 import com.ripple.media.picker.config.impl.ImagePickConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
-import com.ripple.media.picker.image.activity.RippleTakePhotoAgencyActivity
 import com.ripple.media.picker.image.extend.imagePick
 import com.ripple.media.picker.image.extend.takePhoto
 import com.ripple.media.picker.model.RippleMediaModel
@@ -70,10 +65,10 @@ class MediaPickActivity : AppCompatActivity() {
 
                 compressImageList(testList) {
                     onFinish { finishResult, unFinishResult ->
-                        finishResult.logD()
+                        finishResult.toLogD()
                         val targetDir = finishResult!![0].getCompressConfig().getTargetDir()
                         val targetPath = finishResult!![0].getCompressConfig().getTargetPath()
-                        val filePath = File(targetDir, targetPath).absolutePath.logD()
+                        val filePath = File(targetDir, targetPath).absolutePath.toLogD()
 
 
                     }

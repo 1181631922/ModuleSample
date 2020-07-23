@@ -32,6 +32,13 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
 ) : ProcessTask<S, T> {
 
     /**
+     * 是否在子线程回调
+     * 默认使用handler，在主线程回调
+     * 后面需要将其加入配置项
+     */
+    var callBackInChildThread = false
+
+    /**
      * 所有任务回调
      */
     var onAllResult: OnAllResult<List<ProcessModel<S, T>>>? = null
@@ -102,6 +109,7 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
 
                     override fun onFailed(failedResult: List<ProcessModel<S, T>>?) {
                         super.onFailed(failedResult)
+
                         val bundle = Bundle()
                         bundle.putSerializable(
                             OnFailed.RESULT_FAILED,
@@ -212,6 +220,86 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
             }
             val itemFuture = service.submit(processItem)
         }
+    }
+
+    /**
+     * 以下为所有任务回调
+     *
+     * 所有任务开始
+     */
+    private fun onStart() {
+
+    }
+
+    /**
+     * 所有任务结束后
+     * 失败任务回调
+     */
+    private fun onFailed(failedResult: List<ProcessModel<S, T>>?) {
+
+    }
+
+    /**
+     * 所有任务结束
+     * 成功任务回调
+     */
+    private fun onSuccess(successResult: List<ProcessModel<S, T>>?) {
+
+    }
+
+    /**
+     * 所有任务结束
+     * 成功和失败任务回调
+     */
+    private fun onFinish(
+        finishResult: List<ProcessModel<S, T>>?,
+        unFinishResult: List<ProcessModel<S, T>>?
+    ) {
+
+    }
+
+    /**
+     * 以下为单个的回调
+     *
+     * 单个任务开始回调
+     */
+    private fun onItemStart(startResult: ProcessModel<S, T>) {
+
+    }
+
+    /**
+     * 单个任务进行中回调
+     */
+    private fun onItemDoing(doingResult: ProcessModel<S, T>) {
+
+    }
+
+    /**
+     * 单个任务被打断回调
+     */
+    private fun onItemInterrupted(interruptedResult: ProcessModel<S, T>) {
+
+    }
+
+    /**
+     * 单个任务失败回调
+     */
+    private fun onItemFailed(failedResult: ProcessModel<S, T>) {
+
+    }
+
+    /**
+     * 单个任务成功回调
+     */
+    private fun onItemSuccess(successResult: ProcessModel<S, T>) {
+
+    }
+
+    /**
+     * 单个任务结束回调
+     */
+    private fun onItemFinish(finishResult: ProcessModel<S, T>) {
+
     }
 
     class ProcessTaskImplHandler<S, T>(processTask: ProcessTask<S, T>) :

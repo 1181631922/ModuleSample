@@ -10,9 +10,9 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.test.LogHelper
 import com.fanyafeng.modules.test.Zprint
-import com.ripple.log.extend.logD
-import com.ripple.log.extend.logDWithClassJump
-import com.ripple.log.extend.logVWithClassJump
+import com.ripple.log.tpyeextend.toLogD
+import com.ripple.log.tpyeextend.toLogDWithClassJump
+import com.ripple.log.tpyeextend.toLogVWithClassJump
 import com.ripple.log.extend.withClassJump
 import com.ripple.tool.density.dp2pxF
 import com.ripple.ui.ninegridview.NineGridLoadFrame
@@ -105,8 +105,8 @@ class NineGridActivity : BaseActivity() {
             Log.d("打印当前方法名：", "方法名" + method(Exception()))
             Zprint.log(this.javaClass, "是否能够定位到类")
             withClassJump()
-            println("9是否能打印:" + 9.logVWithClassJump())
-            logD("打印日志")
+            println("9是否能打印:" + 9.toLogVWithClassJump())
+            toLogD("打印日志")
         }
     }
 
@@ -115,7 +115,7 @@ class NineGridActivity : BaseActivity() {
         if (trace.isEmpty()) {
             return -1
         }
-        return trace[0].lineNumber.logDWithClassJump()
+        return trace[0].lineNumber.toLogDWithClassJump()
     }
 
     private fun method(e: Exception): String {

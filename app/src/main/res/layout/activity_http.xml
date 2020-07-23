@@ -23,6 +23,30 @@
                 android:text="get异步请求" />
 
             <Button
+                android:id="@+id/httpGetASyncPackCallback1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get异步请求callback封装model" />
+
+            <Button
+                android:id="@+id/httpGetASyncPackCallback2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get异步请求callback封装List Model" />
+
+            <Button
+                android:id="@+id/httpGetASyncPackLambda1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get异步请求lambda封装model" />
+
+            <Button
+                android:id="@+id/httpGetASyncPackLambda2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get异步请求lambda封装List Model" />
+
+            <Button
                 android:id="@+id/httpGetASync2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

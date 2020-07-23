@@ -107,9 +107,16 @@ class RippleDialogConfig {
             return this
         }
 
-        fun setCancel(isCancel: Boolean): Builder {
+//        fun setCancel(isCancel: Boolean): Builder {
+//            this.isCancel = isCancel
+//            return this
+//        }
+
+        /**
+         * 优化后的代码
+         */
+        fun setCancel(isCancel: Boolean): Builder = apply {
             this.isCancel = isCancel
-            return this
         }
 
         fun build(): RippleDialogConfig {

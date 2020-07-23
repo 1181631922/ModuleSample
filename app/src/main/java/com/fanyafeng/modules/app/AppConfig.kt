@@ -1,13 +1,13 @@
 package com.fanyafeng.modules.app
 
 import android.app.Application
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.module.AppGlideModule
+import android.content.Context
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
 import com.fanyafeng.modules.mediapick.config.RippleImageLoadFrameImpl
+import com.ripple.log.tpyeextend.toLogD
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.permission.RipplePermissionImpl
+import com.ripple.tool.date.long2Date
 
 /**
  * Author: fanyafeng
@@ -18,10 +18,17 @@ import com.ripple.permission.RipplePermissionImpl
 open class AppConfig : Application() {
     override fun onCreate() {
         super.onCreate()
+        toLogD("APP开始启动时间 onCreate：" + System.currentTimeMillis().long2Date())
         RipplePermissionImpl.init(this)
         Fresco.initialize(this)
         RippleMediaPick
             .getInstance()
             .setImageLoadFrame(RippleImageLoadFrameImpl())
     }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        toLogD("APP开始启动时间 attachBaseContext：" + System.currentTimeMillis().long2Date())
+    }
+
 }

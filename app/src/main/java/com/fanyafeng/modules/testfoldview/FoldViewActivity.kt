@@ -17,10 +17,10 @@ class FoldViewActivity : BaseActivity() {
     }
 
     private fun initView() {
-//        foldView1.setFoldViewOnlyUnfold(true)
+        foldView1.setFoldViewOnlyUnfold(true)
         foldView1.setDescTextViewBackGroundColor(Color.RED)
         foldView1.setFoldControlTextViewBackGroundColor(Color.RED)
-        foldView1.setFoldViewDesc("测试试测试测试测试测试测试测试")
+        foldView1.setFoldViewDesc("15201057723  123456a登录我的账号，去我的订单里面找带这个商品的订单就行，123456a登录我的账号，去我的订单里面找带这个商品的订单就行测试试测试测试测试测试测试测试")
     }
 
     private fun initData() {
