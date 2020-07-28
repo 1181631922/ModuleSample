@@ -11,8 +11,6 @@ interface IRequestParams {
 
     interface IHttpParams {
         var method: HttpMethod
-
-        var response: IHttpResponse
     }
 
 }

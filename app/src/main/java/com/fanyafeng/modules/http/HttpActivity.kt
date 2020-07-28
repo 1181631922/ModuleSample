@@ -8,6 +8,8 @@ import com.ripple.http.demo.RippleHttp
 import com.ripple.http.exception.BaseException
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
+import com.ripple.task.config.ProcessModel
+import com.ripple.task.extend.handleTask
 import kotlinx.android.synthetic.main.activity_http.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -167,7 +169,7 @@ class HttpActivity : BaseActivity() {
      * http get lambda请求封装
      */
     private fun httpGetASyncPackLambda1() {
-        RippleHttp.getInstance().getLambda<User>(GET_USER,
+        RippleHttp.getInstance().get<User>(GET_USER,
             success = {
                 it.toLogD()
             })
@@ -177,7 +179,7 @@ class HttpActivity : BaseActivity() {
      * http get lambda请求封装
      */
     private fun httpGetASyncPackLambda2() {
-        RippleHttp.getInstance().getLambda<List<User>>(
+        RippleHttp.getInstance().get<List<User>>(
             GET_USER_LIST,
             success = {
                 it.toLogD()
@@ -223,20 +225,34 @@ class HttpActivity : BaseActivity() {
             .get()
             .headers(urlHeader.build())
 
-        urlBuilder?.build().toLogD()
+        urlBuilder.build().toLogD()
         request.build().headers.toLogD()
-
         Thread(
             Runnable {
-                val response = client.newCall(request.build()).execute()
-                if (response.code == 200) {
+                /**
+                 * 呼叫请求
+                 * 此时可以获取到请求是否成发送
+                 * 以及对请求进行操作
+                 */
+                val realCall = client.newCall(request.build())
+
+                /**
+                 * 请求后的返回
+                 * 通过此判断请求是否成功
+                 */
+                val response = realCall.execute()
+                if (response.isSuccessful) {
                     response.body?.string().toLogD()
+                } else {
+                    "请求失败：".toLogD()
                 }
             }
         ).start()
 
 
+
     }
 }
+
 
 data class User(var name: String? = null)

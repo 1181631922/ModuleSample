@@ -24,6 +24,7 @@ object ScreenUtil {
      *
      * @param context 上下文环境
      */
+    @JvmStatic
     fun getScreenSize(context: Context?): String {
         context?.let {
             val displayMetrics = it.resources.displayMetrics
@@ -38,6 +39,7 @@ object ScreenUtil {
      *
      * @param context 上下文环境
      */
+    @JvmStatic
     fun getScreenWidth(context: Context?): Int {
         context?.let {
             val displayMetrics = it.resources.displayMetrics
@@ -50,6 +52,7 @@ object ScreenUtil {
     /**
      * 获取屏幕高度
      */
+    @JvmStatic
     fun getScreenHeight(context: Context?): Int {
         context?.let {
             val displayMetrics = it.resources.displayMetrics
@@ -63,6 +66,7 @@ object ScreenUtil {
      * 针对有虚拟按键的手机
      * 获取屏幕高度
      */
+    @JvmStatic
     fun getRealScreenHeight(context: Context?): Int {
         context?.let {
             val windowManger = it.getSystemService(Context.WINDOW_SERVICE) as WindowManager

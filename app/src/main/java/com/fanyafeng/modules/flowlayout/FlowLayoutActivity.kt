@@ -15,6 +15,7 @@ import android.widget.TextView
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.log.LogFactory
+import com.ripple.log.tpyeextend.toLogD
 import com.ripple.tool.density.dp2px
 import com.ripple.tool.extend.forEachAnchor
 import com.ripple.tool.extend.forEach
@@ -46,10 +47,11 @@ class FlowLayoutActivity : BaseActivity() {
 
 
         5.forEach {
-            val model = ChooseModel("我是第$it", it != 3, it == 0)
+            val model = ChooseModel("我是第我是第我是第我是第我是第$it", it != 3, it == 0)
             list.add(model)
             val itemView = ChooseItemView(this)
             val tagView = itemView.getTagView()
+            tagView.setPadding(0, 0, 0, 0)
             itemView.setInnerTagWrapContent()
             itemView.chooseViewUnselected = R.drawable.choose_view_normal
             chooseItemView.addItemView(itemView, model)
@@ -134,11 +136,12 @@ class FlowLayoutActivity : BaseActivity() {
             "a2-b1-c1",
             "a3-b2-c2",
             "a1-b2-c1",
-            "a1-b2-c3",
             "a1-b3-c1",
             "a1-b4-c1",
             "a1-b1-c2",
-            "a1-b1-c3"
+            "a1-b1-c3",
+            "a1-b2-c3",
+            "a2-b2-c1"
         )
 
     /**
@@ -172,7 +175,7 @@ class FlowLayoutActivity : BaseActivity() {
 
     /**
      * 用户选取规格集合
-     * 进入页面时用户已经选取了规格
+     * 进入页面时用户已经选取了规格userCheckList
      * 会有一个初始化规格
      */
     private var userCheckList = mutableListOf(
@@ -187,16 +190,16 @@ class FlowLayoutActivity : BaseActivity() {
     private var parentLayoutModelList = mutableListOf<ParentLayoutModel>()
 
     /**
-     * 所有可选规格列表
-     */
-    private val containCanSelectList: MutableList<List<List<ChooseModel>>> =
-        mutableListOf(mutableListOf(), mutableListOf(), mutableListOf())
-
-    /**
      * 所有用户能够选取的规格列表
      * fixme 取交集
+     * 用户可选的
      */
     private val userCanCheckList = mutableMapOf<Int, TreeSet<ChooseModel>>()
+
+    /**
+     * 通过筛选后筛选的可点击结果
+     */
+    private val filterCondition = mutableListOf<List<String>>()
 
     /**
      * 所有的可选商品
@@ -225,6 +228,8 @@ class FlowLayoutActivity : BaseActivity() {
      * 所有的选取操作
      */
     private fun wareChoose() {
+
+        skuList.toLogD("skuList")
         /**
          * 所有规格数量
          */
@@ -234,54 +239,64 @@ class FlowLayoutActivity : BaseActivity() {
          * 初始化可选列表
          */
         (0 until selectCount).forEach { index ->
-//            userCheckList需要在此初始化
-//            containCanSelectList也需要在此初始化
             userCanCheckList[index] = TreeSet()
         }
 
+        userCheckList.toLogD("userCheckList:")
+
+        filterCondition.clear()
+        userCheckList.forEachIndexed { index, chooseModel ->
+            val list = mutableListOf<String>()
+            selectCount.forEach {
+                var id = ""
+                if (it != index) {
+                    id = userCheckList[it].id!!
+                }
+                list.add(id)
+            }
+            filterCondition.add(list)
+        }
 
         /**
-         * 根据用户选择的规格
-         * 去展示其余剩下的可选规格
+         * filterCondition的item为筛选项
          */
-        userCheckList.forEachIndexed { index, userCheckListItem ->
-
-            if (userCheckListItem.id.isNotNullOrEmpty()) {
-                /**
-                 * 如果id不为空，则此规格处于选取状态
-                 */
-                val canSelectList = mutableListOf<List<ChooseModel>>()
-                skuList.forEach { skuListItem ->
-                    if (skuListItem.contains(userCheckListItem)) {
-                        canSelectList.add(skuListItem)
+        filterCondition.toLogD("filterCondition:")
+        /**
+         * 所有规格的商品进行规格的筛选
+         */
+        filterCondition.forEachIndexed { index, list ->
+            /**
+             * 此时取反筛选
+             */
+            val listS = mutableListOf<List<ChooseModel>>()
+            skuList.forEachIndexed { skuIndex, skuItemList ->
+                var canBeAdded = true
+                skuItemList.forEachIndexed { skuIndexInner, chooseModel ->
+                    if (list[skuIndexInner].isNotNullOrEmpty() && chooseModel.id != list[skuIndexInner]) {
+                        canBeAdded = false
                     }
+                    chooseModel.id.toLogD("filterCondition chooseModel id")
+                    list[skuIndexInner].toLogD("filterCondition chooseModel list")
                 }
-                println("canSelectList:$canSelectList")
-                containCanSelectList[index] = canSelectList
-            } else {
+                if (canBeAdded) {
+                    listS.add(skuItemList)
+                }
+            }
+            listS.toLogD("index: $index filterCondition listS")
+            /**
+             * 开始从lisS中筛选规格
+             */
+            listS.forEachIndexed { indexS, listS ->
+                val canCheckTag = listS[index]
                 /**
-                 * 如果id为空则为未选取状态，此时需要将所有的商品都加入到列表中
+                 * 此时打印的id都是可选的，其余都是不可选
                  */
-                containCanSelectList[index] = skuList
+                canCheckTag.id.toLogD("canCheckTag.id")
+                userCanCheckList[index]!!.add(canCheckTag)
             }
         }
 
-        println("containCanSelectList:$containCanSelectList")
-
-        val targetChooseSet = skuList.toMutableSet()
-
-        val unionTargetChooseSet = TreeSet<List<ChooseModel>>()
-
-        containCanSelectList.forEachIndexed { index, list ->
-            println("需要去重：$list")
-            println("去重之前的结果：$targetChooseSet")
-
-            targetChooseSet.retainAll(list)
-
-            unionTargetChooseSet.union(list)
-        }
-
-        println("去重之后的结果：$targetChooseSet")
+        userCanCheckList.toLogD("userCanCheckList")
 
         /**
          * 原始数据点选
@@ -293,30 +308,12 @@ class FlowLayoutActivity : BaseActivity() {
         }
 
         /**
-         * 去重之后取交集
-         */
-        targetChooseSet.forEach { list ->
-            list.forEachIndexed { innerIndex, chooseModel ->
-                userCanCheckList[innerIndex]?.add(chooseModel)
-            }
-        }
-
-        /**
-         * 取合集
-         */
-        unionTargetChooseSet.forEach { list ->
-            list.forEachIndexed { innerIndex, chooseModel ->
-//                userCanCheckList[innerIndex]?.add(chooseModel)
-            }
-        }
-
-        /**
          * 此处为筛选去重后的列表
          * 也就是最后用户可选的列表
          */
         userCanCheckList.forEach { (position, chooseModelSet) ->
             println("可选列表$position")
-            println(chooseModelSet.toString())
+            println("可选列表" + chooseModelSet.toString())
 
         }
 
@@ -400,8 +397,14 @@ class FlowLayoutActivity : BaseActivity() {
                 val innerItem = SpecificationChooseView(context)
                 innerItem.tag = innerIndex
                 innerItem.chooseViewUnselected = R.drawable.choose_view_normal
-                innerItem.chooseViewUnselectable=R.drawable.specification_choose_view_unselectable_broken
-                innerItem.setInnerTagLayoutParams(RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 32.dp2px))
+                innerItem.chooseViewUnselectable =
+                    R.drawable.specification_choose_view_unselectable_broken
+                innerItem.setInnerTagLayoutParams(
+                    RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        32.dp2px
+                    )
+                )
                 itemFlowView.addItemView(innerItem, specItem)
                 itemFlowView.onItemClickListener =
                     { view, position, model, isCheckable, checkRepeat ->

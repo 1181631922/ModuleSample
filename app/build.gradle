@@ -26,6 +26,7 @@ android {
     buildTypes {
 
         debug {
+            minifyEnabled false
             buildConfigField "String", "ENVIRONMENT", "\"http://114.55.11.71:80/ecom/\""
         }
 
@@ -101,6 +102,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+//    https://github.com/zjupure/GlideWebpDecoder
+    implementation "com.zlc.glide:webpdecoder:2.0.4.11.0"
 
     implementation 'com.facebook.fresco:fresco:2.2.0'
 

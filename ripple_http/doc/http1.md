@@ -44,4 +44,148 @@ private fun httpGetASync1() {
     })
 }
 ```
+这里使用的是`OKhttp`自带的异步请求，暂时先基于这一种情况进行封装，现在类型是确认的，但是咱们的目标肯定是从外部传入的，先来定义下调用方式：
+
+```
+RippleHttp.getInstance()
+            .get(URL, object : OnHttpResult.OnHttpSimpleResult<T> {
+                override fun onItemSuccess(successResult: T) {
+                    successResult.toLogD()
+                }
+            })
+```
+这应该是咱们的目标(一步一步来，暂时不考虑`param`以及`header`等等)，通过外部传入`url`以及泛型`T`来将请求成功的数据进行解析，到现在咱们开始考虑下一步了，`url`传的话肯定是很容易的，下一步比较麻烦的是需要解析方法上的泛型`T`，这里暂时先不细讲，后面会细讲，目标明确了，剩下的就是去按照自己想要的调用方式去编写框架了。
+##### 1.1.1.1 首先定义回调
+回调的话这里还是需要慎重一下的，这里定义了五种：`成功，完成，开始，进行中，失败`，下面简述一下为什么会有这五种
+1. `OnItemSuccess<T>`成功回调，这个是肯定的，咱们的目的就是为了获取数据传给使用者，采用泛型是因为需要依据用户的需求进行解析
+2. `OnItemFinish<Boolean>`结束回调，不论失败还是成功，都会走到此回调，因为使用者有时候需要在结束时做相应操作，不论此请求成功与否。
+3. `OnItemStart<Unit>`开始回调，标志请求的一种状态
+4. `OnItemDoing<Long>`任务进行中回调，这里是为了兼容下载文件时的请求，`0L-100L`为其正常范围，失败的话会返回`-1L`
+5. `OnItemFailed<BaseException>`失败回调，会返回失败的原因`msg`以及相应的`code`
+
+##### 1.1.1.2 再有就是解析泛型
+这里是个大块，暂时放着，后面会细讲，因为这里涉及到了`java`以及`kotlin`还是有区别的
+
+至此所有准备工作都完成，下面开始封装：
+
+```
+    /**
+     * 以接口的方式抽离
+     */
+    fun <S> parseJsonString(result: String?, typeOf: Type): S {
+        return Gson().fromJson(result, typeOf)
+    }
+
+    /**
+     * 异步get请求
+     */
+    fun <T> get(url: String, callback: OnHttpResult<T>) {
+        callback.onItemStart(Unit)
+        /**
+         * 构造urlBuilder
+         */
+        val urlBuilder = url.toHttpUrlOrNull()?.newBuilder()
+
+        /**
+         * 构造url
+         * 使用了大量的构造者模式
+         */
+        val urlResult = urlBuilder?.build()
+
+        /**
+         * 构造request
+         */
+        val request = Request.Builder()
+            .url(urlResult!!)
+            .get()
+        val requestResult = request.build()
+        /**
+         * 发起异步请求
+         */
+        callback.onItemDoing(OnItemDoing.CODE_ITEM_DOING_START)
+        RippleHttpClient.getInstance().newCall(requestResult).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                /**
+                 * 任务进行中回调
+                 * 任务失败，返回-1L
+                 */
+                callback.onItemDoing(OnItemDoing.CODE_ITEM_DOING_FAILED)
+
+                /**
+                 * 走到结束回调但是任务没完成
+                 * 返回false
+                 */
+                callback.onItemFinish(false)
+                /**
+                 * call为回传的结果
+                 */
+                callback.onItemFailed(BaseException(e))
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                /**
+                 * 走到结束回调并且任务完成
+                 * 返回true
+                 */
+                callback.onItemFinish(true)
+
+                /**
+                 * 任务进行中回调
+                 * 任务成功，返回100L
+                 */
+                callback.onItemDoing(OnItemDoing.CODE_ITEM_DOING_FINISH)
+
+                val result = response.body?.string()
+
+                val clazz = parseItemParamType(callback)
+                clazz.toLogD("callback 打印泛型名字：")
+
+                val backResult = parseJsonString<T>(result, clazz)
+                /**
+                 * 任务完成回调
+                 * 返回成功model
+                 */
+                callback.onItemSuccess(backResult)
+            }
+
+        })
+    }
+```
+完成后调用：
+PS：这里我自己通过`SpringBoot`搭建了一个服务器，`Mock`的好多平台不能用了，还好自己会后端，嘿嘿
+
+```
+    /**
+     * http get callback请求封装
+     */
+    private fun httpGetASyncPackCallback1() {
+        RippleHttp.getInstance().get(GET_USER, object : OnHttpResult.OnHttpSimpleResult<User> {
+            override fun onItemStart(startResult: Unit) {
+                super.onItemStart(startResult)
+                logD("HTTP任务开始", "Http请求封装：")
+            }
+
+            override fun onItemDoing(doingResult: Long) {
+                super.onItemDoing(doingResult)
+                doingResult.toLogD("Http请求封装：")
+            }
+
+            override fun onItemSuccess(successResult: User) {
+                successResult.toLogD("Http请求封装：")
+            }
+
+            override fun onItemFailed(failedResult: BaseException) {
+                super.onItemFailed(failedResult)
+                failedResult.toLogD("Http请求封装：")
+            }
+
+            override fun onItemFinish(finishResult: Boolean) {
+                super.onItemFinish(finishResult)
+                finishResult.toLogD("Http请求封装：")
+            }
+        })
+    }
+```
+第一部分暂时先到这里，感觉这篇文章会很长
+
 

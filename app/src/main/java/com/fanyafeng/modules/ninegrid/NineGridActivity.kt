@@ -1,19 +1,26 @@
 package com.fanyafeng.modules.ninegrid
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.webp.decoder.WebpDrawable
+import com.bumptech.glide.integration.webp.decoder.WebpDrawableTransformation
+import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestOptions
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.test.LogHelper
 import com.fanyafeng.modules.test.Zprint
+import com.ripple.log.extend.withClassJump
 import com.ripple.log.tpyeextend.toLogD
 import com.ripple.log.tpyeextend.toLogDWithClassJump
 import com.ripple.log.tpyeextend.toLogVWithClassJump
-import com.ripple.log.extend.withClassJump
 import com.ripple.tool.density.dp2pxF
 import com.ripple.ui.ninegridview.NineGridLoadFrame
 import com.ripple.ui.ninegridview.NineItem
@@ -108,6 +115,20 @@ class NineGridActivity : BaseActivity() {
             println("9是否能打印:" + 9.toLogVWithClassJump())
             toLogD("打印日志")
         }
+
+        Glide.with(this)
+            .load("https://img.dmallcdn.com/20200528/b18fe289-f580-4d98-93b1-f062eaff8af5_240x240H.webp")
+            .into(webpImage)
+
+        val circleCrop: Transformation<Bitmap> = FitCenter()
+        Glide.with(this)
+            .load("https://img.dmallcdn.com/dshop/202007/d213dd9d-96b3-4ac5-9187-9bb81531ec0e_750H.webp")
+            .optionalTransform(circleCrop)
+            .optionalTransform(
+                WebpDrawable::class.java,
+                WebpDrawableTransformation(circleCrop)
+            )
+            .into(webpImage)
     }
 
     private fun line(e: Exception): Int {
