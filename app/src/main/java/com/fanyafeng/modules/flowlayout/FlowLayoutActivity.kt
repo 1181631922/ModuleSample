@@ -373,11 +373,18 @@ class FlowLayoutActivity : BaseActivity() {
             itemLinearLayout.tag = outIndex
             itemLinearLayout.layoutParams =
                 LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
             itemLinearLayout.orientation = LinearLayout.VERTICAL
             itemLinearLayout.setPadding(0, 12.dp2px, 0, 0)
+
+            val titleLayout = LinearLayout(context)
+            val itemLayoutParams =
+                LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 40.dp2px)
+            titleLayout.layoutParams = itemLayoutParams
+
+            titleLayout.orientation = LinearLayout.HORIZONTAL
             val itemTitle = TextView(context)
             //正常来说应在此处进行规格的选择
             itemTitle.text = allSpecListItem.title
@@ -386,8 +393,23 @@ class FlowLayoutActivity : BaseActivity() {
             itemTitle.setPadding(5.dp2px, 0, 5.dp2px, 0)
             itemTitle.maxLines = 1
             itemTitle.ellipsize = TextUtils.TruncateAt.END
-            itemTitle.gravity = Gravity.LEFT
-            itemLinearLayout.addView(itemTitle)
+            itemTitle.gravity = Gravity.CENTER_VERTICAL or Gravity.LEFT
+            itemTitle.layoutParams = itemLayoutParams
+            titleLayout.addView(itemTitle)
+
+            val itemTitleDesc = TextView(context)
+//            itemTitleDesc.text = "请选取：" + allSpecListItem.title
+            itemTitleDesc.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12F)
+            itemTitleDesc.setTextColor(Color.parseColor("#222222"))
+            itemTitleDesc.setPadding(5.dp2px, 0, 0, 0)
+            itemTitleDesc.maxLines = 1
+            itemTitleDesc.ellipsize = TextUtils.TruncateAt.END
+            itemTitleDesc.gravity = Gravity.CENTER_VERTICAL or Gravity.LEFT
+            itemTitleDesc.layoutParams = itemLayoutParams
+            titleLayout.addView(itemTitleDesc)
+
+            itemLinearLayout.addView(titleLayout)
+
             val itemFlowView = ChooseFlowView(context)
             itemFlowView.layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -425,12 +447,18 @@ class FlowLayoutActivity : BaseActivity() {
                                 userCheckList[groupPosition] =
                                     ChooseModel(id = "", name = "", checked = false)
                             }
+                            if (!chooseModel.checked) {
+                                parentLayoutModelList[groupPosition].titleDescView.text =
+                                    "请选择" + allSpecList[groupPosition].title
+                            } else {
+                                parentLayoutModelList[groupPosition].titleDescView.text = ""
+                            }
                             wareChoose()
                         }
                     }
             }
             itemLinearLayout.addView(itemFlowView)
-            parentLayoutModelList.add(ParentLayoutModel(itemTitle, itemFlowView))
+            parentLayoutModelList.add(ParentLayoutModel(itemTitle, itemTitleDesc, itemFlowView))
 
             chooseListLayout.addView(itemLinearLayout)
         }
@@ -438,7 +466,11 @@ class FlowLayoutActivity : BaseActivity() {
     }
 }
 
-data class ParentLayoutModel(var titleView: TextView, var chooseView: ChooseFlowView)
+data class ParentLayoutModel(
+    var titleView: TextView,
+    var titleDescView: TextView,
+    var chooseView: ChooseFlowView
+)
 
 data class GroupChooseModel(var title: String? = null, var chooseModelList: List<ChooseModel>)
 
