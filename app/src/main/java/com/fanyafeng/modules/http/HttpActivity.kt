@@ -5,20 +5,22 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.http.callback.OnHttpResult
 import com.ripple.http.demo.RippleHttp
+import com.ripple.http.demo.RippleHttpClient
 import com.ripple.http.exception.BaseException
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
-import com.ripple.task.config.ProcessModel
-import com.ripple.task.extend.handleTask
 import kotlinx.android.synthetic.main.activity_http.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 
 class HttpActivity : BaseActivity() {
     companion object {
         private const val GET_USER = "$BASE_URL/test/getUser"
         private const val GET_USER_LIST = "$BASE_URL/test/getUserList"
+        private const val GET_USER_BY_ID = "$BASE_URL/get/getUserById"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,20 +189,82 @@ class HttpActivity : BaseActivity() {
     }
 
 
+    /**
+     * get请求测试
+     * 请求超时
+     *
+     * 包含以下几方面：
+     * params
+     * header
+     * path
+     */
     private fun httpGetASync2() {
-        val client = OkHttpClient()
-        val urlBuilder = GET_USER.toHttpUrlOrNull()?.newBuilder()
-        urlBuilder?.addQueryParameter("uid", "uid")
+        /**
+         * 读取超时时间
+         */
+        val READ_TIMEOUT = 100_000L
+
+        /**
+         * 写入超时时间
+         */
+        val WRITE_TIMEOUT = 60_000L
+
+        /**
+         * 链接时间
+         */
+        val CONNECT_TIMEOUT = 60_000L
+
+        /**
+         * 构造OkHttpClient
+         */
+        val client = RippleHttpClient.getInstance().newBuilder()
+        client.readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
+        client.writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+        client.connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+
+        val clientResult = client.build()
+
+        /**
+         * 构造带有path的url
+         * 这里采用buffer，主要因为它是线程安全的而且高效
+         */
+        val urlBuffer = StringBuffer()
+        urlBuffer.append(GET_USER_BY_ID)
+        urlBuffer.append("/")
+        urlBuffer.append("myname")
+        val httpUrl = urlBuffer.toString()
+        val urlBuilder = httpUrl.toHttpUrlOrNull()?.newBuilder()
+
+        /**
+         * 构造header请求头
+         * 这里采用ConcurrentHashMap，考虑到线程安全，防止重复添加相同的key，value
+         */
+        val hashMap: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
+        val headerBuilder = Headers.Builder()
+        hashMap.forEach { (key: String, value: Any) ->
+            headerBuilder.add(key, value.toString())
+        }
+        val urlHeaderResult = headerBuilder.build()
+
+        /**
+         * 构造params
+         * id为int类型
+         */
+        urlBuilder?.addQueryParameter("id", "666")
         val urlResult = urlBuilder?.build()
         urlResult.toLogD()
 
         val request = Request.Builder()
+            //header构建
+            .headers(urlHeaderResult)
+            //url构建
             .url(urlResult!!)
+            //get请求
             .get()
         val requestResult = request.build()
 
 
-        client.newCall(requestResult).enqueue(object : Callback {
+        clientResult.newCall(requestResult).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.toString().toLogD()
             }
@@ -209,7 +273,6 @@ class HttpActivity : BaseActivity() {
                 val result = response.body?.string()
                 result.toLogD()
             }
-
         })
     }
 
@@ -248,7 +311,6 @@ class HttpActivity : BaseActivity() {
                 }
             }
         ).start()
-
 
 
     }

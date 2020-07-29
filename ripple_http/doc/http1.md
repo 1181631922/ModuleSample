@@ -187,5 +187,114 @@ PS：这里我自己通过`SpringBoot`搭建了一个服务器，`Mock`的好多
     }
 ```
 第一部分暂时先到这里，感觉这篇文章会很长
+# 自己动手编写http框架（一）
+#### 1.1.2 http所有情况
+这里将剩下的所有情况都进行了汇总，具体如下：
+1. 构造请求端，也就是单例`Client`，为了确保`header`，配置等
+2. 请求中`url`带有`path`的情况
+3. 正常请求带有`params`的情况
+4. 需要自己设置请求头`header`，确保请求头统一并且不重复
+5. 请求方法，这里以`get`为例子
+
+下方为具体业务代码，还未做抽象，不急，一步一步来：
+
+```
+    /**
+     * get请求测试
+     * 请求超时
+     *
+     * 包含以下几方面：
+     * params
+     * header
+     * path
+     */
+    private fun httpGetASync2() {
+        /**
+         * 读取超时时间
+         */
+        val READ_TIMEOUT = 100_000L
+
+        /**
+         * 写入超时时间
+         */
+        val WRITE_TIMEOUT = 60_000L
+
+        /**
+         * 链接时间
+         */
+        val CONNECT_TIMEOUT = 60_000L
+
+        /**
+         * 构造OkHttpClient
+         */
+        val client = RippleHttpClient.getInstance().newBuilder()
+        client.readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
+        client.writeTimeout(WRITE_TIMEOUT, TimeUnit.MILLISECONDS)
+        client.connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+
+        val clientResult = client.build()
+
+        /**
+         * 构造带有path的url
+         * 这里采用buffer，主要因为它是线程安全的而且高效
+         */
+        val urlBuffer = StringBuffer()
+        urlBuffer.append(GET_USER_BY_ID)
+        urlBuffer.append("/")
+        urlBuffer.append("myname")
+        val httpUrl = urlBuffer.toString()
+        val urlBuilder = httpUrl.toHttpUrlOrNull()?.newBuilder()
+
+        /**
+         * 构造header请求头
+         * 这里采用ConcurrentHashMap，考虑到线程安全，防止重复添加相同的key，value
+         */
+        val hashMap: ConcurrentHashMap<String, Any> = ConcurrentHashMap()
+        val headerBuilder = Headers.Builder()
+        hashMap.forEach { (key: String, value: Any) ->
+            headerBuilder.add(key, value.toString())
+        }
+        val urlHeaderResult = headerBuilder.build()
+
+        /**
+         * 构造params
+         * id为int类型
+         */
+        urlBuilder?.addQueryParameter("id", "666")
+        val urlResult = urlBuilder?.build()
+        urlResult.toLogD()
+
+        val request = Request.Builder()
+            //header构建
+            .headers(urlHeaderResult)
+            //url构建
+            .url(urlResult!!)
+            //get请求
+            .get()
+        val requestResult = request.build()
 
 
+        clientResult.newCall(requestResult).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.toString().toLogD()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val result = response.body?.string()
+                result.toLogD()
+            }
+        })
+    }
+```
+
+### 1.2 抽象http get请求
+大体分为三部分，因为我一边写博客一遍写代码，难免过程会有错误，后面以最终实现的代码为最终结果，心中想要实现的效果大体如下，先来列一下要实现的目标
+#### 1.2.1 client基础配置
+基础配置一般是不动的，但是为了防止特殊情况还是需要支持用户修改，这里大体罗列了一下基础配置，并且把通常不会改的放到了同一个接口中。
+1. 读取超时时间
+2. 写入超时时间
+3. 链接时间
+4. 请求头
+5. 编码
+
+开始定义接口：
