@@ -1,8 +1,11 @@
 package com.fanyafeng.modules.http
 
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.LinearLayout
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
+import com.ripple.dialog.widget.impl.RippleDialog
 import com.ripple.http.callback.OnHttpResult
 import com.ripple.http.demo.RippleHttp
 import com.ripple.http.demo.RippleHttpClient
@@ -31,6 +34,14 @@ class HttpActivity : BaseActivity() {
     }
 
     private fun initView() {
+        httpTest.setOnClickListener {
+            val param = UserParam()
+            param.init()
+            param.getUrl().toLogD()
+            param.getHeader().toLogD()
+        }
+
+
         //httpGet异步请求
         httpGetASync1.setOnClickListener {
             httpGetASync1()

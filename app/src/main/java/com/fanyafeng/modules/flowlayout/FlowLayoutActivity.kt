@@ -268,9 +268,10 @@ class FlowLayoutActivity : BaseActivity() {
             /**
              * 此时取反筛选
              */
-            val listS = mutableListOf<List<ChooseModel>>()
+            val targetChooseModelList = mutableListOf<List<ChooseModel>>()
             skuList.forEachIndexed { skuIndex, skuItemList ->
                 var canBeAdded = true
+                skuItemList.toLogD("skuItemList")
                 skuItemList.forEachIndexed { skuIndexInner, chooseModel ->
                     if (list[skuIndexInner].isNotNullOrEmpty() && chooseModel.id != list[skuIndexInner]) {
                         canBeAdded = false
@@ -278,16 +279,17 @@ class FlowLayoutActivity : BaseActivity() {
                     chooseModel.id.toLogD("filterCondition chooseModel id")
                     list[skuIndexInner].toLogD("filterCondition chooseModel list")
                 }
-                if (canBeAdded) {
-                    listS.add(skuItemList)
+                if (canBeAdded && !skuItemList.isNullOrEmpty()) {
+                    targetChooseModelList.add(skuItemList)
                 }
             }
-            listS.toLogD("index: $index filterCondition listS")
+            targetChooseModelList.toLogD("index: $index filterCondition listS")
             /**
-             * 开始从lisS中筛选规格
+             * 开始从targetChooseModelList中筛选规格
              */
-            listS.forEachIndexed { indexS, listS ->
-                val canCheckTag = listS[index]
+            targetChooseModelList.forEachIndexed { indexS, listInner ->
+                listInner.toLogD("listInner")
+                val canCheckTag = listInner[index]
                 /**
                  * 此时打印的id都是可选的，其余都是不可选
                  */
