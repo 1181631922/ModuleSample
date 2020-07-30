@@ -1,5 +1,6 @@
 package com.fanyafeng.modules.http
 
+import com.fanyafeng.modules.BaseActivity
 import com.ripple.http.base.annotation.HttpRequest
 import com.ripple.http.base.impl.HttpRequestParamsImpl
 
@@ -10,5 +11,7 @@ import com.ripple.http.base.impl.HttpRequestParamsImpl
  * Email: fanyafeng@live.cn
  * Description:
  */
-@HttpRequest("/test/test",host = "https://www.taobo.com")
-class UserParam : HttpRequestParamsImpl()
+@HttpRequest("/get/getUserById")
+class UserParam : HttpRequestParamsImpl() {
+    var id: Int = 666
+}

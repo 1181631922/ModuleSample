@@ -7,6 +7,7 @@ import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.dialog.widget.impl.RippleDialog
 import com.ripple.http.callback.OnHttpResult
+import com.ripple.http.demo.HttpTask
 import com.ripple.http.demo.RippleHttp
 import com.ripple.http.demo.RippleHttpClient
 import com.ripple.http.exception.BaseException
@@ -35,10 +36,7 @@ class HttpActivity : BaseActivity() {
 
     private fun initView() {
         httpTest.setOnClickListener {
-            val param = UserParam()
-            param.init()
-            param.getUrl().toLogD()
-            param.getHeader().toLogD()
+            HttpTask.testCall()
         }
 
 
@@ -86,6 +84,15 @@ class HttpActivity : BaseActivity() {
 
         httpGetSync.setOnClickListener {
             httpGetSync1()
+        }
+
+        httpTest1.setOnClickListener {
+            val param = UserParam()
+            HttpTask.call(param, object : OnHttpResult.OnHttpSimpleResult<User> {
+                override fun onItemSuccess(successResult: User) {
+                    successResult.name.toLogD()
+                }
+            })
         }
     }
 

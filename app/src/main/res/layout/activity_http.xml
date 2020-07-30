@@ -65,6 +65,12 @@
                 android:layout_height="wrap_content"
                 android:text="封装get请求" />
 
+            <Button
+                android:id="@+id/httpTest1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="封装get请求1" />
+
         </LinearLayout>
     </ScrollView>
 
