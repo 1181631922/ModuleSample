@@ -94,6 +94,15 @@ class HttpActivity : BaseActivity() {
                 }
             })
         }
+
+        httpTest2.setOnClickListener {
+            val param = UserListParam()
+            HttpTask.call(param, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+                override fun onItemSuccess(successResult: List<User>) {
+                    successResult.toLogD()
+                }
+            })
+        }
     }
 
     private fun initData() {

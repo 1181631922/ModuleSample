@@ -75,14 +75,17 @@ fun String.forEachAnchor(lambda: TripleLambda<Char, Boolean, Boolean>) {
  * 第三个返回值为True时则为首位置
  * 第四个返回值为True时则为尾位置
  */
-fun <T> Iterable<T>.forEachAnchor(lambda: QuadraLambda<Int, T, Boolean, Boolean>) {
-    val last = this.last()
+fun <T> List<T>.forEachAnchor(lambda: QuadraLambda<Int, T, Boolean, Boolean>) {
     this.forEachIndexed { index, item ->
-        when {
-            index == 0 -> {
-                lambda?.invoke(index, item, true, false)
+        when (index) {
+            0 -> {
+                if (size == 1) {
+                    lambda?.invoke(index, item, true, true)
+                } else {
+                    lambda?.invoke(index, item, true, false)
+                }
             }
-            last?.equals(item) == true -> {
+            size - 1 -> {
                 lambda?.invoke(index, item, false, true)
             }
             else -> {

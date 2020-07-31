@@ -69,7 +69,13 @@
                 android:id="@+id/httpTest1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="封装get请求1" />
+                android:text="封装get model请求1" />
+
+            <Button
+                android:id="@+id/httpTest2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="封装get list请求1" />
 
         </LinearLayout>
     </ScrollView>
