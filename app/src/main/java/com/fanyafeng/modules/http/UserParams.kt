@@ -1,10 +1,7 @@
 package com.fanyafeng.modules.http
 
-import com.fanyafeng.modules.BaseActivity
 import com.ripple.http.base.annotation.HttpRequest
 import com.ripple.http.base.impl.HttpRequestParamsImpl
-import com.ripple.tool.extend.forEachAnchor
-import com.ripple.tool.kttypelians.QuadraLambda
 
 
 /**
@@ -15,8 +12,23 @@ import com.ripple.tool.kttypelians.QuadraLambda
  */
 @HttpRequest("/get/getUserById")
 class UserParam : HttpRequestParamsImpl() {
-    var id: Int = 666
+    var id: Int = 666777
 }
 
 @HttpRequest("/get/getUserList")
 class UserListParam : HttpRequestParamsImpl()
+
+@HttpRequest("/post/getUserById")
+class UserListPostParam : HttpRequestParamsImpl() {
+
+    var id: Int = 666
+
+    override fun isUseJsonFormat(): Boolean {
+        return true
+    }
+}
+
+@HttpRequest("/post/getUserList")
+class UserListPostIdParam : HttpRequestParamsImpl() {
+    var id: Int = 999
+}

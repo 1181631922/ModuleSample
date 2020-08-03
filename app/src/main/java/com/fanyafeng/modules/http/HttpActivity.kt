@@ -1,16 +1,13 @@
 package com.fanyafeng.modules.http
 
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.LinearLayout
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
-import com.ripple.dialog.widget.impl.RippleDialog
 import com.ripple.http.callback.OnHttpResult
-import com.ripple.http.demo.HttpTask
+import com.ripple.http.RippleHttpClient
 import com.ripple.http.demo.RippleHttp
-import com.ripple.http.demo.RippleHttpClient
 import com.ripple.http.exception.BaseException
+import com.ripple.http.impl.HttpTask
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
 import kotlinx.android.synthetic.main.activity_http.*
@@ -25,6 +22,7 @@ class HttpActivity : BaseActivity() {
         private const val GET_USER = "$BASE_URL/test/getUser"
         private const val GET_USER_LIST = "$BASE_URL/test/getUserList"
         private const val GET_USER_BY_ID = "$BASE_URL/get/getUserById"
+        private const val POST_USER_BY_ID = "$BASE_URL/post/getUserById"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +34,11 @@ class HttpActivity : BaseActivity() {
 
     private fun initView() {
         httpTest.setOnClickListener {
-            HttpTask.testCall()
+            httpPostASync()
+        }
+
+        httpTest3.setOnClickListener {
+            httpPostASync2()
         }
 
 
@@ -88,7 +90,7 @@ class HttpActivity : BaseActivity() {
 
         httpTest1.setOnClickListener {
             val param = UserParam()
-            HttpTask.call(param, object : OnHttpResult.OnHttpSimpleResult<User> {
+            HttpTask.get(param, object : OnHttpResult.OnHttpSimpleResult<User> {
                 override fun onItemSuccess(successResult: User) {
                     successResult.name.toLogD()
                 }
@@ -97,16 +99,23 @@ class HttpActivity : BaseActivity() {
 
         httpTest2.setOnClickListener {
             val param = UserListParam()
-            HttpTask.call(param, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+            HttpTask.get(param, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
                 override fun onItemSuccess(successResult: List<User>) {
                     successResult.toLogD()
                 }
+
+                override fun onItemFailed(failedResult: BaseException) {
+                    super.onItemFailed(failedResult)
+                    failedResult.message.toLogD()
+                }
             })
+
+
         }
     }
 
     private fun initData() {
-
+//        (::httpGetASync1).invoke()
     }
 
     private fun httpGetASync1() {
@@ -340,6 +349,36 @@ class HttpActivity : BaseActivity() {
         ).start()
 
 
+    }
+
+    /**
+     * get请求测试
+     * 请求超时
+     *
+     * 包含以下几方面：
+     * params
+     * header
+     * path
+     */
+    private fun httpPostASync() {
+        val userListPostParam = UserListPostParam()
+        userListPostParam.addPathParam("myName")
+        HttpTask.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+            override fun onItemSuccess(successResult: List<User>) {
+                super.onItemSuccess(successResult)
+                successResult.toLogD()
+            }
+        })
+    }
+
+    private fun httpPostASync2() {
+        val userListPostParam = UserListPostIdParam()
+        HttpTask.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+            override fun onItemSuccess(successResult: List<User>) {
+                super.onItemSuccess(successResult)
+                successResult.toLogD()
+            }
+        })
     }
 }
 
