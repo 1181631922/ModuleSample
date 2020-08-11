@@ -8,10 +8,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.log.LogFactory
@@ -45,6 +42,7 @@ class FlowLayoutActivity : BaseActivity() {
 
     private fun initView() {
 
+        testMaxLineFlowView.setMaxLine(1)
 
         5.forEach {
             val model = ChooseModel("我是第我是第我是第我是第我是第$it", it != 3, it == 0)

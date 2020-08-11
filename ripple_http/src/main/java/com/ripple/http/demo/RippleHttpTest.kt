@@ -1,6 +1,6 @@
 package com.ripple.http.demo
 
-import com.google.gson.Gson
+import com.alibaba.fastjson.JSON
 import com.ripple.http.RippleHttpClient
 import com.ripple.http.callback.OnHttpResult
 import com.ripple.http.exception.BaseException
@@ -29,18 +29,18 @@ import kotlin.reflect.jvm.reflect
  *
  * 此类封装http请求，如 get，set，文件下载
  */
-class RippleHttp private constructor() {
+class RippleHttpTest private constructor() {
 
 
     companion object {
         @Volatile
-        private var instance: RippleHttp? = null
+        private var instance: RippleHttpTest? = null
 
-        fun getInstance(): RippleHttp {
+        fun getInstance(): RippleHttpTest {
             if (instance == null) {
-                synchronized(RippleHttp::class) {
+                synchronized(RippleHttpTest::class) {
                     if (instance == null) {
-                        instance = RippleHttp()
+                        instance = RippleHttpTest()
                     }
                 }
             }
@@ -131,7 +131,7 @@ class RippleHttp private constructor() {
      * 以接口的方式抽离
      */
     fun <S> parseJsonString(result: String?, typeOf: Type): S {
-        return Gson().fromJson(result, typeOf)
+        return JSON.parseObject(result, typeOf)
     }
 
     /**

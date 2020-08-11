@@ -17,6 +17,7 @@ import com.fanyafeng.modules.common.MainModel
 import com.fanyafeng.modules.dialog.RippleDialogActivity
 import com.fanyafeng.modules.flowlayout.FlowLayoutActivity
 import com.fanyafeng.modules.http.HttpActivity
+import com.fanyafeng.modules.http.HttpLinkActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
@@ -115,6 +116,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("可折叠layout", FoldViewActivity::class.java))
             add(MainModel("嵌套滑动", StickyNavigationLayoutActivity::class.java))
             add(MainModel("测试log工具类", TestLogActivity::class.java))
+            add(MainModel("测试http链式调用", HttpLinkActivity::class.java))
         }
 
 //        20.forEach {

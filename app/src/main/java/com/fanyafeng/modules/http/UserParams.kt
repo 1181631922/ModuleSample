@@ -1,7 +1,10 @@
 package com.fanyafeng.modules.http
 
+import com.ripple.http.base.IParamsBuilder
+import com.ripple.http.base.IRequestParams
 import com.ripple.http.base.annotation.HttpRequest
 import com.ripple.http.base.impl.HttpRequestParamsImpl
+import javax.net.ssl.SSLSocketFactory
 
 
 /**

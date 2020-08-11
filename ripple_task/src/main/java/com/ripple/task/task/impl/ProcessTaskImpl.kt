@@ -32,13 +32,6 @@ class ProcessTaskImpl<S, T> @JvmOverloads constructor(
 ) : ProcessTask<S, T> {
 
     /**
-     * 是否在子线程回调
-     * 默认使用handler，在主线程回调
-     * 后面需要将其加入配置项
-     */
-    var callBackInChildThread = false
-
-    /**
      * 所有任务回调
      */
     var onAllResult: OnAllResult<List<ProcessModel<S, T>>>? = null

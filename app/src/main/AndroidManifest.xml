@@ -5,7 +5,6 @@
 
     <dist:module dist:instant="true" />
 
-
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" /> <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 从SDCard读取数据权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 相机权限 -->
@@ -24,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".testlog.TestLogActivity"></activity>
+        <activity android:name=".http.HttpLinkActivity"></activity>
+        <activity android:name=".testlog.TestLogActivity" />
         <activity android:name=".stickynavigationlayout.StickyNavigationLayoutActivity" />
         <activity android:name=".testfoldview.FoldViewActivity" />
         <activity android:name=".flowlayout.FlowLayoutActivity" />
@@ -32,26 +32,25 @@
             android:name=".dialog.RippleDialogActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".task.HandleTaskActivity" />
-<!--        <activity android:name=".http.HttpActivity" />-->
+        <activity android:name=".http.HttpActivity" />
         <activity android:name=".ninegrid.NineGridActivity" />
         <activity android:name=".widget.SudokuActivity" />
         <activity android:name=".mediapick.MediaPickActivity" />
         <activity android:name=".permission.PermissionTestActivity" />
         <activity android:name=".BaseActivity" />
-<!--        <activity android:name=".main.MainActivity">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-        <activity android:name="com.fanyafeng.modules.http.HttpActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--        <activity android:name=".http.HttpActivity">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
     </application>
 
 </manifest>

@@ -3,11 +3,11 @@ package com.fanyafeng.modules.http
 import android.os.Bundle
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
+import com.ripple.http.RippleHttp
 import com.ripple.http.callback.OnHttpResult
 import com.ripple.http.RippleHttpClient
-import com.ripple.http.demo.RippleHttp
+import com.ripple.http.demo.RippleHttpTest
 import com.ripple.http.exception.BaseException
-import com.ripple.http.impl.HttpTask
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
 import kotlinx.android.synthetic.main.activity_http.*
@@ -90,7 +90,7 @@ class HttpActivity : BaseActivity() {
 
         httpTest1.setOnClickListener {
             val param = UserParam()
-            HttpTask.get(param, object : OnHttpResult.OnHttpSimpleResult<User> {
+            RippleHttp.get(param, object : OnHttpResult.OnHttpSimpleResult<User> {
                 override fun onItemSuccess(successResult: User) {
                     successResult.name.toLogD()
                 }
@@ -99,7 +99,7 @@ class HttpActivity : BaseActivity() {
 
         httpTest2.setOnClickListener {
             val param = UserListParam()
-            HttpTask.get(param, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+            RippleHttp.get(param, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
                 override fun onItemSuccess(successResult: List<User>) {
                     successResult.toLogD()
                 }
@@ -164,7 +164,7 @@ class HttpActivity : BaseActivity() {
      * http get callback请求封装
      */
     private fun httpGetASyncPackCallback1() {
-        RippleHttp.getInstance().get(GET_USER, object : OnHttpResult.OnHttpSimpleResult<User> {
+        RippleHttpTest.getInstance().get(GET_USER, object : OnHttpResult.OnHttpSimpleResult<User> {
             override fun onItemStart(startResult: Unit) {
                 super.onItemStart(startResult)
                 logD("HTTP任务开始", "Http请求封装：")
@@ -195,7 +195,7 @@ class HttpActivity : BaseActivity() {
      * http get callback请求封装
      */
     private fun httpGetASyncPackCallback2() {
-        RippleHttp.getInstance()
+        RippleHttpTest.getInstance()
             .get(GET_USER_LIST, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
                 override fun onItemSuccess(successResult: List<User>) {
                     successResult.toLogD("Http请求封装：")
@@ -207,7 +207,7 @@ class HttpActivity : BaseActivity() {
      * http get lambda请求封装
      */
     private fun httpGetASyncPackLambda1() {
-        RippleHttp.getInstance().get<User>(GET_USER,
+        RippleHttpTest.getInstance().get<User>(GET_USER,
             success = {
                 it.toLogD()
             })
@@ -217,7 +217,7 @@ class HttpActivity : BaseActivity() {
      * http get lambda请求封装
      */
     private fun httpGetASyncPackLambda2() {
-        RippleHttp.getInstance().get<List<User>>(
+        RippleHttpTest.getInstance().get<List<User>>(
             GET_USER_LIST,
             success = {
                 it.toLogD()
@@ -363,7 +363,7 @@ class HttpActivity : BaseActivity() {
     private fun httpPostASync() {
         val userListPostParam = UserListPostParam()
         userListPostParam.addPathParam("myName")
-        HttpTask.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+        RippleHttp.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
             override fun onItemSuccess(successResult: List<User>) {
                 super.onItemSuccess(successResult)
                 successResult.toLogD()
@@ -373,10 +373,33 @@ class HttpActivity : BaseActivity() {
 
     private fun httpPostASync2() {
         val userListPostParam = UserListPostIdParam()
-        HttpTask.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+        val userListPostParam1 = UserListPostParam()
+        userListPostParam1.addPathParam("myName")
+        RippleHttp.post(userListPostParam, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
             override fun onItemSuccess(successResult: List<User>) {
                 super.onItemSuccess(successResult)
                 successResult.toLogD()
+                logD("结束时间")
+            }
+
+            override fun onItemFinish(finishResult: Boolean) {
+                super.onItemFinish(finishResult)
+                userListPostParam.setCancelNext(true)
+            }
+        }).thenPost(userListPostParam1, object : OnHttpResult.OnHttpSimpleResult<List<User>> {
+            override fun onItemStart(startResult: Unit) {
+                super.onItemStart(startResult)
+                logD("开始时间")
+            }
+
+            override fun onItemSuccess(successResult: List<User>) {
+                super.onItemSuccess(successResult)
+                successResult.toLogD()
+            }
+
+            override fun onItemFinish(finishResult: Boolean) {
+                super.onItemFinish(finishResult)
+                logD("任务完成")
             }
         })
     }

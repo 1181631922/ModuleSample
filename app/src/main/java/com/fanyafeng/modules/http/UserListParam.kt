@@ -22,6 +22,12 @@ fun test() {
 
         }
     }
+}
 
+fun main() {
+    GlobalScope.launch {
+        println("测试")
+    }
+    println("测试")
 }
 
