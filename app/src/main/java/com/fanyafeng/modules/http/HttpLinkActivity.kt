@@ -45,6 +45,11 @@ class HttpLinkActivity : BaseActivity() {
                 onSuccess<User> {
                     it.name.toLogD("随行get请求")
                 }
+
+                onFailed {
+                    //取消之后的请求
+                    userParam.setCancelNext(true)
+                }
             }.thenPost {
                 val userListPostParam = UserListPostIdParam()
                 params = userListPostParam

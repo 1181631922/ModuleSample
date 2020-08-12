@@ -358,7 +358,7 @@ internal class HttpTask : IHttpRequest {
                 override fun onItemFinish(finishResult: Boolean) {
                     callback.onItemFinish(finishResult)
                     executeCount.incrementAndGet()
-                    cancelNext.set(headParams.cancelNext() ?: false)
+                    cancelNext.set(params.cancelNext() ?: false)
                     if (executeCount.get() == totalCount) {
                         var targetIndex = index + 1
                         if (!cancelNext.get()) {
