@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stickyNavigationLayoutTopView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -30,7 +30,6 @@
             android:id="@+id/stickyNavigationLayoutViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
 
     </com.ripple.ui.stickynavigationlayout.impl.StickyNavigationLayout>
 

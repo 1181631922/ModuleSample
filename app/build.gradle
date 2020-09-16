@@ -86,19 +86,21 @@ task testLocalProperties {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation "androidx.constraintlayout:constraintlayout:2.0.1"
     implementation project(path: ':ripple_dialog')
     implementation project(path: ':ripple_tool')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':ripple_log')
     implementation project(path: ':ripple_http')
     implementation project(path: ':ripple_image_compress')
+    implementation project(path: ':ripple_sdk_cache')
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha02'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha05'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
@@ -113,7 +115,7 @@ dependencies {
     implementation project(path: ':ripple_task')
 
 //    projectMaven 'ripple_ui|com.ripple.component:ui:1.1.2'
-    implementation "com.google.android.material:material:1.1.0"
+    implementation "com.google.android.material:material:1.2.0"
 }
 
 task printlnFileName {

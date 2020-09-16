@@ -109,7 +109,7 @@ class TabLayoutFragment : Fragment() {
                 }
             }
 
-        private val IMG_URL =
+        val IMG_URL =
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594009379309&di=32738ab79a38d91af96097a536c632da&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F56%2F12%2F01300000164151121576126282411.jpg"
     }
 }

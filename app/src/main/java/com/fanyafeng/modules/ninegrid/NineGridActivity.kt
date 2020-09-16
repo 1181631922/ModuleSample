@@ -123,11 +123,11 @@ class NineGridActivity : BaseActivity() {
         val circleCrop: Transformation<Bitmap> = FitCenter()
         Glide.with(this)
             .load("https://img.dmallcdn.com/dshop/202007/d213dd9d-96b3-4ac5-9187-9bb81531ec0e_750H.webp")
-            .optionalTransform(circleCrop)
-            .optionalTransform(
-                WebpDrawable::class.java,
-                WebpDrawableTransformation(circleCrop)
-            )
+//            .optionalTransform(circleCrop)
+//            .optionalTransform(
+//                WebpDrawable::class.java,
+//                WebpDrawableTransformation(circleCrop)
+//            )
             .into(webpImage)
     }
 

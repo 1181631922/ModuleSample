@@ -14,6 +14,7 @@ import com.fanyafeng.modules.R
 import com.ripple.http.RippleHttp
 import com.ripple.http.callback.OnHttpResult
 import com.ripple.http.extend.httpGet
+import com.ripple.http.extend.httpPost
 import com.ripple.log.tpyeextend.toLogD
 import com.ripple.tool.density.dp2px
 import kotlinx.android.synthetic.main.activity_http_link.*
@@ -44,6 +45,7 @@ class HttpLinkActivity : BaseActivity() {
 
                 onSuccess<User> {
                     it.name.toLogD("随行get请求")
+                    userParam.setCancelNext(true)
                 }
 
                 onFailed {
@@ -58,6 +60,7 @@ class HttpLinkActivity : BaseActivity() {
                     it.toLogD()
                 }
             }
+
 
         }
 

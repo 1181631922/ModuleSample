@@ -1,6 +1,7 @@
 package com.fanyafeng.modules.http
 
 import android.os.Bundle
+import androidx.core.view.NestedScrollingChild
 import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import com.ripple.http.RippleHttp
@@ -10,6 +11,8 @@ import com.ripple.http.demo.RippleHttpTest
 import com.ripple.http.exception.BaseException
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
+import com.ripple.log.tpyeextend.toLogDWithClassJump
+import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_http.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -395,6 +398,7 @@ class HttpActivity : BaseActivity() {
             override fun onItemSuccess(successResult: List<User>) {
                 super.onItemSuccess(successResult)
                 successResult.toLogD()
+                successResult.toLogDWithClassJump()
             }
 
             override fun onItemFinish(finishResult: Boolean) {

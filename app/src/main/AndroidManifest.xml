@@ -23,7 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".http.HttpLinkActivity"></activity>
+        <activity android:name=".cache.CacheTestActivity"></activity>
+        <activity android:name=".taobaomain.TaoBaoMain1Activity" />
+        <activity android:name=".taobaomain.TaoBaoMainActivity" />
+        <activity android:name=".http.HttpLinkActivity" />
         <activity android:name=".testlog.TestLogActivity" />
         <activity android:name=".stickynavigationlayout.StickyNavigationLayoutActivity" />
         <activity android:name=".testfoldview.FoldViewActivity" />
@@ -41,16 +44,10 @@
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--        <activity android:name=".http.HttpActivity">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
     </application>
 
 </manifest>

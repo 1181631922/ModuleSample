@@ -6,10 +6,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.fanyafeng.modules.BaseActivity
 import com.fanyafeng.modules.R
 import kotlinx.android.synthetic.main.activity_sticky_navigation_layout.*
 
-class StickyNavigationLayoutActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
+class StickyNavigationLayoutActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     private val tabList = mutableListOf("LinearLayout", "GridLayout")
     private val tabListFragment = mutableListOf<Pair<String, Fragment>>()
