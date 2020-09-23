@@ -26,10 +26,15 @@ import com.fanyafeng.modules.stickynavigationlayout.StickyNavigationLayoutActivi
 import com.fanyafeng.modules.task.HandleTaskActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.fanyafeng.modules.testlog.TestLogActivity
+import com.ripple.log.extend.logD
+import com.ripple.log.tpyeextend.toLogD
+import com.ripple.sdk.router.hepler.PageRouterName
+import com.ripple.tool.date.long2Date
 import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
+@PageRouterName("myname", pageName = "测试")
 class MainActivity : BaseActivity() {
 
     private val funcList = mutableListOf<MainModel>()
@@ -37,11 +42,12 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logD("APP开始启动时间 Activity onCreate：" + System.currentTimeMillis().long2Date())
         setContentView(R.layout.activity_main)
         title = "主页"
 
+        supportActionBar?.subtitle = "副主题"
 
-        BuildConfig.VERSION_CODE
         initView()
         initData()
     }

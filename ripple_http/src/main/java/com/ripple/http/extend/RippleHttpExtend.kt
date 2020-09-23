@@ -64,6 +64,13 @@ class RippleHttpLinkExtra(private val rippleHttpLinkKotlin: RippleHttpLinkKotlin
         this.failedLambda = failedLambda
     }
 
+    /**
+     * 取消请求
+     */
+    fun cancel() {
+
+    }
+
     fun withGet(lambda: RippleHttpLinkExtra.() -> Unit) {
         this.apply(lambda)
         rippleHttpLinkKotlin.withGet(
@@ -149,6 +156,7 @@ class RippleHttpLinkExtend(
         return this
     }
 
+    @JvmOverloads
     fun start() {
         val rippleHttpLinkExtra = RippleHttpLinkExtra(rippleHttpLinkKotlin)
         rippleHttpLinkExtra.start()

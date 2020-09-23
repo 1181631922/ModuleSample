@@ -59,7 +59,7 @@ class HttpLinkActivity : BaseActivity() {
                 onSuccess<List<User>> {
                     it.toLogD()
                 }
-            }
+            }.start()
 
 
         }

@@ -4,6 +4,14 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //https://github.com/google/auto
+    //AutoService会自动在META-INF文件夹下生成Processor配置信息文件
+    //新版本需要加上，否则不能自动生成META-INFO文件
+    implementation 'com.google.auto.service:auto-service:1.0-rc6'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc6'
+    //javaPoet是square推出的开源java代码生成框架，提供Java Api生成.java源文件
+    //https://github.com/square/javapoet
+    implementation 'com.squareup:javapoet:1.11.1'
 }
 
 sourceCompatibility = "1.7"

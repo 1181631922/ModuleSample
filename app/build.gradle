@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 //apply plugin: 'ripple-permission-plugin'
 
 repositories {
@@ -97,6 +99,10 @@ dependencies {
     implementation project(path: ':ripple_image_compress')
     implementation project(path: ':ripple_sdk_cache')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation project(path: ':ripple_sdk_router')
+    implementation project(path: ':ripple_sdk_router_helper')
+    annotationProcessor project(path: ':ripple_sdk_router_helper')
+    kapt project(path: ':ripple_sdk_router_helper')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

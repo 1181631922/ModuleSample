@@ -15,7 +15,7 @@ import java.util.regex.Pattern
  * 转换日期
  */
 @JvmOverloads
-fun Long.long2Date(pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+fun Long.long2Date(pattern: String = "yyyy-MM-dd HH:mm:ss:SSS"): String {
     val date = Date(this)
     val sd = SimpleDateFormat(pattern, Locale.getDefault())
     return sd.format(date)
