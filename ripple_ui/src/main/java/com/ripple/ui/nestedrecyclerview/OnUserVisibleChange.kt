@@ -3,11 +3,10 @@ package com.ripple.ui.nestedrecyclerview
 
 /**
  * Author: fanyafeng
- * Data: 2020/8/24 09:26
+ * Data: 2020/8/28 17:13
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface INestedRecyclerView {
-
-
+interface OnUserVisibleChange {
+    fun onUserVisibleChange(isVisibleToUser: Boolean)
 }

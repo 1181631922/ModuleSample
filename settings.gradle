@@ -1,3 +1,5 @@
+include ':ripple_dependencies'
+include ':ripple_sdk_startup'
 rootProject.name='ModuleSample'
 include ':app'
 include ':ripple_log'
