@@ -53,12 +53,13 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
     private var config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig
 
-    private lateinit var closeArrow: Drawable
-    private lateinit var openArrow: Drawable
+    private var closeArrow: Drawable? = null
+    private var openArrow: Drawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ripple_image_picker)
+        initArrow()
 
         config = if (intent.getSerializableExtra(IImagePickConfig.IMAGE_CONFIG_NAME) != null) {
             intent.getSerializableExtra(IImagePickConfig.IMAGE_CONFIG_NAME) as IImagePickConfig
@@ -129,11 +130,7 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         rippleFolderRV.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false)
         (rippleImageRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         (rippleFolderRV.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-
-        closeArrow = resources.getDrawable(R.drawable.folder_close_arrow)
-        closeArrow.setBounds(0, 0, closeArrow.minimumWidth, closeArrow.minimumHeight)
-        openArrow = resources.getDrawable(R.drawable.folder_open_arrow)
-        openArrow.setBounds(0, 0, openArrow.minimumWidth, openArrow.minimumHeight)
+        initArrow()
     }
 
     private fun initData() {
@@ -142,8 +139,16 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         }
     }
 
+    private fun initArrow() {
+        closeArrow = resources.getDrawable(R.drawable.folder_close_arrow)
+        closeArrow?.setBounds(0, 0, closeArrow?.minimumWidth ?: 0, closeArrow?.minimumHeight ?: 0)
+        openArrow = resources.getDrawable(R.drawable.folder_open_arrow)
+        openArrow?.setBounds(0, 0, openArrow?.minimumWidth ?: 0, openArrow?.minimumHeight ?: 0)
+    }
+
     override fun onResume() {
         super.onResume()
+        initArrow()
         updateData()
         setRightTitle(RippleMediaPick.getInstance().imageList.size)
 

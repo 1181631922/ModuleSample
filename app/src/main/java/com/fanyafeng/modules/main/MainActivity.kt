@@ -22,6 +22,7 @@ import com.fanyafeng.modules.http.HttpLinkActivity
 import com.fanyafeng.modules.permission.PermissionTestActivity
 import com.fanyafeng.modules.mediapick.MediaPickActivity
 import com.fanyafeng.modules.ninegrid.NineGridActivity
+import com.fanyafeng.modules.startup.TestStartupActivity
 import com.fanyafeng.modules.stickynavigationlayout.StickyNavigationLayoutActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
@@ -125,6 +126,7 @@ class MainActivity : BaseActivity() {
             add(MainModel("测试log工具类", TestLogActivity::class.java))
             add(MainModel("测试http链式调用", HttpLinkActivity::class.java))
             add(MainModel("测试缓存框架", CacheTestActivity::class.java))
+            add(MainModel("测试AppStartUp", TestStartupActivity::class.java))
         }
 
 //        20.forEach {

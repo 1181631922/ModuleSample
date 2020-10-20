@@ -1,0 +1,24 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.test.startup">
+
+    <application>
+        <provider
+            android:name="com.ripple.sdk.startup.provider.InitializationProvider"
+            android:authorities="${applicationId}.ripple-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <!-- 自动初始化 -->
+<!--            <meta-data-->
+<!--                android:name="com.test.startup.LibraryC"-->
+<!--                android:value="ripple.startup" />-->
+
+            <!-- 手动初始化（也是延迟初始化） -->
+            <!--            <meta-data-->
+            <!--                android:name="com.test.startup.LibaryD"-->
+            <!--                android:value="ripple.startup"-->
+            <!--                tools:node="remove" />-->
+        </provider>
+    </application>
+</manifest>
