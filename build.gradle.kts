@@ -7,6 +7,8 @@ buildscript {
     val kotlin_version by extra("1.3.71")
     val min_sdk_version by extra(17)
     val max_sdk_version by extra(30)
+    val compile_sdk_version by extra(29)
+    val build_tools_version by extra("29.0.3")
 
     ReposDependencies.addRepos.invoke(repositories)
 
