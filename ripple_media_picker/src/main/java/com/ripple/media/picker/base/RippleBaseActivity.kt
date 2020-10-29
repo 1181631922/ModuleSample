@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.config.MediaThemeConfig
 
 /**
  * base
@@ -20,17 +21,25 @@ open class RippleBaseActivity : AppCompatActivity() {
     protected var toolbarCenterTitle: TextView? = null
     protected var toolbarRightTitle: TextView? = null
 
+    protected var themeConfig: MediaThemeConfig? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            val themeConfig = RippleMediaPick.getInstance().themeConfig
-            window.statusBarColor = themeConfig.getStatusBarColor()
-            if (themeConfig.isLight()) {
-                window.decorView.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            themeConfig = if (intent.getSerializableExtra(MediaThemeConfig.THEME_CONFIG) != null) {
+                intent.getSerializableExtra(MediaThemeConfig.THEME_CONFIG) as MediaThemeConfig
             } else {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                RippleMediaPick.getInstance().themeConfig
+            }
+            themeConfig?.let {
+                window.statusBarColor = it.getStatusBarColor()
+                if (it.isLight()) {
+                    window.decorView.systemUiVisibility =
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                } else {
+                    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                }
             }
         }
     }
@@ -38,26 +47,36 @@ open class RippleBaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         toolbar = findViewById(R.id.toolbar)
-        val themeConfig = RippleMediaPick.getInstance().themeConfig
+        themeConfig = if (intent.getSerializableExtra(MediaThemeConfig.THEME_CONFIG) != null) {
+            intent.getSerializableExtra(MediaThemeConfig.THEME_CONFIG) as MediaThemeConfig
+        } else {
+            RippleMediaPick.getInstance().themeConfig
+        }
 
         toolbar?.let {
             setSupportActionBar(toolbar)
-            toolbar!!.title = ""
-            toolbar!!.setNavigationIcon(themeConfig.getNavigationIcon())
-            toolbar!!.setBackgroundColor(themeConfig.getToolbarColor())
-            toolbar!!.setNavigationOnClickListener {
+            it.title = ""
+            themeConfig?.let { theme ->
+                it.setNavigationIcon(theme.getNavigationIcon())
+                it.setBackgroundColor(theme.getToolbarColor())
+            }
+            it.setNavigationOnClickListener {
                 finish()
             }
         }
 
         toolbarCenterTitle = findViewById(R.id.toolbarCenterTitle)
         toolbarCenterTitle?.let {
-            toolbarCenterTitle!!.setTextColor(themeConfig.getToolbarCenterTitleColor())
+            themeConfig?.let { theme ->
+                it.setTextColor(theme.getToolbarCenterTitleColor())
+            }
         }
 
         toolbarRightTitle = findViewById(R.id.toolbarRightTitle)
         toolbarRightTitle?.let {
-            toolbarRightTitle!!.setTextColor(themeConfig.getToolbarRightTitleColor())
+            themeConfig?.let { theme ->
+                it.setTextColor(theme.getToolbarRightTitleColor())
+            }
         }
     }
 

@@ -2,7 +2,6 @@ package com.ripple.media.picker.image.adapter
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.camera.TakePicture
+import com.ripple.media.picker.config.CropImageConfig
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.IPreviewImageConfig
+import com.ripple.media.picker.config.MediaThemeConfig
 import com.ripple.media.picker.config.impl.PreviewImageConfig
 import com.ripple.media.picker.image.RippleImagePick
-import com.ripple.media.picker.image.activity.RipplePreviewImageActivity
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.util.LogUtil
 import com.ripple.media.picker.util.dp2px
@@ -42,6 +42,10 @@ class RippleImageAdapter @JvmOverloads constructor(
         private const val ITEM_TYPE_PICTURE = 1
         private const val ITEM_TYPE_CAMERA = 2
     }
+
+    var imageCropConfig: CropImageConfig? = null
+
+    var themeConfig: MediaThemeConfig? = null
 
     var SCREEN_WIDTH = (mContext as Activity).screenwidth()
     var ITEM_WIDTH = ((SCREEN_WIDTH - 4.dp2px) / line).toInt()
@@ -90,6 +94,12 @@ class RippleImageAdapter @JvmOverloads constructor(
 
         when (holder) {
             is RippleImageViewHolder -> {
+                if (imageCropConfig == null) {
+                    holder.checkLayout?.visibility = View.VISIBLE
+                } else {
+                    holder.checkLayout?.visibility = View.GONE
+                }
+
                 val realPosition = if (config.showCamera()) position - 1 else position
                 val model = list[realPosition]
                 holder.imageItemCheck?.text = ""
@@ -167,15 +177,25 @@ class RippleImageAdapter @JvmOverloads constructor(
                 }
 
                 holder.itemView.setOnClickListener {
-                    //跳转到
-
-                    val config =
-                        PreviewImageConfig.Builder().setCurrentPosition(realPosition)
-                            .setImageList(list)
-                            .setSelectModel(IPreviewImageConfig.PreviewModel.NORMAL)
-                            .build()
-                    RippleImagePick.getInstance()
-                        .imagePreview(mContext, config, IPreviewImageConfig.PREVIEW_RESULT)
+                    if (imageCropConfig == null) {
+                        //跳转到
+                        val config =
+                            PreviewImageConfig.Builder().setCurrentPosition(realPosition)
+                                .setImageList(list)
+                                .setSelectModel(IPreviewImageConfig.PreviewModel.NORMAL)
+                                .build()
+                        RippleImagePick.getInstance()
+                            .imagePreview(mContext, config, IPreviewImageConfig.PREVIEW_RESULT)
+                    } else {
+                        //此时跳转到裁剪页面
+                        RippleImagePick.getInstance().imageCrop(
+                            mContext,
+                            model.getPath(),
+                            CropImageConfig.CROP_IMAGE_REQUEST_CODE,
+                            imageCropConfig,
+                            themeConfig
+                        )
+                    }
                 }
 
             }

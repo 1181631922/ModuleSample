@@ -2,7 +2,7 @@
  * Author: fanyafeng
  * Date: 2020/10/20 14:06
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: module中build.gradle依赖的构建版本号
  */
 object ModuleBuildGradle {
     const val apiLevel = 29

@@ -2,7 +2,7 @@
  * Author: fanyafeng
  * Date: 2020/10/19 11:12
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: 常用的kt库的版本号
  */
 object KotlinVersion {
     /*

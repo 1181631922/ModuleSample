@@ -29,6 +29,7 @@ import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.fanyafeng.modules.testlog.TestLogActivity
 import com.ripple.log.extend.logD
 import com.ripple.log.tpyeextend.toLogD
+import com.ripple.media.picker.image.activity.RippleCropImageActivity
 import com.ripple.sdk.router.hepler.PageRouterName
 import com.ripple.tool.date.long2Date
 import com.ripple.tool.extend.forEach

@@ -21,8 +21,11 @@ import com.ripple.media.picker.R
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.media.picker.base.RippleBaseActivity
 import com.ripple.media.picker.camera.PictureGalleryUtil
+import com.ripple.media.picker.config.CropImageConfig
 import com.ripple.media.picker.config.IImagePickConfig
 import com.ripple.media.picker.config.IPreviewImageConfig
+import com.ripple.media.picker.config.MediaThemeConfig
+import com.ripple.media.picker.config.impl.ThemeConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.ScanImageSource
 import com.ripple.media.picker.image.adapter.RippleFolderAdapter
@@ -53,6 +56,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
 
     private var config: IImagePickConfig = RippleMediaPick.getInstance().imagePickConfig
 
+    private var imageCropConfig: CropImageConfig? = null
+
     private var closeArrow: Drawable? = null
     private var openArrow: Drawable? = null
 
@@ -66,6 +71,12 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         } else {
             RippleMediaPick.getInstance().imagePickConfig
         }
+
+        if (intent.getSerializableExtra(CropImageConfig.CROP_IMAGE_CONFIG) != null) {
+            imageCropConfig =
+                intent.getSerializableExtra(CropImageConfig.CROP_IMAGE_CONFIG) as CropImageConfig
+        }
+
 
         RippleMediaPick.getInstance().imageList.addAll(config.getSelectList())
 
@@ -207,13 +218,9 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
     private fun setRightTitle(count: Int) {
         if (count > 0) {
             toolbarRightTitle?.setTextColor(Color.WHITE)
-//            toolbarRightTitle?.background =
-//                resources.getDrawable(R.drawable.ripple_next_step_shape)
             toolbarRightTitle?.text = "确认($count)"
         } else {
             toolbarRightTitle?.setTextColor(Color.GRAY)
-//            toolbarRightTitle?.background =
-//                resources.getDrawable(R.drawable.ripple_next_step_unable_shape)
             toolbarRightTitle?.text = "确认"
         }
 
@@ -247,6 +254,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                     config = config,
                     line = LINE
                 )
+            adapter?.imageCropConfig = imageCropConfig
+            adapter?.themeConfig = themeConfig
             rippleImageRV.adapter = adapter
             adapter?.notifyDataSetChanged()
             toolbarCenterTitle?.text = "所有图片"
@@ -255,7 +264,6 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
             /**
              * 文件夹
              */
-
             folderAdapter = RippleFolderAdapter(this, mediaList)
             rippleFolderRV.adapter = folderAdapter
             folderAdapter?.notifyDataSetChanged()
@@ -267,6 +275,8 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                     this,
                     mediaList[position].getMediaList(), config = config, line = LINE
                 )
+                adapter?.imageCropConfig = imageCropConfig
+                adapter?.themeConfig = themeConfig
                 rippleImageRV.adapter = adapter
                 toolbarCenterTitle?.text = model.getName()
                 setRippleFolderRV()
@@ -360,6 +370,19 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
                         imageList
                     )
                     setResult(RESULT_OK, intent)
+                    finish()
+                }
+                CropImageConfig.CROP_IMAGE_REQUEST_CODE -> {
+                    if (data != null) {
+                        val intent = Intent()
+                        intent.putExtra(
+                            CropImageConfig.CROP_IMAGE_REQUEST_RESULT,
+                            data.getSerializableExtra(CropImageConfig.CROP_IMAGE_REQUEST_RESULT)
+                        )
+                        setResult(RESULT_OK, intent)
+                    } else {
+                        setResult(RESULT_CANCELED)
+                    }
                     finish()
                 }
             }

@@ -37,7 +37,7 @@ class RippleMediaPick private constructor() {
         }
 
     /**
-     * 主题配置，暂时只支持全局配置，后期会加上局部配置
+     * 主题配置，暂时只支持全局配置(已经支持局部配置)，后期会加上局部配置
      */
     var themeConfig: MediaThemeConfig = ThemeConfig.Builder().create()
         get() = Preconditions.checkNotNull(field, "MediaThemeConfig接口未实现")

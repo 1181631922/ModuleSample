@@ -4,7 +4,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
  * Author: fanyafeng
  * Date: 2020/10/19 19:32
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: 根目录gradle中依赖的maven列表
  */
 object AllReposDependencies {
     val addRepos: (handler: RepositoryHandler) -> Unit = {

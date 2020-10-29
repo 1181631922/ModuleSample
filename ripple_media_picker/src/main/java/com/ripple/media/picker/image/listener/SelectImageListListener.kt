@@ -1,6 +1,7 @@
 package com.ripple.media.picker.image.listener
 
 import com.ripple.media.picker.model.RippleMediaModel
+import java.io.Serializable
 
 /**
  * Author: fanyafeng
@@ -8,6 +9,6 @@ import com.ripple.media.picker.model.RippleMediaModel
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface SelectImageListListener {
+interface SelectImageListListener : Serializable {
     fun selectImageList(imageList: List<RippleMediaModel>)
 }

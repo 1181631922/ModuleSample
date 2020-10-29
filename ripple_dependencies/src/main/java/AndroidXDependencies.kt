@@ -2,7 +2,7 @@
  * Author: fanyafeng
  * Date: 2020/10/19 10:49
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: 所依赖的androidx的第三方库
  */
 object AndroidXDependencies {
     /**

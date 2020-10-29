@@ -47,6 +47,7 @@ dependencies {
     implementation(AndroidXDependencies.androidx_appcompat_appcompat_with_version)
     implementation(AndroidXDependencies.androidx_core_core_ktx_with_version)
     implementation(project(":ripple_tool"))
+//    implementation(RippleLibrary.com_ripple_component_tool)
 }
 
 apply(from = "./gradle-jcenter-push.gradle")

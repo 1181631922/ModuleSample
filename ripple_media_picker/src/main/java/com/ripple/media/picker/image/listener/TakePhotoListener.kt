@@ -1,6 +1,7 @@
 package com.ripple.media.picker.image.listener
 
 import java.io.File
+import java.io.Serializable
 
 /**
  * Author: fanyafeng
@@ -8,6 +9,6 @@ import java.io.File
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface TakePhotoListener {
+interface TakePhotoListener : Serializable {
     fun onTakePhotoListener(file: File?)
 }

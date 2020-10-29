@@ -4,7 +4,7 @@ import org.gradle.kotlin.dsl.PluginDependenciesSpecScope
  * Author: fanyafeng
  * Date: 2020/10/20 14:53
  * Email: fanyafeng@live.cn
- * Description:
+ * Description: module中依赖的plugin
  */
 object ModuleBuildGradlePlugin {
     const val com_android_library = "com.android.library"

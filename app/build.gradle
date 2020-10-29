@@ -154,10 +154,10 @@ class GreetingPluginExtension {
 class GreetingPlugin implements Plugin<Project> {
 
     @Override
-    void apply(Project target) {
-        /**
-         * name为自定义DSL的名字
-         */
+    void apply(org.gradle.api.Project target) {
+/**
+ * name为自定义DSL的名字
+ */
         def extension = target.extensions.create('greeting', GreetingPluginExtension)
 
         /**

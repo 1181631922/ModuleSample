@@ -57,6 +57,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="base64存储照片" />
+
+            <Button
+                android:id="@+id/mediaPick8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="裁剪图片" />
         </LinearLayout>
     </ScrollView>
 

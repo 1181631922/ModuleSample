@@ -10,6 +10,11 @@ import java.io.Serializable
  * Description:
  */
 interface MediaThemeConfig : Serializable {
+
+    companion object {
+        const val THEME_CONFIG = "theme_config"
+    }
+
     /**
      * 是否是亮模式
      */

@@ -18,7 +18,9 @@ import com.ripple.image.compress.extend.compressImageList
 import com.ripple.image.compress.model.ImageItem
 import com.ripple.log.tpyeextend.toLogD
 import com.ripple.media.picker.RippleMediaPick
+import com.ripple.media.picker.config.CropImageConfig
 import com.ripple.media.picker.config.IImagePickConfig
+import com.ripple.media.picker.config.impl.CropImageConfigImpl
 import com.ripple.media.picker.config.impl.ImagePickConfig
 import com.ripple.media.picker.image.RippleImagePick
 import com.ripple.media.picker.image.activity.RippleImagePickerActivity
@@ -27,6 +29,8 @@ import com.ripple.media.picker.image.extend.takePhoto
 import com.ripple.media.picker.model.RippleMediaModel
 import com.ripple.media.picker.model.SimpleImageModel
 import com.ripple.permission.annotation.NeedPermission
+import com.ripple.tool.screen.getScreenHeight
+import com.ripple.tool.screen.getScreenWidth
 import kotlinx.android.synthetic.main.activity_media_pick.*
 import java.io.File
 
@@ -34,7 +38,6 @@ class MediaPickActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = MediaPickActivity::class.java.simpleName
-
     }
 
     private var testList = mutableListOf<MyMediaModel>()
@@ -122,6 +125,32 @@ class MediaPickActivity : AppCompatActivity() {
             )
         }
 
+        mediaPick8.setOnClickListener {
+//            val intent = Intent(this, RippleCropImageActivity::class.java)
+//            intent.putExtra(
+//                CropImageConfig.CROP_IMAGE_URL,
+//                "/storage/emulated/0/Pictures/Screenshots/Screenshot_20201018_130411_com.huawei.android.launcher.jpg"
+//            )
+////            intent.putExtra(CropImageConfig.CROP_IMAGE_CONFIG, CropImageConfigImpl())
+//            startActivity(intent)
+
+//            RippleImagePick.getInstance().imageCrop(
+//                this,
+//                "/storage/emulated/0/Pictures/Screenshots/Screenshot_20201018_130411_com.huawei.android.launcher.jpg",
+//            )
+
+            val cropLength =
+                getScreenHeight().coerceAtMost(getScreenWidth())
+            val config = CropImageConfigImpl(
+                inWidth = cropLength,
+                inHeight = cropLength,
+                outWidth = cropLength,
+                outHeight = cropLength
+            )
+            RippleImagePick.getInstance()
+                .imageCrop(this, config, CropImageConfig.CROP_IMAGE_REQUEST_CODE)
+        }
+
     }
 
     private fun initData() {
@@ -160,6 +189,12 @@ class MediaPickActivity : AppCompatActivity() {
                     Log.d(
                         "result返回的拍照路径:",
                         data!!.getStringExtra(IImagePickConfig.TAKE_PHOTO_PATH)
+                    )
+                }
+                CropImageConfig.CROP_IMAGE_REQUEST_CODE -> {
+                    Log.d(
+                        "result返回的裁剪图片的保存路径:",
+                        (data!!.getSerializableExtra(CropImageConfig.CROP_IMAGE_REQUEST_RESULT) as File).absolutePath
                     )
                 }
             }
