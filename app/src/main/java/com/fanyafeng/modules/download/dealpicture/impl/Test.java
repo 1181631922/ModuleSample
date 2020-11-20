@@ -1,4 +1,4 @@
-package com.fanyafeng.modules.dealpicture.impl;
+package com.fanyafeng.modules.download.dealpicture.impl;
 
 /**
  * Author: fanyafeng

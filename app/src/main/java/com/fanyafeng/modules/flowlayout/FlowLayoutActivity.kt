@@ -51,6 +51,7 @@ class FlowLayoutActivity : BaseActivity() {
             val tagView = itemView.getTagView()
             tagView.setPadding(0, 0, 0, 0)
             itemView.setInnerTagWrapContent()
+            itemView.selectedTagColor = Color.parseColor("#023894")
             itemView.chooseViewUnselected = R.drawable.choose_view_normal
             chooseItemView.addItemView(itemView, model)
         }

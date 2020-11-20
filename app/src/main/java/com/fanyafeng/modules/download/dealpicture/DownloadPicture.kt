@@ -1,6 +1,7 @@
-package com.fanyafeng.modules.dealpicture
+package com.fanyafeng.modules.download.dealpicture
 
 import android.content.Context
+import com.fanyafeng.modules.download.Download
 import java.io.File
 import java.io.Serializable
 import java.text.SimpleDateFormat
@@ -12,27 +13,7 @@ import java.util.*
  * Email: fanyafeng@live.cn
  * Description:
  */
-interface DownloadPicture : Serializable {
-    fun download(
-        context: Context,
-        sourcePath: String,
-        targetPath: String?,
-        onResultCallBack: OnResultCallBack
-    )
-
-    interface OnResultCallBack {
-        fun onError(message: String)
-
-        fun onSuccess()
-    }
-
-    interface SimpleResultCallBack : OnResultCallBack {
-        override fun onSuccess() {
-        }
-
-        override fun onError(message: String) {
-        }
-    }
+interface DownloadPicture : Download {
 
     /**
      * 创建文件

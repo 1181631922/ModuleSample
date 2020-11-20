@@ -1,4 +1,4 @@
-package com.fanyafeng.modules.dealpicture.impl
+package com.fanyafeng.modules.download.dealpicture.impl
 
 import android.app.Activity
 import android.content.Context
@@ -17,7 +17,8 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.request.ImageRequest
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import com.fanyafeng.modules.dealpicture.DownloadPicture
+import com.fanyafeng.modules.download.Download
+import com.fanyafeng.modules.download.dealpicture.DownloadPicture
 import com.ripple.media.picker.camera.PictureGalleryUtil
 import java.io.File
 import java.io.FileOutputStream
@@ -33,7 +34,7 @@ class FrescoDownloadPicture : DownloadPicture {
         context: Context,
         sourcePath: String,
         targetPath: String?,
-        onResultCallBack: DownloadPicture.OnResultCallBack
+        onResultCallBack: Download.OnResultCallBack
     ) {
 
         var photoFileDir =
@@ -92,5 +93,13 @@ class FrescoDownloadPicture : DownloadPicture {
 
         }, UiThreadImmediateExecutorService.getInstance())
 
+    }
+
+    override fun download(
+        context: Context,
+        sourcePath: String,
+        onResultCallBack: Download.OnResultCallBack
+    ) {
+        this.download(context, sourcePath, null, onResultCallBack)
     }
 }

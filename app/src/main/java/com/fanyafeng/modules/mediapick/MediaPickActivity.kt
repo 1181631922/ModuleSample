@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.fanyafeng.modules.R
-import com.fanyafeng.modules.dealpicture.DownloadPicture
-import com.fanyafeng.modules.dealpicture.impl.Base64DownloadPicture
-import com.fanyafeng.modules.dealpicture.impl.FrescoDownloadPicture
-import com.fanyafeng.modules.dealpicture.impl.GlideDownloadPicture
-import com.fanyafeng.modules.dealpicture.impl.Test
+import com.fanyafeng.modules.download.Download
+import com.fanyafeng.modules.download.dealpicture.DownloadPicture
+import com.fanyafeng.modules.download.dealpicture.impl.Base64DownloadPicture
+import com.fanyafeng.modules.download.dealpicture.impl.FrescoDownloadPicture
+import com.fanyafeng.modules.download.dealpicture.impl.GlideDownloadPicture
+import com.fanyafeng.modules.download.dealpicture.impl.Test
 import com.ripple.image.compress.config.CompressConfig
 import com.ripple.image.compress.config.impl.SimpleCompressConfig
 import com.ripple.image.compress.extend.compressImageList
@@ -93,8 +94,7 @@ class MediaPickActivity : AppCompatActivity() {
             GlideDownloadPicture().download(
                 this,
                 "https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg",
-                null,
-                object : DownloadPicture.SimpleResultCallBack {
+                object : Download.SimpleResultCallBack {
                     override fun onSuccess() {
                         super.onSuccess()
 
@@ -106,8 +106,7 @@ class MediaPickActivity : AppCompatActivity() {
             FrescoDownloadPicture().download(
                 this,
                 "https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3252521864,872614242&fm=26&gp=0.jpg",
-                null,
-                object : DownloadPicture.SimpleResultCallBack {
+                object : Download.SimpleResultCallBack {
 
                 })
         }
@@ -116,8 +115,7 @@ class MediaPickActivity : AppCompatActivity() {
             Base64DownloadPicture().download(
                 this,
                 Test.test,
-                null,
-                object : DownloadPicture.SimpleResultCallBack {
+                object : Download.SimpleResultCallBack {
                     override fun onSuccess() {
 
                     }

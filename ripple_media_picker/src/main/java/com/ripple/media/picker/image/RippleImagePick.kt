@@ -110,7 +110,7 @@ class RippleImagePick private constructor() {
         val intent = Intent(context, RippleImagePickerActivity::class.java)
         intent.putExtra(
             IImagePickConfig.IMAGE_CONFIG_NAME,
-            ImagePickConfig.Builder().setCount(1).setShowCamera(false).setChooseType(
+            ImagePickConfig.Builder().setCount(-1).setShowCamera(true).setChooseType(
                 MediaPickConfig.ChooseType.SINGLE_CHOOSE_TYPE
             ).setSize(-1L).build()
         )

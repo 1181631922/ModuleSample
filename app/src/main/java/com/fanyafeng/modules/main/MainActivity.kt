@@ -16,6 +16,7 @@ import com.fanyafeng.modules.R
 import com.fanyafeng.modules.cache.CacheTestActivity
 import com.fanyafeng.modules.common.MainModel
 import com.fanyafeng.modules.dialog.RippleDialogActivity
+import com.fanyafeng.modules.filetest.FileTestActivity
 import com.fanyafeng.modules.flowlayout.FlowLayoutActivity
 import com.fanyafeng.modules.http.HttpActivity
 import com.fanyafeng.modules.http.HttpLinkActivity
@@ -115,6 +116,7 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
+            add(MainModel("网络文件下载",FileTestActivity::class.java))
             add(MainModel("媒体库选择", MediaPickActivity::class.java))
             add(MainModel("动态权限", PermissionTestActivity::class.java))
             add(MainModel("图片九宫格", NineGridActivity::class.java))

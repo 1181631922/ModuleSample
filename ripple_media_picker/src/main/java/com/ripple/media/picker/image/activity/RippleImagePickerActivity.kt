@@ -162,7 +162,11 @@ class RippleImagePickerActivity : RippleBaseActivity(), ScanImageSource.ImageSou
         initArrow()
         updateData()
         setRightTitle(RippleMediaPick.getInstance().imageList.size)
-
+        if (intent.getSerializableExtra(CropImageConfig.CROP_IMAGE_CONFIG) != null) {
+            imageCropConfig =
+                intent.getSerializableExtra(CropImageConfig.CROP_IMAGE_CONFIG) as CropImageConfig
+            toolbarRightTitle?.visibility = View.GONE
+        }
         adapter?.notifyDataSetChanged()
     }
 

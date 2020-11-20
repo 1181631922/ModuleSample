@@ -205,21 +205,27 @@ class RippleImageAdapter @JvmOverloads constructor(
                 params?.height = ITEM_WIDTH
                 holder.itemView.setOnClickListener {
                     val modelList = RippleMediaPick.getInstance().imageList
-                    if (modelList.size < config.getCount()) {
-                        //申请相机权限
+                    if (config.getCount()!=-1){
+                        if (modelList.size < config.getCount()) {
+                            //申请相机权限
+                            TakePicture(config).openCamera(
+                                mContext,
+                                IImagePickConfig.TAKE_PICTURE_CODE
+                            )
+                        } else {
+                            Toast.makeText(
+                                mContext,
+                                "图片最多选取" + config.getCount() + "张",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }else{
                         TakePicture(config).openCamera(
                             mContext,
                             IImagePickConfig.TAKE_PICTURE_CODE
                         )
-                    } else {
-                        Toast.makeText(
-                            mContext,
-                            "图片最多选取" + config.getCount() + "张",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
                     }
-
                 }
             }
         }
