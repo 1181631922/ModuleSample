@@ -34,4 +34,12 @@ class UserListPostParam : HttpRequestParamsImpl() {
 @HttpRequest("/post/getUserList")
 class UserListPostIdParam : HttpRequestParamsImpl() {
     var id: Int = 999
+
+    override fun getConnectTimeOut(): Long {
+        return super.getConnectTimeOut()
+    }
+
+    override fun getWriteTimeOut(): Long {
+        return 1*1000
+    }
 }

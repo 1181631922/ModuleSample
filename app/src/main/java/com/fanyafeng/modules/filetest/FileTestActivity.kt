@@ -1,6 +1,7 @@
 package com.fanyafeng.modules.filetest
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -23,6 +24,7 @@ import com.fanyafeng.modules.download.dealpicture.impl.GlideDownloadPicture
 import com.fanyafeng.modules.download.Download
 import com.ripple.dialog.extend.showToast
 import com.ripple.log.tpyeextend.toLogD
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_file_test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -88,6 +90,7 @@ class FileTestActivity : AppCompatActivity() {
         }
 
         fileTest5.setOnClickListener {
+            val requestOptions = RequestOptions.timeoutOf(2000)
 //            val futureTarget =
 //                Glide.with(this).asFile().load("http://st.app.dmall.com/test/JetBrainsActivate.rar")
 //            val requestListener = object : RequestListener<File> {
@@ -112,8 +115,9 @@ class FileTestActivity : AppCompatActivity() {
 //                    showToast("下载成功")
 //                    return false
 //                }
-//            }
+//            }]
 //            futureTarget.addListener(requestListener)
+//            futureTarget.apply(requestOptions)
 //            futureTarget.preload()
 
 
@@ -148,8 +152,6 @@ class FileTestActivity : AppCompatActivity() {
                 "com.fanyafeng.module.Timeout",
                 2500
             )
-
-            val requestOptions = RequestOptions.timeoutOf(2000)
 
             val requestBuilder =
                 Glide.with(this).download("http://st.app.dmall.com/test/WechatIMG24")
@@ -263,6 +265,33 @@ class FileTestActivity : AppCompatActivity() {
 
         fileTest14.setOnClickListener {
             modelResult?.toJson()?.toLogD()
+        }
+
+        fileTest15.setOnClickListener {
+            val kv = MMKV.defaultMMKV()
+            kv.putString("key", "樊亚风")
+        }
+
+        fileTest16.setOnClickListener {
+            val kv = MMKV.defaultMMKV()
+            val result = kv.getString("key", "获取失败").toLogD()
+
+        }
+
+        fileTest17.setOnClickListener {
+            val kv = MMKV.defaultMMKV()
+            kv.putString("key", "樊亚风更新")
+//            val countDownTimer = object : CountDownTimer(5000, 1000) {
+//                override fun onTick(millisUntilFinished: Long) {
+//                    millisUntilFinished.toLogD()
+//                }
+//
+//                override fun onFinish() {
+//                    "结束任务".toLogD()
+//                }
+//
+//            }
+//            countDownTimer.start()
         }
     }
 

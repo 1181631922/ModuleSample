@@ -33,6 +33,9 @@ class FileDataStoreManager(val context: Context) {
             .catch {
                 if (it is IOException) {
                     it.printStackTrace()
+                    /*
+                    用于异常回复，如果catch到io异常，则入空参恢复flow
+                     */
                     emit(emptyPreferences())
                 } else {
                     throw it

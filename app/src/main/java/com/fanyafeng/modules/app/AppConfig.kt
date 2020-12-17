@@ -9,6 +9,7 @@ import com.ripple.log.tpyeextend.toLogD
 import com.ripple.media.picker.RippleMediaPick
 import com.ripple.permission.RipplePermissionImpl
 import com.ripple.tool.date.long2Date
+import com.tencent.mmkv.MMKV
 
 /**
  * Author: fanyafeng
@@ -22,6 +23,7 @@ open class AppConfig : Application() {
         logD("APP开始启动时间 onCreate：" + System.currentTimeMillis().long2Date())
         RipplePermissionImpl.init(this)
         Fresco.initialize(this)
+        MMKV.initialize(this)
         RippleMediaPick
             .getInstance()
             .setImageLoadFrame(RippleImageLoadFrameImpl())

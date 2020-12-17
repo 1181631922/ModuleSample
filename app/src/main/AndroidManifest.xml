@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".filetest.FileTestActivity"></activity>
+        <activity android:name=".glidetest.GlideTestActivity"></activity>
+        <activity android:name=".filetest.FileTestActivity" />
         <activity android:name=".startup.TestStartupActivity" />
         <activity android:name=".cache.CacheTestActivity" />
         <activity android:name=".taobaomain.TaoBaoMain1Activity" />

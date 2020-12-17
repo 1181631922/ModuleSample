@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import com.fanyafeng.modules.BaseActivity
-import com.fanyafeng.modules.BuildConfig
+import com.fanyafeng.modules.glidetest.GlideTestActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.cache.CacheTestActivity
 import com.fanyafeng.modules.common.MainModel
@@ -29,11 +29,8 @@ import com.fanyafeng.modules.task.HandleTaskActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.fanyafeng.modules.testlog.TestLogActivity
 import com.ripple.log.extend.logD
-import com.ripple.log.tpyeextend.toLogD
-import com.ripple.media.picker.image.activity.RippleCropImageActivity
 import com.ripple.sdk.router.hepler.PageRouterName
 import com.ripple.tool.date.long2Date
-import com.ripple.tool.extend.forEach
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_function_list_layout.view.*
 
@@ -57,6 +54,8 @@ class MainActivity : BaseActivity() {
 
     private fun initView() {
         functionList.layoutManager = LinearLayoutManager(this)
+        functionList.layoutManager?.height
+        functionList.height
 
         functionList.addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -116,7 +115,8 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
-            add(MainModel("网络文件下载",FileTestActivity::class.java))
+            add(MainModel("测试Glide图片库", GlideTestActivity::class.java))
+            add(MainModel("网络文件下载", FileTestActivity::class.java))
             add(MainModel("媒体库选择", MediaPickActivity::class.java))
             add(MainModel("动态权限", PermissionTestActivity::class.java))
             add(MainModel("图片九宫格", NineGridActivity::class.java))

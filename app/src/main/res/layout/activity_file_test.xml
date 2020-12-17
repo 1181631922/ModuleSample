@@ -98,6 +98,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="封装获取最新的model" />
+
+            <Button
+                android:id="@+id/fileTest15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="通过mmkv持久化存储" />
+
+            <Button
+                android:id="@+id/fileTest16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="通过mmkv获取持久化存储对象" />
+
+            <Button
+                android:id="@+id/fileTest17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="测试计时器" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
