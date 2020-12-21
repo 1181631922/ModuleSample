@@ -26,6 +26,7 @@ import com.fanyafeng.modules.ninegrid.NineGridActivity
 import com.fanyafeng.modules.startup.TestStartupActivity
 import com.fanyafeng.modules.stickynavigationlayout.StickyNavigationLayoutActivity
 import com.fanyafeng.modules.task.HandleTaskActivity
+import com.fanyafeng.modules.testflow.TestFlowActivity
 import com.fanyafeng.modules.testfoldview.FoldViewActivity
 import com.fanyafeng.modules.testlog.TestLogActivity
 import com.ripple.log.extend.logD
@@ -115,6 +116,7 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
+            add(MainModel("测试Flow", TestFlowActivity::class.java))
             add(MainModel("测试Glide图片库", GlideTestActivity::class.java))
             add(MainModel("网络文件下载", FileTestActivity::class.java))
             add(MainModel("媒体库选择", MediaPickActivity::class.java))

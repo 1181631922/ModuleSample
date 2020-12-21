@@ -44,8 +44,8 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(kotlin("stdlib", KotlinCompilerVersion.VERSION))
-    implementation(AndroidXDependencies.androidx_appcompat_appcompat_with_version)
-    implementation(AndroidXDependencies.androidx_core_core_ktx_with_version)
+    implementation(AndroidXDependencies.androidx_appcompat_appcompat)
+    implementation(AndroidXDependencies.androidx_core_core_ktx)
     implementation(project(":ripple_tool"))
 //    implementation(RippleLibrary.com_ripple_component_tool)
 }
