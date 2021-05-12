@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="buttonText1"
+            type="String" />
+
+        <variable
+            name="buttonText2"
+            type="String" />
+
+        <variable
+            name="buttonText3"
+            type="com.fanyafeng.modules.datastore.DataButton3" />
+
+        <variable
+            name="viewModel"
+            type="com.fanyafeng.modules.datastore.DataStoreViewModel" />
+
+        <variable
+            name="buttonText4"
+            type="String" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".datastore.DataStoreActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/dataBtn1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{buttonText1}" />
+
+            <Button
+                android:id="@+id/dataBtn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{buttonText2}" />
+
+            <Button
+                android:id="@+id/dataBtn3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.clickButton3()}"
+                android:text="@{buttonText3.text}" />
+
+            <Button
+                android:id="@+id/dataBtn4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{(click) -> viewModel.clickButton4(true)}"
+                android:text="@{buttonText4}" />
+
+            <Button
+                android:id="@+id/dataBtn5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.clickButton5()}"
+                android:text="@={viewModel.buttonText5}" />
+
+            <Button
+                android:id="@+id/dataBtn6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.clickButton6()}"
+                android:text="@={viewModel.buttonText6}" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

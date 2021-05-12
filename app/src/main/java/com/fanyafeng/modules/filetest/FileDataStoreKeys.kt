@@ -14,4 +14,6 @@ object FileDataStoreKeys {
     val FILE_NAME = preferencesKey<String>("my_name")
 
     val FILE_TIME = preferencesKey<Long>("file_time")
+
+    val FILE_ADD = preferencesKey<Long>("file_add")
 }

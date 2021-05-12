@@ -26,7 +26,6 @@ class DefaultSessionAndUserEventRepositoryTest {
             println(it.toString())
         }
 
-
     }
 
 }

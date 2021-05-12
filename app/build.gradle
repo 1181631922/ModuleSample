@@ -48,6 +48,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
     android.applicationVariants.all { variant ->
 
         println("获取buildType:" + variant.buildType.name)
@@ -95,10 +100,10 @@ task testLocalProperties {
 //        ./gradlew :app:dependencies --configuration implementation
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'junit:junit:4.13'
+    implementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
@@ -116,17 +121,17 @@ dependencies {
     implementation project(path: ':ripple_sdk_startup')
     annotationProcessor project(path: ':ripple_sdk_router_helper')
     kapt project(path: ':ripple_sdk_router_helper')
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 //    https://github.com/zjupure/GlideWebpDecoder
     implementation "com.zlc.glide:webpdecoder:2.0.4.11.0"
 
-    implementation 'com.facebook.fresco:fresco:2.2.0'
+    implementation 'com.facebook.fresco:fresco:2.3.0'
 
     implementation project(path: ':ripple_ui')
     implementation project(path: ':ripple_permission')
@@ -134,7 +139,7 @@ dependencies {
     implementation project(path: ':ripple_task')
 
 //    projectMaven 'ripple_ui|com.ripple.component:ui:1.1.2'
-    implementation "com.google.android.material:material:1.2.1"
+    implementation "com.google.android.material:material:1.3.0"
 
     // Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
@@ -142,15 +147,24 @@ dependencies {
     // Proto DataStore
     implementation "androidx.datastore:datastore-core:1.0.0-alpha05"
 
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+    implementation 'androidx.activity:activity-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.5.0-beta01'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
     // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 
     implementation 'com.tencent:mmkv-static:1.2.6'
+
+    //引入Dagger2以及依赖的一些包，因为用到注释所以还需要引用annotation包
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.28'//指定注解处理器
+    implementation 'com.google.dagger:dagger:2.28'//dagger公用api
+    implementation 'javax.inject:javax.inject:1'
 }
 
 task printlnFileName {

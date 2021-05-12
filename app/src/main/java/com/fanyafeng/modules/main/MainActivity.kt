@@ -15,6 +15,7 @@ import com.fanyafeng.modules.glidetest.GlideTestActivity
 import com.fanyafeng.modules.R
 import com.fanyafeng.modules.cache.CacheTestActivity
 import com.fanyafeng.modules.common.MainModel
+import com.fanyafeng.modules.datastore.DataStoreActivity
 import com.fanyafeng.modules.dialog.RippleDialogActivity
 import com.fanyafeng.modules.filetest.FileTestActivity
 import com.fanyafeng.modules.flowlayout.FlowLayoutActivity
@@ -116,6 +117,7 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         funcList.apply {
+            add(MainModel("DataStore", DataStoreActivity::class.java))
             add(MainModel("测试Flow", TestFlowActivity::class.java))
             add(MainModel("测试Glide图片库", GlideTestActivity::class.java))
             add(MainModel("网络文件下载", FileTestActivity::class.java))

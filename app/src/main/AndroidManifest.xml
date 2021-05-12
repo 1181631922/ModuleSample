@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".testflow.TestFlowActivity"></activity>
+        <activity android:name=".datastore.DataStoreActivity"></activity>
+        <activity android:name=".testflow.TestFlowActivity" />
         <activity android:name=".glidetest.GlideTestActivity" />
         <activity android:name=".filetest.FileTestActivity" />
         <activity android:name=".startup.TestStartupActivity" />

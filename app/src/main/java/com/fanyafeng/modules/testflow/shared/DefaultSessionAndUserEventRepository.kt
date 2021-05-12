@@ -1,10 +1,13 @@
 package com.fanyafeng.modules.testflow.shared
 
+import androidx.annotation.WorkerThread
 import com.fanyafeng.modules.testflow.model.*
 import com.fanyafeng.modules.testflow.session.SessionRepository
 import kotlinx.coroutines.flow.*
 import com.fanyafeng.modules.testflow.result.Result
 import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
@@ -13,11 +16,13 @@ import java.lang.Exception
  * Email: fanyafeng@live.cn
  * Description:
  */
-class DefaultSessionAndUserEventRepository(
+@Singleton
+class DefaultSessionAndUserEventRepository @Inject constructor(
     private val userEventDataSource: UserEventDataSource,
     private val sessionRepository: SessionRepository
 ) : SessionAndUserEventRepository {
 
+    @WorkerThread
     override fun getObservableUserEvent(
         userId: String?,
         eventId: String
